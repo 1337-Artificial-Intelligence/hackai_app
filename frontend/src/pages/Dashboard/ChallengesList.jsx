@@ -187,10 +187,10 @@ export default function ChallengesList() {
       {groupedChallenges.map((levelChallenges, levelIndex) => (
         <div key={levelIndex} className="space-y-6">
           <div className="flex items-center gap-4">
-            <div className="h-px bg-gray-800 flex-grow"></div>
-            <h2 className="text-gray-400 font-medium">
+            {/* <div className="h-px bg-gray-800 flex-grow"></div> */}
+            {/* <h2 className="text-gray-400 font-medium">
               {levelIndex === 0 ? 'Getting Started' : `Level ${levelIndex + 1}`}
-            </h2>
+            </h2> */}
             <div className="h-px bg-gray-800 flex-grow"></div>
           </div>
           

@@ -23,6 +23,28 @@ export default function CardWithForm() {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
+  React.useEffect(() => {
+    // Check if user is already logged in
+    const token = localStorage.getItem('token');
+    const user = localStorage.getItem('user');
+
+    if (token && user) {
+      try {
+        const userData = JSON.parse(user);
+        // Redirect based on role
+        if (userData.role === 'admin') {
+          navigate('/admin');
+        } else {
+          navigate('/dashboard/main');
+        }
+      } catch (err) {
+        // If there's an error parsing user data, clear storage
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+      }
+    }
+  }, [navigate]);
+
   const handleLogin = async () => {
     setIsLoading(true);
     setError("");
