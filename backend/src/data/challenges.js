@@ -1,5 +1,7 @@
-const challenges = [
+// Define challenge data
+const challengeData = [
   {
+    id: 'web_security',
     title: "Web Security Fundamentals",
     description: "Learn and implement basic web security principles including XSS prevention, CSRF protection, and secure authentication.",
     requirements: [
@@ -7,11 +9,13 @@ const challenges = [
       "Add CSRF protection",
       "Set up secure authentication"
     ],
-    order: 1,
     points: 100,
-    isActive: true
+    isActive: true,
+    dependencies: [],
+    tag: "security"
   },
   {
+    id: 'db_optimization',
     title: "Database Optimization",
     description: "Optimize database queries and structure for better performance using indexing and query optimization techniques.",
     requirements: [
@@ -19,23 +23,27 @@ const challenges = [
       "Optimize complex queries",
       "Implement caching"
     ],
-    order: 2,
     points: 150,
-    isActive: true
+    isActive: true,
+    dependencies: ['web_security'],
+    tag: "database"
   },
   {
-    title: "API Integration Challenge",
-    description: "Connect and integrate with external APIs securely while handling rate limits and errors gracefully.",
+    id: 'api_development',
+    title: "API Development",
+    description: "Build a secure and efficient API with proper authentication, rate limiting, and error handling.",
     requirements: [
       "Implement API authentication",
       "Handle rate limiting",
       "Add error handling"
     ],
-    order: 3,
     points: 200,
-    isActive: true
+    isActive: true,
+    dependencies: ['web_security', 'db_optimization'],
+    tag: "api"
   },
   {
+    id: 'scalability',
     title: "Scalability Solutions",
     description: "Design and implement scalable architecture using load balancing and microservices patterns.",
     requirements: [
@@ -43,10 +51,14 @@ const challenges = [
       "Design microservices",
       "Implement service discovery"
     ],
-    order: 4,
     points: 250,
-    isActive: true
+    isActive: true,
+    dependencies: ['api_development'],
+    tag: "architecture"
   }
 ];
 
-module.exports = challenges;
+// This will be populated when inserting challenges
+const challengeIds = {};
+
+module.exports = { challengeData, challengeIds };

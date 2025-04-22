@@ -1,21 +1,53 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import ChallengesList from "./ChallengesList";
 import LeaderBoard from "./LeaderBoard";
 import Team from "./Team";
 
 LeaderBoard;
 export default function Main() {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("Challenges");
-
-  // const completedChallenges = 1;
-  // const totalChallenges = 4;
-  // const progressPercentage = (completedChallenges / totalChallenges) * 100;
-
   const [showNamePopup, setShowNamePopup] = useState(false);
-  const [newTeamName, setNewTeamName] = useState("Team Name");
-  const [completedChallenges, setCompletedChallenges] = useState(2);
-  const [totalChallenges, setTotalChallenges] = useState(4);
-  const progressPercentage = (completedChallenges / totalChallenges) * 100;
+  const [teamData, setTeamData] = useState(null);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    navigate('/');
+  };
+
+  useEffect(() => {
+    fetchTeamData();
+    // console.log(teamData?.teamName);
+  }, []);
+
+  const fetchTeamData = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        throw new Error('No authentication token found');
+      }
+
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/teams/me`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch team data');
+      }
+
+      const data = await response.json();
+      setTeamData(data.data);
+    } catch (err) {
+      console.error('Error fetching team data:', err);
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const leaderboardData = [
     { teamName: "ByteBusters", points: 450, rank: 1 },
@@ -94,9 +126,23 @@ export default function Main() {
   };
   return (
     <div className="w-full">
-        <h1 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent transition-all duration-300 group-hover:brightness-125">
-        Team Name
-        </h1>
+      <div className="flex justify-between items-center">
+        {loading ? (
+          <div className="text-gray-400">Loading team data...</div>
+        ) : error ? (
+          <div className="text-red-400">{error}</div>
+        ) : (
+          <h1 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent transition-all duration-300 group-hover:brightness-125">
+            {teamData?.teamName || 'Team Name'}
+          </h1>
+        )}
+        <button
+          onClick={handleLogout}
+          className="px-4 py-2 text-sm font-medium text-white bg-red-500 rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+        >
+          Logout
+        </button>
+      </div>
       {/* <button onClick={() => setShowNamePopup(true)} className="group relative"> */}
         {/* <span className="absolute -right-6 -top-1 opacity-100 group-hover:opacity-100 transition-opacity">
           <svg
@@ -116,15 +162,15 @@ export default function Main() {
       {/* </button> */}
 
       <div className="flex flex-col justify-center items-center w-full">
-        <div className="flex w-full text-white justify-between items-center mb-3">
+        {/* <div className="flex w-full text-white justify-between items-center mb-3">
           <span className="text-sm text-gray-400">Overall Progress</span>
           <span className="text-sm font-medium bg-gradient-to-r from-purple-300 to-blue-300 bg-clip-text text-transparent">
             {completedChallenges}/{totalChallenges} Levels
           </span>
-        </div>
+        </div> */}
 
         {/* Enhanced Progress Bar */}
-        <div className="w-full relative">
+        {/* <div className="w-full relative">
           <div className="w-full bg-gray-800 rounded-full h-3 overflow-hidden">
             <div
               className="bg-gradient-to-r from-purple-500 to-blue-500 h-3 rounded-full transition-all duration-500 ease-out"
@@ -138,7 +184,7 @@ export default function Main() {
           {progressPercentage === 100 && (
             <div className="absolute inset-0 blur-sm bg-gradient-to-r from-purple-500/20 to-blue-500/20"></div>
           )}
-        </div>
+        </div> */}
       </div>
 
       {showNamePopup && (

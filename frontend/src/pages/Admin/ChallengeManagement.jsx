@@ -24,6 +24,7 @@ export default function ChallengeManagement() {
     resources: [""],
     subject: null,
     dependencies: [],
+    points: 100,
   });
 
   useEffect(() => {
@@ -95,8 +96,7 @@ export default function ChallengeManagement() {
         tag: formData.tag,
         resources: formData.resources.filter(Boolean),
         dependencies: formData.dependencies,
-        order: selectedChallenge?.order || challenges.length + 1,
-        points: 100
+        points: parseInt(formData.points) || 100
       };
 
       const response = await fetch(url, {
@@ -169,7 +169,8 @@ export default function ChallengeManagement() {
       tag: challenge.tag,
       resources: challenge.resources?.length ? challenge.resources : [""],
       dependencies: challenge.dependencies?.map(String) || [],
-      subject: null
+      subject: null,
+      points: challenge.points || 100
     });
     setShowModal(true);
   };
@@ -280,6 +281,21 @@ export default function ChallengeManagement() {
                         onChange={handleInputChange}
                         className="w-full bg-gray-800 rounded-lg px-4 py-2 md:py-3 text-sm md:text-base text-white focus:ring-2 focus:ring-purple-500"
                         placeholder="Enter tag name"
+                        required
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm md:text-base text-gray-300 mb-2">
+                        Points
+                      </label>
+                      <input
+                        type="number"
+                        name="points"
+                        value={formData.points || 100}
+                        onChange={handleInputChange}
+                        className="w-full bg-gray-800 rounded-lg px-4 py-2 md:py-3 text-sm md:text-base text-white focus:ring-2 focus:ring-purple-500"
+                        min="0"
                         required
                       />
                     </div>

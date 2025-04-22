@@ -7,6 +7,7 @@ import Main from "./pages/Dashboard/Main";
 import ChallengePage from "./pages/Dashboard/challenge/ChallngePage";
 import Admin from "./pages/Admin/Admin";
 import Graph from "./pages/Dashboard/Graph";
+import NotFound from "./pages/NotFound";
 
 const App = () => {
   return (
@@ -20,6 +21,7 @@ const App = () => {
           <Route path="Graph" element={<Graph />} />
         </Route>
         <Route path="/admin" element={<Admin />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
   );

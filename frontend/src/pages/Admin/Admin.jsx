@@ -1,12 +1,20 @@
 import React, { useState } from "react";
-import { Link, Outlet } from "react-router-dom";
-import { ArrowLeftIcon } from "lucide-react";
+import { Link, Outlet, useNavigate } from "react-router-dom";
+import { ArrowLeftIcon, LogOut } from "lucide-react";
 import ChallengeManagement from "./ChallengeManagement";
 import Leaderboard from "../Dashboard/LeaderBoard";
 import TeamManagement from "./Teams";
 import ChallengeValidation from "./ChallengeValidation";
 
 export default function Admin() {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    navigate('/');
+  };
+
   const leaderboardData = [
     { teamName: "ByteBusters", points: 450, rank: 1 },
     { teamName: "Code Crusaders", points: 420, rank: 2 },
@@ -25,13 +33,22 @@ export default function Admin() {
           <div className="max-w-7xl w-full  mx-auto flex justify-between items-center">
             <img src="/assets/logo.jpg" className="md:w-48 w-36" alt="" />
 
-            <Link
-              to="/"
-              className="inline-flex gap-2 md:h-12 h-9 font-extrabold animate-shimmer text-white items-center hover:underline cursor-pointer justify-center rounded-md  "
-            >
-              <ArrowLeftIcon size={18} className="text-xl" />
-              Back to home
-            </Link>
+            <div className="flex items-center gap-4">
+              <Link
+                to="/"
+                className="inline-flex gap-2 md:h-12 h-9 font-extrabold animate-shimmer text-white items-center hover:underline cursor-pointer justify-center rounded-md"
+              >
+                <ArrowLeftIcon size={18} className="text-xl" />
+                Back to home
+              </Link>
+              <button
+                onClick={handleLogout}
+                className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-red-500 rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+              >
+                <LogOut size={18} />
+                Logout
+              </button>
+            </div>
           </div>
         </nav>
         <div className="max-w-7xl mx-auto ">

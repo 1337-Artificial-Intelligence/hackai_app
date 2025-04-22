@@ -10,19 +10,15 @@ const challengeSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Challenge description is required']
   },
-  requirements: [{
-    type: String,
-    required: true
-  }],
-  points: {
-    type: Number,
-    required: true,
-    min: 0
-  },
   tag: {
     type: String,
     required: [true, 'Challenge tag is required'],
     trim: true
+  },
+  points: {
+    type: Number,
+    required: true,
+    min: 0
   },
   resources: [{
     type: String,

@@ -156,14 +156,15 @@ exports.validateSubmission = async (req, res) => {
       // Add to completed challenges
       team.completedChallenges.push(challenge._id);
 
-      // Find next challenge
-      const nextChallenge = await Challenge.findOne({
-        order: challenge.order + 1,
+      // Find available challenges that have this challenge as their only dependency
+      const nextChallenges = await Challenge.find({
+        dependencies: { $size: 1, $eq: [challenge._id] },
         isActive: true
       });
 
-      if (nextChallenge) {
-        team.currentChallenge = nextChallenge._id;
+      // If there's a next challenge that depends only on this one, set it as current
+      if (nextChallenges.length > 0) {
+        team.currentChallenge = nextChallenges[0]._id;
       }
 
       await team.save();
