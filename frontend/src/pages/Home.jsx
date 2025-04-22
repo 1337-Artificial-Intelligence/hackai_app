@@ -94,7 +94,7 @@ export default function Home() {
           What is Think AI Morocco?
         </h1>
         {/* <div className="h-[40rem] rounded-md flex flex-col antialiased bg-white dark:bg-black dark:bg-grid-white/[0.05] items-center justify-center relative overflow-hidden"> */}
-        <p className="text-gray-200 mt-10 md:p-6 p-3 md:text-lg text-base">
+        <p className="text-gray-200 mt-10 md:p-6 p-2 md:text-lg text-base">
           <span className="font-extrabold">Think AI Morocco</span> is a{" "}
           <span className="font-extrabold">4-Days AI hackathon</span> co-hosted
           by <span className="font-extrabold">1337AI</span> and
@@ -110,7 +110,7 @@ export default function Home() {
         {/* </div> */}
       </div>
 
-      <div className=" md:p-6 p-3 overflow-x-hidden  max-w-7xl w-full mx-auto px-3 Testimonies mt-64 flex flex-col justify-center items-center">
+      <div className=" md:p-6 p-2 overflow-x-hidden  max-w-7xl w-full mx-auto px-3 Testimonies mt-64 flex flex-col justify-center items-center">
         <h1
           className="text-3xl sm:text-4xl underline-offset-8 md:text-5xl lg:text-5xl  font-extrabold text-center text-gray-900 dark:text-gray-200 leading-tight"
           initial={{ opacity: 0, y: 50 }}
@@ -129,7 +129,7 @@ export default function Home() {
         </video>
       </div>
 
-      <div className=" md:p-6 p-3 overflow-x-hidden Testimonies mt-64 w-full flex flex-col justify-center items-center">
+      <div className=" md:p-6 p-2 overflow-x-hidden Testimonies mt-64 w-full flex flex-col justify-center items-center">
         <h1
           className="text-3xl sm:text-4xl underline-offset-8 md:text-5xl lg:text-5xl font-extrabold text-center text-gray-900 dark:text-gray-200 leading-tight"
           initial={{ opacity: 0, y: 50 }}
@@ -182,7 +182,7 @@ export default function Home() {
         </Link>
       </div>
 
-      <div className="Testimonies mt-64 max-w-7xl w-full mx-auto px-3 flex flex-col justify-center items-center">
+      <div className="Testimonies mt-64 max-w-7xl w-full mx-auto px-2 flex flex-col justify-center items-center">
         <h1
           className="text-3xl sm:text-4xl  underline-offset-8 md:text-5xl lg:text-5xl font-extrabold text-center text-gray-900 dark:text-gray-200 leading-tight"
           initial={{ opacity: 0, y: 50 }}
@@ -197,7 +197,7 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="Testimonies mt-64 max-w-7xl w-full mx-auto px-3 flex flex-col justify-center items-center">
+      <div className="Testimonies mt-64 max-w-7xl w-full mx-auto px-2 flex flex-col justify-center items-center">
         <h1
           className="text-3xl sm:text-4xl  underline-offset-8 md:text-5xl lg:text-5xl font-extrabold text-center text-gray-900 dark:text-gray-200 leading-tight"
           initial={{ opacity: 0, y: 50 }}
@@ -212,7 +212,7 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="Testimonies mt-64 max-w-7xl w-full mx-auto px-3 flex flex-col justify-center items-center">
+      <div className="Testimonies mt-64 max-w-7xl w-full mx-auto px-2 flex flex-col justify-center items-center">
         <h1
           className="text-3xl sm:text-4xl underline-offset-8 md:text-5xl lg:text-5xl font-extrabold text-center text-gray-900 dark:text-gray-200 leading-tight"
           initial={{ opacity: 0, y: 50 }}
@@ -229,7 +229,7 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="Testimonies mt-64 max-w-7xl w-full mx-auto px-3 flex flex-col justify-center items-center ">
+      <div className="Testimonies mt-64 max-w-7xl w-full mx-auto px-2 flex flex-col justify-center items-center ">
         <h1
           className="text-3xl sm:text-4xl underline-offset-8 md:text-5xl lg:text-5xl font-extrabold text-center text-gray-900 dark:text-gray-200 leading-tight"
           initial={{ opacity: 0, y: 50 }}
@@ -248,7 +248,7 @@ export default function Home() {
           <ContactUs />
         </div>
       </div>
-      <div className="footer mt-64 max-w-7xl w-full mx-auto px-3 flex flex-col justify-center items-center">
+      <div className="footer mt-64 max-w-7xl w-full mx-auto px-2 flex flex-col justify-center items-center">
         <Footer />
       </div>
     </div>
