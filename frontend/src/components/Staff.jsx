@@ -95,7 +95,7 @@ export default function Staff() {
             Jury
           </h2>
         </div>
-        <div className="grid gap-8 lg:gap-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+        <div className="grid gap-8 lg:gap-10 grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {jury.map(([img, name, role]) => (
             <TeamMember key={name} img={img} name={name} role={role} />
           ))}
@@ -109,7 +109,7 @@ export default function Staff() {
             Mentors
           </h2>
         </div>
-        <div className="grid gap-8 lg:gap-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+        <div className="grid gap-8 lg:gap-10 grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {mentors.map(([img, name, role]) => (
             <TeamMember key={name} img={img} name={name} role={role} />
           ))}
@@ -123,7 +123,7 @@ export default function Staff() {
             Organizers
           </h2>
         </div>
-        <div className="grid gap-8 lg:gap-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+        <div className="grid gap-8 lg:gap-10 grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {organizers.map(([img, name, role]) => (
             <TeamMember key={name} img={img} name={name} role={role} />
           ))}
