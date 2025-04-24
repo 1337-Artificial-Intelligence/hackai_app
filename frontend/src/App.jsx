@@ -8,8 +8,14 @@ import ChallengePage from "./pages/Dashboard/challenge/ChallngePage";
 import Admin from "./pages/Admin/Admin";
 import Graph from "./pages/Dashboard/Graph";
 import NotFound from "./pages/NotFound";
+import { useEffect } from "react";
 
 const App = () => {
+
+  useEffect(() => {
+    document.getElementById('root').classList.add('dark');
+  }, []);
+
   return (
     <BrowserRouter>
       <Routes>

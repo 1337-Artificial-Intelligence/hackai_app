@@ -45,11 +45,11 @@ const FAQ = () => {
     {
       question: "Skills needed?",
       answer:
-        "Bac +4 in AI related degrees and having worked on AI projects before.",
+        "No specific skills are required. We welcome all levels of experience, from beginners to experts.",
     },
     {
       question: "When will I be contacted?",
-      answer: "On May 8th, you'll be contacted by email.",
+      answer: "Next week, you will receive an email with all the details.",
     },
     {
       question: "Will I need my laptop?",

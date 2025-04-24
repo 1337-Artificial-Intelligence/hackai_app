@@ -30,13 +30,14 @@ export default function Staff() {
     ],
     []
   );
-
+  
   const mentors = useMemo(
     () => [
       ["/assets/profiles/1337ai/amoujar.jpg", "Abderrahmane Moujar", "Technical Program Chair"],
+      [getRandomImage(), "Achraf Mamdouh", "SWE Google"],
       ["/assets/profiles/1337ai/mel-kora.jpg", "Mounia El Koraichi", "Sponsorship Director"],
       ["/assets/profiles/1337ai/jchennak.jpg", "Jawaher Chennak", "Operations Manager"],
-      [getRandomImage(), "Nouamane Tazi", "ML engineer @ Hugging Face"],
+      ["/assets/profiles/extern/nouamane.jpeg", "Nouamane Tazi", "ML engineer @ Hugging Face"],
     ],
     []
   );
@@ -48,11 +49,12 @@ export default function Staff() {
       ["/assets/profiles/1337ai/mel-kora.jpg", "Mounia El Koraichi", "Sponsorship Director"],
       ["/assets/profiles/1337ai/kbenlyaz.jpg", "Khalid Benlyazid", "Volunteer Coordinator"],
       ["/assets/profiles/1337ai/jchennak.jpg", "Jawaher Chennak", "Operations Manager"],
+      ["/assets/profiles/1337ai/issam.jpeg", "Issam laafar", "Operations Manager"],
+      ["/assets/profiles/1337ai/mossaab.jpeg", "Mossaab amimar", "Operations Manager"],
       ["/assets/profiles/1337ai/yahya.jpeg", "Yahya ICHAKDI", "Academic Relations"],
-      [getRandomImage(), "Nouamane Tazi", "Communications Lead"],
+      ["/assets/profiles/extern/nouamane.jpeg", "Nouamane Tazi", "Communications Lead"],
       [getRandomImage(), "Noureddine tahadout", "Communications Lead"],
       ["/assets/profiles/1337ai/hbarrak.jpeg", "Hamza Barrak", "Industry Relations"],
-      ["/assets/profiles/1337ai/hbarrak.jpeg", "Noureddine tahadout", "Industry Relations"],
     ],
     []
   );
@@ -61,16 +63,24 @@ export default function Staff() {
     <section className="bg-white dark:bg-black/50">
       {/* Speakers Section */}
       <MembersSection title="Speakers">
-        {speakers.map(([img, name, role]) => (
+        {/* to be announced soon */}
+        <p className="text-gray-200 text-lg lg:text-xl font-medium max-w-2xl mx-auto">
+          🎉 Speakers to be announced soon! Stay tuned for exciting updates. 🎤
+        </p>
+
+        {/* {speakers.map(([img, name, role]) => (
           <TeamMember key={name} img={img} name={name} role={role} />
-        ))}
+        ))} */}
       </MembersSection>
 
       {/* Jury Section */}
       <MembersSection title="Jury">
-        {jury.map(([img, name, role]) => (
+        {/* {jury.map(([img, name, role]) => (
           <TeamMember key={name} img={img} name={name} role={role} />
-        ))}
+        ))} */}
+        <p className="text-gray-200 text-lg lg:text-xl font-medium max-w-2xl mx-auto">
+          🎉 Jury to be announced soon! Stay tuned for exciting updates. 🎤
+        </p>
       </MembersSection>
 
       {/* Mentors Section */}
