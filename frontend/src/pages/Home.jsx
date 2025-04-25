@@ -64,7 +64,7 @@ export default function Home() {
             target="_blank"
             className="inline-flex md:h-12 h-9 animate-shimmer items-center cursor-pointer justify-center rounded-md border border-white bg-[linear-gradient(110deg,#000103,45%,#1e2631,55%,#000103)] bg-[length:200%_100%] px-6 font-medium text-gray-200 transition-colors focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-slate-50"
           >
-            Login
+            Register
           </Link>
         </div>
       </nav>
@@ -82,7 +82,7 @@ export default function Home() {
             target="_blank"
             className="inline-flex h-12 animate-shimmer items-center cursor-pointer justify-center rounded-md border border-white bg-[linear-gradient(110deg,#000103,45%,#1e2631,55%,#000103)] bg-[length:200%_100%] px-6 font-medium text-gray-200 transition-colors focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-slate-50"
           >
-            Login
+            Register
           </Link>
         </div>
       </div>
@@ -187,7 +187,7 @@ export default function Home() {
           target="_blank"
           className="shadow-[0_0_0_3px_#000000_inset] bg-white px-6 py-2 bg-transparent border border-black dark:border-white dark:text-black text-black rounded-lg font-bold transform hover:-translate-y-1 transition duration-400"
         >
-          Login
+          Register
         </Link>
       </div>
 
