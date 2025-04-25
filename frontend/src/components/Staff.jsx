@@ -79,22 +79,29 @@ export default function Staff() {
           <TeamMember key={name} img={img} name={name} role={role} />
         ))} */}
         <p className="text-gray-200 text-lg lg:text-xl font-medium max-w-2xl mx-auto">
-          🎉 Jury to be announced soon! Stay tuned for exciting updates. 🎤
+          🎉 Jury to be announced soon! Stay tuned for exciting updates. 👨‍⚖️
         </p>
       </MembersSection>
 
       {/* Mentors Section */}
       <MembersSection title="Mentors">
-        {mentors.map(([img, name, role]) => (
+        {/* {mentors.map(([img, name, role]) => (
           <TeamMember key={name} img={img} name={name} role={role} />
-        ))}
+        ))} */}
+        <p className="text-gray-200 text-lg lg:text-xl font-medium max-w-2xl mx-auto">
+          🎉 Mentors to be announced soon! Stay tuned for exciting updates. 👨‍🏫
+        </p>
       </MembersSection>
 
       {/* Organizers Section */}
       <MembersSection title="Organizers">
-        {organizers.map(([img, name, role]) => (
+        {/* {organizers.map(([img, name, role]) => (
           <TeamMember key={name} img={img} name={name} role={role} />
-        ))}
+          ))} */}
+        <p className="text-gray-200 text-lg lg:text-xl font-medium max-w-2xl mx-auto">
+          🎉 Mentors to be announced soon! Stay tuned for exciting updates. 👨 
+
+        </p>
       </MembersSection>
     </section>
   );

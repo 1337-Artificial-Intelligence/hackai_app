@@ -30,10 +30,11 @@ export default function Home() {
       quote:
         "Nothing but all of u guys were incredible human being loving supporting and inspiring. Thank you all from the bottom of my heart.",
       name: "Participant",
-      title: ""
+      title: "",
     },
     {
-      quote: "I was really impressed, you guys took care of every details, we felt like we are home.",
+      quote:
+        "I was really impressed, you guys took care of every details, we felt like we are home.",
       name: "Participant",
       title: "",
     },
@@ -58,7 +59,9 @@ export default function Home() {
           <img src="/assets/logo_l.png" className="md:w-48 w-36" alt="" />
 
           <Link
-            to="/sign"
+            // open this https://forms.gle/oBn1QXJRXZ7b33wPA in new tab
+            to="https://forms.gle/oBn1QXJRXZ7b33wPA"
+            target="_blank"
             className="inline-flex md:h-12 h-9 animate-shimmer items-center cursor-pointer justify-center rounded-md border border-white bg-[linear-gradient(110deg,#000103,45%,#1e2631,55%,#000103)] bg-[length:200%_100%] px-6 font-medium text-gray-200 transition-colors focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-slate-50"
           >
             Login
@@ -74,7 +77,9 @@ export default function Home() {
         </div>
         <div className="w-full flex relative z-10 justify-center items-center">
           <Link
-            to="/sign"
+            // to="/sign"
+            to="https://forms.gle/oBn1QXJRXZ7b33wPA"
+            target="_blank"
             className="inline-flex h-12 animate-shimmer items-center cursor-pointer justify-center rounded-md border border-white bg-[linear-gradient(110deg,#000103,45%,#1e2631,55%,#000103)] bg-[length:200%_100%] px-6 font-medium text-gray-200 transition-colors focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-slate-50"
           >
             Login
@@ -96,10 +101,13 @@ export default function Home() {
         {/* <div className="h-[40rem] rounded-md flex flex-col antialiased bg-white dark:bg-black dark:bg-grid-white/[0.05] items-center justify-center relative overflow-hidden"> */}
         <p className="text-gray-200 mt-10 md:p-6 p-2 md:text-lg text-base">
           <span className="font-extrabold">Hack AI Morocco</span> is a{" "}
-          <span className="font-extrabold">4-Days AI hackathon like no other </span> 
-          Students from all over Morocco will come together for a unique experience full of unexpected challenges
-          surprises, and learning. You won’t know what’s coming next—but that’s the fun part. 
-          Get ready to think fast, work smart, and push your limits! 
+          <span className="font-extrabold">
+            4-Days AI hackathon like no other{" "}
+          </span>
+          Students from all over Morocco will come together for a unique
+          experience full of unexpected challenges surprises, and learning. You
+          won’t know what’s coming next—but that’s the fun part. Get ready to
+          think fast, work smart, and push your limits!
         </p>
 
         {/* , surprises, and learning. You won’t know what’s coming next—but that’s the fun part. Get ready to think fast, work smart, and push your limits! */}
@@ -113,25 +121,27 @@ export default function Home() {
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.2 }} // Triggers when 20% is visible
-          transition={{ duration: 0.8, ease: "easeOut" }}
-        >
-          Announcement
-        </h1>
-        <video
-          src="https://youtu.be/xuzIOim5Ma0?si=YvfH4MeuR9_8AObc"
-          className="h-full mt-10 w-full rounded-lg md:p-6 p-3"
-          controls
-        >
-          Your browser does not support the video tag.
-        </video>
-      </div>
+            transition={{ duration: 0.8, ease: "easeOut" }}
+          >
+            Announcement
+          </h1>
+          
+          <div className="mt-6 w-full flex justify-center">
+            <iframe
+            className="w-full max-w-4xl aspect-video rounded-lg"
+            src="https://player.vimeo.com/video/1078694431?title=0&amp;byline=0&amp;portrait=0&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479"
+            allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media"
+            title="HACK AI 2025"
+            ></iframe>
+          </div>
+          </div>
 
-      <div className=" md:p-6 p-2 overflow-x-hidden Testimonies mt-64 w-full flex flex-col justify-center items-center">
-        <h1
-          className="text-3xl sm:text-4xl underline-offset-8 md:text-5xl lg:text-5xl font-extrabold text-center text-gray-900 dark:text-gray-200 leading-tight"
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.2 }} // Triggers when 20% is visible
+          <div className="md:p-6 p-2 overflow-x-hidden Testimonies mt-64 w-full flex flex-col justify-center items-center">
+          <h1
+            className="text-3xl sm:text-4xl underline-offset-8 md:text-5xl lg:text-5xl font-extrabold text-center text-gray-900 dark:text-gray-200 leading-tight"
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.2 }} // Triggers when 20% is visible
           transition={{ duration: 0.8, ease: "easeOut" }}
         >
           2025 Planning
@@ -172,7 +182,9 @@ export default function Home() {
           innovation converge to shape the future of technology.
         </p>
         <Link
-          to="/sign"
+          // to="/sign"
+          to="https://forms.gle/oBn1QXJRXZ7b33wPA"
+          target="_blank"
           className="shadow-[0_0_0_3px_#000000_inset] bg-white px-6 py-2 bg-transparent border border-black dark:border-white dark:text-black text-black rounded-lg font-bold transform hover:-translate-y-1 transition duration-400"
         >
           Login
