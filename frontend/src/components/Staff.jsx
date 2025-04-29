@@ -19,7 +19,7 @@ export default function Staff() {
 
   const speakers = useMemo(
     () => [
-      ["./public/assets/profiles/speakers/achraf.jpeg", "Achraf Mamdouh", "Senior Software Engineer @ Google"],
+      ["/assets/profiles/speakers/achraf.jpeg", "Achraf Mamdouh", "Senior Software Engineer @ Google"],
     ],
     []
   );
