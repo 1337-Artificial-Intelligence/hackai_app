@@ -19,7 +19,7 @@ export default function Staff() {
 
   const speakers = useMemo(
     () => [
-      [getRandomImage(), "Achraf Mamdouh", "SWE Google"],
+      ["./public/assets/profiles/speakers/achraf.jpeg", "Achraf Mamdouh", "Senior Software Engineer @ Google"],
     ],
     []
   );
@@ -64,13 +64,13 @@ export default function Staff() {
       {/* Speakers Section */}
       <MembersSection title="Speakers">
         {/* to be announced soon */}
-        <p className="text-gray-200 text-lg lg:text-xl font-medium max-w-2xl mx-auto">
+        {/* <p className="text-gray-200 text-lg lg:text-xl font-medium max-w-2xl mx-auto">
           🎉 Speakers to be announced soon! Stay tuned for exciting updates. 🎤
-        </p>
+        </p> */}
 
-        {/* {speakers.map(([img, name, role]) => (
+        {speakers.map(([img, name, role]) => (
           <TeamMember key={name} img={img} name={name} role={role} />
-        ))} */}
+        ))}
       </MembersSection>
 
       {/* Jury Section */}

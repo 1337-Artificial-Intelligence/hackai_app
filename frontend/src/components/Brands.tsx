@@ -29,8 +29,12 @@ const BRANDS: Brand[] = [
     logo: "/assets/brands/um6pcc.png",
   },
   {
-    name: "Brand 5",
+    name: "Brand 6",
     logo: "/assets/brands/norma.svg",
+  },
+  {
+    name: "Brand 7",
+    logo: "/assets/brands/AHG-logo.png",
   },
 ];
 
