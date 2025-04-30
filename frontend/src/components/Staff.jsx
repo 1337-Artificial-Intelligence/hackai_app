@@ -19,88 +19,192 @@ export default function Staff() {
 
   const speakers = useMemo(
     () => [
-      ["/assets/profiles/speakers/achraf.jpeg", "Achraf Mamdouh", "Senior Software Engineer @ Google"],
+      [
+        "/assets/profiles/speakers/achraf.jpeg",
+        "Achraf Mamdouh",
+        "Senior Software Engineer @ Google",
+      ],
     ],
     []
   );
-  
+
   const jury = useMemo(
-    () => [
-      [getRandomImage(), "Achraf Mamdouh", "SWE Google"],
-    ],
+    () => [[getRandomImage(), "Achraf Mamdouh", "SWE Google"]],
     []
   );
-  
+
   const mentors = useMemo(
     () => [
-      ["/assets/profiles/1337ai/amoujar.jpg", "Abderrahmane Moujar", "Technical Program Chair"],
+      [
+        "/assets/profiles/1337ai/amoujar.jpg",
+        "Abderrahmane Moujar",
+        "Technical Program Chair",
+      ],
       [getRandomImage(), "Achraf Mamdouh", "SWE Google"],
-      ["/assets/profiles/1337ai/mel-kora.jpg", "Mounia El Koraichi", "Sponsorship Director"],
-      ["/assets/profiles/1337ai/jchennak.jpg", "Jawaher Chennak", "Operations Manager"],
-      ["/assets/profiles/extern/nouamane.jpeg", "Nouamane Tazi", "ML engineer @ Hugging Face"],
+      [
+        "/assets/profiles/1337ai/mel-kora.jpg",
+        "Mounia El Koraichi",
+        "Sponsorship Director",
+      ],
+      [
+        "/assets/profiles/1337ai/jchennak.jpg",
+        "Jawaher Chennak",
+        "Operations Manager",
+      ],
+      [
+        "/assets/profiles/extern/nouamane.jpeg",
+        "Nouamane Tazi",
+        "ML engineer @ Hugging Face",
+      ],
     ],
     []
   );
-  
+
   const organizers = useMemo(
     () => [
-      ['/assets/profiles/1337ai/aabouelm.jpg', "Ahmed Abouelmawahib", "Student Activities Coordinator @ 1337"],
-      ["/assets/profiles/1337ai/amoujar.jpg", "Abderrahmane Moujar", "Technical Program Chair"],
-      ["/assets/profiles/1337ai/mel-kora.jpg", "Mounia El Koraichi", "Sponsorship Director"],
-      ["/assets/profiles/1337ai/kbenlyaz.jpg", "Khalid Benlyazid", "Volunteer Coordinator"],
-      ["/assets/profiles/1337ai/jchennak.jpg", "Jawaher Chennak", "Operations Manager"],
-      ["/assets/profiles/1337ai/issam.jpeg", "Issam laafar", "Operations Manager"],
-      ["/assets/profiles/1337ai/mossaab.jpeg", "Mossaab amimar", "Operations Manager"],
-      ["/assets/profiles/1337ai/yahya.jpeg", "Yahya ICHAKDI", "Academic Relations"],
-      ["/assets/profiles/extern/nouamane.jpeg", "Nouamane Tazi", "Communications Lead"],
+      [
+        "/assets/profiles/1337ai/aabouelm.jpg",
+        "Ahmed Abouelmawahib",
+        "Student Activities Coordinator @ 1337",
+      ],
+      [
+        "/assets/profiles/1337ai/amoujar.jpg",
+        "Abderrahmane Moujar",
+        "Technical Program Chair",
+      ],
+      [
+        "/assets/profiles/1337ai/mel-kora.jpg",
+        "Mounia El Koraichi",
+        "Sponsorship Director",
+      ],
+      [
+        "/assets/profiles/1337ai/kbenlyaz.jpg",
+        "Khalid Benlyazid",
+        "Volunteer Coordinator",
+      ],
+      [
+        "/assets/profiles/1337ai/jchennak.jpg",
+        "Jawaher Chennak",
+        "Operations Manager",
+      ],
+      [
+        "/assets/profiles/1337ai/issam.jpeg",
+        "Issam laafar",
+        "Operations Manager",
+      ],
+      [
+        "/assets/profiles/1337ai/mossaab.jpeg",
+        "Mossaab amimar",
+        "Operations Manager",
+      ],
+      [
+        "/assets/profiles/1337ai/yahya.jpeg",
+        "Yahya ICHAKDI",
+        "Academic Relations",
+      ],
+      [
+        "/assets/profiles/extern/nouamane.jpeg",
+        "Nouamane Tazi",
+        "Communications Lead",
+      ],
       [getRandomImage(), "Noureddine tahadout", "Communications Lead"],
-      ["/assets/profiles/1337ai/hbarrak.jpeg", "Hamza Barrak", "Industry Relations"],
+      [
+        "/assets/profiles/1337ai/hbarrak.jpeg",
+        "Hamza Barrak",
+        "Industry Relations",
+      ],
     ],
     []
   );
+
+  // className="Headline text-3xl sm:text-4xl underline-offset-8 md:text-5xl lg:text-5xl font-extrabold text-center text-gray-900 dark:text-gray-200 leading-tight"
+  // initial={{ opacity: 0, y: 50 }}
+  // whileInView={{ opacity: 1, y: 0 }}
+  // viewport={{ once: true, amount: 0.2 }}
+  // transition={{ duration: 0.8, ease: "easeOut" }}
 
   return (
     <section className="bg-white dark:bg-black/50">
-      {/* Speakers Section */}
-      <MembersSection title="Speakers">
-        {/* to be announced soon */}
-        {/* <p className="text-gray-200 text-lg lg:text-xl font-medium max-w-2xl mx-auto">
-          🎉 Speakers to be announced soon! Stay tuned for exciting updates. 🎤
-        </p> */}
-
+      <MembersSection
+        title={
+          <div className="overflow-x-hidden Testimonies mt-16 w-full flex flex-col justify-center items-center">
+            <h1
+              className="Headline text-3xl sm:text-4xl underline-offset-8 md:text-5xl lg:text-5xl font-extrabold text-center text-gray-900 dark:text-gray-200 leading-tight"
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
+            >
+              Speakers
+            </h1>
+          </div>
+        }
+      >
         {speakers.map(([img, name, role]) => (
           <TeamMember key={name} img={img} name={name} role={role} />
         ))}
       </MembersSection>
 
       {/* Jury Section */}
-      <MembersSection title="Jury">
-        {/* {jury.map(([img, name, role]) => (
-          <TeamMember key={name} img={img} name={name} role={role} />
-        ))} */}
+      <MembersSection
+        title={
+          <div className="overflow-x-hidden Testimonies mt-16 w-full flex flex-col justify-center items-center">
+            <h1
+              className="Headline text-3xl sm:text-4xl underline-offset-8 md:text-5xl lg:text-5xl font-extrabold text-center text-gray-900 dark:text-gray-200 leading-tight"
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
+            >
+              Jury
+            </h1>
+          </div>
+        }
+      >
         <p className="text-gray-200 text-lg lg:text-xl font-medium max-w-2xl mx-auto">
           🎉 Jury to be announced soon! Stay tuned for exciting updates. 👨‍⚖️
         </p>
       </MembersSection>
 
       {/* Mentors Section */}
-      <MembersSection title="Mentors">
-        {/* {mentors.map(([img, name, role]) => (
-          <TeamMember key={name} img={img} name={name} role={role} />
-        ))} */}
+      <MembersSection
+        title={
+          <div className="overflow-x-hidden Testimonies mt-16 w-full flex flex-col justify-center items-center">
+            <h1
+              className="Headline text-3xl sm:text-4xl underline-offset-8 md:text-5xl lg:text-5xl font-extrabold text-center text-gray-900 dark:text-gray-200 leading-tight"
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
+            >
+              Mentors
+            </h1>
+          </div>
+        }
+      >
         <p className="text-gray-200 text-lg lg:text-xl font-medium max-w-2xl mx-auto">
           🎉 Mentors to be announced soon! Stay tuned for exciting updates. 👨‍🏫
         </p>
       </MembersSection>
 
       {/* Organizers Section */}
-      <MembersSection title="Organizers">
-        {/* {organizers.map(([img, name, role]) => (
-          <TeamMember key={name} img={img} name={name} role={role} />
-          ))} */}
+      <MembersSection
+        title={
+          <div className="overflow-x-hidden Testimonies mt-16 w-full flex flex-col justify-center items-center">
+            <h1
+              className="Headline text-3xl sm:text-4xl underline-offset-8 md:text-5xl lg:text-5xl font-extrabold text-center text-gray-900 dark:text-gray-200 leading-tight"
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
+            >
+              Organizers
+            </h1>
+          </div>
+        }
+      >
         <p className="text-gray-200 text-lg lg:text-xl font-medium max-w-2xl mx-auto">
-          🎉 Mentors to be announced soon! Stay tuned for exciting updates. 👨 
-
+          🎉 Mentors to be announced soon! Stay tuned for exciting updates. 👨
         </p>
       </MembersSection>
     </section>
