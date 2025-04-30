@@ -17,6 +17,8 @@ import ContactUs from "../components/ContactUs";
 
 import Staff from "../components/Staff";
 import Prizes from "../components/Prizes";
+import MainTitle from "../components/title";
+import StyledNeon from "../components/StyledNeon";
 
 export default function Home() {
   const testimonials = [
@@ -53,10 +55,10 @@ export default function Home() {
   ];
   const words = `Hack AI Morocco 2025: Unleashing Innovation and Creativity in a 4-Day Hackathon!`;
   return (
-    <div className="dark bg-black pb-10 md:px-6 px-3 ">
+    <div className="dark bg-black pb-10  ">
       <nav className="bg-black  w-full  py-3 flex justify-between relative z-10 top-0 items-center">
         <div className="max-w-7xl w-full  mx-auto flex justify-between items-center">
-          <img src="/assets/logo_l.png" className="md:w-48 w-36" alt="" />
+          <img src="/assets/logo_l.png" className="md:w-40 w-36" alt="" />
 
           <Link
             // open this https://forms.gle/oBn1QXJRXZ7b33wPA in new tab
@@ -68,7 +70,8 @@ export default function Home() {
           </Link>
         </div>
       </nav>
-      <div className="min-h-screen max-w-7xl w-full z-[9000] mx-auto px-3 flex flex-col justify-center items-center">
+      <div className="MainSec min-h-screen max-w-7xl w-full z-[9000] mx-auto px-3 flex flex-col justify-center items-center overflow-hidden">
+        <StyledNeon/>
         <div className="w-full font-extrabold relative z-10 -mt-36">
           <TextHoverEffect text="HACK AI" />
         </div>
@@ -88,16 +91,8 @@ export default function Home() {
       </div>
       <BackgroundBeams />
       {/* </BackgroundLines> */}
+      <MainTitle />
       <div className="overflow-x-hidden max-w-7xl w-full mx-auto px-3 Testimonies flex flex-col justify-center items-center">
-        <h1
-          className="text-3xl sm:text-4xl underline-offset-8 md:text-5xl lg:text-5xl font-extrabold text-center text-gray-900 dark:text-gray-200 leading-tight"
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.2 }} // Triggers when 20% is visible
-          transition={{ duration: 0.8, ease: "easeOut" }}
-        >
-          What is Hack AI Morocco?
-        </h1>
         {/* <div className="h-[40rem] rounded-md flex flex-col antialiased bg-white dark:bg-black dark:bg-grid-white/[0.05] items-center justify-center relative overflow-hidden"> */}
         <p className="text-gray-200 mt-10 md:p-6 p-2 md:text-lg text-base">
           <span className="font-extrabold">Hack AI Morocco</span> is a{" "}
@@ -117,7 +112,7 @@ export default function Home() {
 
       <div className=" md:p-6 p-2 overflow-x-hidden  max-w-7xl w-full mx-auto px-3 Testimonies mt-64 flex flex-col justify-center items-center">
         <h1
-          className="text-3xl sm:text-4xl underline-offset-8 md:text-5xl lg:text-5xl  font-extrabold text-center text-gray-900 dark:text-gray-200 leading-tight"
+          className="Headline text-3xl sm:text-4xl underline-offset-8 md:text-5xl lg:text-5xl  font-extrabold text-center text-gray-900 dark:text-gray-200 leading-tight"
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.2 }} // Triggers when 20% is visible
@@ -126,7 +121,7 @@ export default function Home() {
             Announcement
           </h1>
           
-          <div className="mt-6 w-full flex justify-center">
+          <div className="VidContainer mt-6 w-full flex justify-center">
             <iframe
             className="w-full max-w-4xl aspect-video rounded-lg"
             src="https://player.vimeo.com/video/1078694431?title=0&amp;byline=0&amp;portrait=0&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479"
@@ -138,7 +133,7 @@ export default function Home() {
 
           <div className="md:p-6 p-2 overflow-x-hidden Testimonies mt-64 w-full flex flex-col justify-center items-center">
           <h1
-            className="text-3xl sm:text-4xl underline-offset-8 md:text-5xl lg:text-5xl font-extrabold text-center text-gray-900 dark:text-gray-200 leading-tight"
+            className="Headline text-3xl sm:text-4xl underline-offset-8 md:text-5xl lg:text-5xl font-extrabold text-center text-gray-900 dark:text-gray-200 leading-tight"
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.2 }} // Triggers when 20% is visible
@@ -159,7 +154,7 @@ export default function Home() {
 
       <div className="overflow-x-hidden Testimonies mt-64 w-full flex flex-col justify-center items-center">
         <h1
-          className="text-3xl sm:text-4xl underline-offset-8 md:text-5xl lg:text-5xl font-extrabold text-center text-gray-900 dark:text-gray-200 leading-tight"
+          className="Headline text-3xl sm:text-4xl underline-offset-8 md:text-5xl lg:text-5xl font-extrabold text-center text-gray-900 dark:text-gray-200 leading-tight"
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.2 }}
@@ -193,7 +188,7 @@ export default function Home() {
 
       <div className="Testimonies mt-64 max-w-7xl w-full mx-auto px-2 flex flex-col justify-center items-center">
         <h1
-          className="text-3xl sm:text-4xl  underline-offset-8 md:text-5xl lg:text-5xl font-extrabold text-center text-gray-900 dark:text-gray-200 leading-tight"
+          className="Headline text-3xl sm:text-4xl  underline-offset-8 md:text-5xl lg:text-5xl font-extrabold text-center text-gray-900 dark:text-gray-200 leading-tight"
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.2 }}
@@ -208,7 +203,7 @@ export default function Home() {
 
       <div className="Testimonies mt-64 max-w-7xl w-full mx-auto px-2 flex flex-col justify-center items-center">
         <h1
-          className="text-3xl sm:text-4xl  underline-offset-8 md:text-5xl lg:text-5xl font-extrabold text-center text-gray-900 dark:text-gray-200 leading-tight"
+          className="Headline text-3xl sm:text-4xl  underline-offset-8 md:text-5xl lg:text-5xl font-extrabold text-center text-gray-900 dark:text-gray-200 leading-tight"
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.2 }}
@@ -223,7 +218,7 @@ export default function Home() {
 
       <div className="Testimonies mt-64 max-w-7xl w-full mx-auto px-2 flex flex-col justify-center items-center">
         <h1
-          className="text-3xl sm:text-4xl underline-offset-8 md:text-5xl lg:text-5xl font-extrabold text-center text-gray-900 dark:text-gray-200 leading-tight"
+          className="Headline text-3xl sm:text-4xl underline-offset-8 md:text-5xl lg:text-5xl font-extrabold text-center text-gray-900 dark:text-gray-200 leading-tight"
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.2 }}
@@ -240,7 +235,7 @@ export default function Home() {
 
       <div className="Testimonies mt-64 max-w-7xl w-full mx-auto px-2 flex flex-col justify-center items-center ">
         <h1
-          className="text-3xl sm:text-4xl underline-offset-8 md:text-5xl lg:text-5xl font-extrabold text-center text-gray-900 dark:text-gray-200 leading-tight"
+          className="Headline text-3xl sm:text-4xl underline-offset-8 md:text-5xl lg:text-5xl font-extrabold text-center text-gray-900 dark:text-gray-200 leading-tight"
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.2 }} // Triggers when 20% is visible

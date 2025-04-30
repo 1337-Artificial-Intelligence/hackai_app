@@ -1,0 +1,29 @@
+@import url('https://fonts.cdnfonts.com/css/quicky-nick'); 
+
+.MainSec{
+	/* background-color: red; */
+}
+
+.VidContainer{
+	iframe {
+		transition: box-shadow 0.3s ease, transform 0.3s ease;
+		box-shadow: 0 0 20px rgba(232, 0, 234, 0.2);
+		cursor : pointer;
+
+		&:hover{
+			transform: scale(1.02);
+			box-shadow:
+			0 0 10px rgba(232, 0, 234, 0.1),
+			0 0 20px rgba(232, 0, 234, 0.2),
+			0 0 40px rgba(232, 0, 234, 0.3),
+			0 0 80px rgba(232, 0, 234, 0.4);
+		}
+	  }
+}
+
+.Headline{
+	font-family: 'Quicky Nick', sans-serif;
+	background: linear-gradient(90deg,rgba(232, 0, 234, 0) 0%, rgba(232, 0, 234, 0.5) 50%, rgba(232, 0, 234, 0) 100%);
+	position: relative;
+}
+
