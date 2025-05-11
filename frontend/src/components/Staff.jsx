@@ -169,6 +169,11 @@ export default function Staff() {
         "Backend Developer / student @ 1337",
       ],
       [
+        "/assets/profiles/1337ai/imran.jpg",
+        "Imran Baali",
+        "Frontend Developer / student @ 1337", 
+      ],
+      [
         "/assets/profiles/1337ai/yahya.jpeg",
         "Yahya ICHAKDI",
         "Academic Relations @ Um6p SOLE",
