@@ -24,6 +24,18 @@ export default function Staff() {
         "Achraf Mamdouh",
         "Senior Software Engineer @ Google",
       ],
+      [
+        "/assets/profiles/speakers/jawad.jpeg",
+        "Jawad Alaoui",
+        "Software Engineer and CEO @ Norma",
+        
+      ],
+      [
+        "/assets/profiles/speakers/mehdi.png",
+        "Mehdi Bennani",
+        "Research Engineer @ Google DeepMind",
+
+      ],
     ],
     []
   );
@@ -36,25 +48,79 @@ export default function Staff() {
   const mentors = useMemo(
     () => [
       [
-        "/assets/profiles/1337ai/amoujar.jpg",
-        "Abderrahmane Moujar",
-        "Technical Program Chair",
-      ],
-      [getRandomImage(), "Achraf Mamdouh", "SWE Google"],
-      [
-        "/assets/profiles/1337ai/mel-kora.jpg",
-        "Mounia El Koraichi",
-        "Sponsorship Director",
+        "/assets/profiles/1337ai/otman.png",
+        "Otmane El Bourki",
+        "AI Engineer @ Impactera ",
       ],
       [
-        "/assets/profiles/1337ai/jchennak.jpg",
-        "Jawaher Chennak",
-        "Operations Manager",
+        "/assets/profiles/1337ai/jawaher.png",
+        "Jawaher chennak",
+        "1337 student / Ai engineer / Phd student @ UM5",
+      ],
+      [
+        "/assets/profiles/extern/khadija.png",
+        "Khadija Bayoud",
+        "Data Scientist @ ToumAI Analytics",
       ],
       [
         "/assets/profiles/extern/nouamane.jpeg",
         "Nouamane Tazi",
         "ML engineer @ Hugging Face",
+      ],
+      [
+        "/assets/profiles/1337ai/kbenlyaz.jpg",
+        "Khalid Benlyazid",
+        "1337 student / AI engineer @ AI Exploration LAB",
+      ],
+      [
+        "/assets/profiles/extern/makourri.png",
+        "Mohamed Mekkouri",
+        "Machine Learning Engineer @ Hugging Face",
+      ],
+      [
+        "/assets/profiles/1337ai/abd.jpeg",
+        "Abderrahmane Moujar",
+        "Research Engineer @ AI Exploration LAB",
+      ],
+      [
+        "/assets/profiles/extern/kawtar.jpeg",
+        "kawtar zerhouni",
+        "Research Developer @ Leyton",
+      ],
+      [
+        "/assets/profiles/1337ai/mounia.png",
+        "Mounia El Koraichi",
+        "1337 student / Data scientist @ UM6P",
+      ],
+      [
+        "/assets/profiles/extern/ihssan.png",
+        "Ihssane Nedjoui",
+        "Software Engineering and AI student @ ENSA",
+      ],
+      [
+        "/assets/profiles/extern/yassir.png",
+        "Yassir Bendou",
+        "PhD Graduate @ IMT Atlantique",
+      ],
+      [
+        "/assets/profiles/extern/imane.png",
+        "Imane Momayiz",
+        "Senior Data Scientist - Cofounder @AtlasIA",
+      ],
+      [
+        "/assets/profiles/extern/m_aymen.png",
+        "Mohamed Aymane Farhi",
+        "NLP Engineer @ Clear Global",
+      ],
+      [
+        "/assets/profiles/extern/yassine.png",
+        "Yassine El Kheir",
+        "PhD Student - Speech ML Researcher @ DFKI",
+      ],
+      [
+        "/assets/profiles/extern/abdeljalil_.png",
+        "Abdeljalil Elmajjodi",
+        "ML Engineer @ AtlasIA",
       ],
     ],
     []
@@ -63,55 +129,74 @@ export default function Staff() {
   const organizers = useMemo(
     () => [
       [
+        "/assets/profiles/extern/khawela.png",
+        "Khaoula Alaoui Belghiti",
+        "PhD Student @ ESI",
+      ],
+      [
         "/assets/profiles/1337ai/aabouelm.jpg",
         "Ahmed Abouelmawahib",
         "Student Activities Coordinator @ 1337",
       ],
       [
-        "/assets/profiles/1337ai/amoujar.jpg",
+        "/assets/profiles/1337ai/abd.jpeg",
         "Abderrahmane Moujar",
-        "Technical Program Chair",
+        "Research Engineer @ AI Exploration LAB",
       ],
       [
-        "/assets/profiles/1337ai/mel-kora.jpg",
+        "/assets/profiles/1337ai/mounia.png",
         "Mounia El Koraichi",
-        "Sponsorship Director",
+        "1337 student / Data scientist @ UM6P",
       ],
       [
         "/assets/profiles/1337ai/kbenlyaz.jpg",
         "Khalid Benlyazid",
-        "Volunteer Coordinator",
+        "1337 student / AI engineer @ AI Exploration LAB",
       ],
       [
-        "/assets/profiles/1337ai/jchennak.jpg",
-        "Jawaher Chennak",
-        "Operations Manager",
+        "/assets/profiles/1337ai/jawaher.png",
+        "Jawaher chennak",
+        "1337 student / Ai engineer / Phd student @ UM5",
       ],
       [
         "/assets/profiles/1337ai/issam.jpeg",
         "Issam laafar",
-        "Operations Manager",
+        "Frontend Developer / student @ 1337", 
       ],
       [
         "/assets/profiles/1337ai/mossaab.jpeg",
         "Mossaab amimar",
-        "Operations Manager",
+        "Backend Developer / student @ 1337",
       ],
       [
         "/assets/profiles/1337ai/yahya.jpeg",
         "Yahya ICHAKDI",
-        "Academic Relations",
+        "Academic Relations @ Um6p SOLE",
       ],
       [
         "/assets/profiles/extern/nouamane.jpeg",
         "Nouamane Tazi",
-        "Communications Lead",
+        "ML engineer @ Hugging Face",
       ],
-      [getRandomImage(), "Noureddine tahadout", "Communications Lead"],
       [
         "/assets/profiles/1337ai/hbarrak.jpeg",
         "Hamza Barrak",
-        "Industry Relations",
+        "Student @ 1337",
+      ],
+      [
+        "/assets/profiles/1337ai/noureddin.png",
+        "Noureddine tahadout",
+        "Designer / Student @ 1337",
+      ],
+      [
+        "/assets/profiles/extern/ihssan.png",
+        "Ihssane Nedjoui",
+        "Software Engineering and AI student @ ENSA",
+      ],
+      [
+        "/assets/profiles/extern/abdeljalil_.png",
+        "Abdeljalil Elmajjodi",
+        "ML Engineer @ AtlasIA",
       ],
     ],
     []
@@ -182,9 +267,9 @@ export default function Staff() {
           </div>
         }
       >
-        <p className="text-gray-200 text-lg lg:text-xl font-medium max-w-2xl mx-auto">
-          🎉 Mentors to be announced soon! Stay tuned for exciting updates. 👨‍🏫
-        </p>
+        {mentors.map(([img, name, role]) => (
+          <TeamMember key={name} img={img} name={name} role={role} />
+        ))}
       </MembersSection>
 
       {/* Organizers Section */}
@@ -203,9 +288,9 @@ export default function Staff() {
           </div>
         }
       >
-        <p className="text-gray-200 text-lg lg:text-xl font-medium max-w-2xl mx-auto">
-          🎉 Mentors to be announced soon! Stay tuned for exciting updates. 👨
-        </p>
+        {organizers.map(([img, name, role]) => (
+          <TeamMember key={name} img={img} name={name} role={role} />
+        ))}
       </MembersSection>
     </section>
   );
