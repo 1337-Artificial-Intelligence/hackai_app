@@ -16,21 +16,49 @@ export default function Team() {
         throw new Error('No authentication token found');
       }
 
-      const [teamRes, submissionsRes] = await Promise.all([
+      const [teamRes, submissionsRes, leaderboardRes] = await Promise.all([
         fetch(`${import.meta.env.VITE_API_URL}/api/teams/me`, {
           headers: { 'Authorization': `Bearer ${token}` }
         }),
         fetch(`${import.meta.env.VITE_API_URL}/api/submissions/team`, {
           headers: { 'Authorization': `Bearer ${token}` }
+        }),
+        fetch(`${import.meta.env.VITE_API_URL}/api/teams/leaderboard`, {
+          headers: { 'Authorization': `Bearer ${token}` }
         })
       ]);
 
-      if (!teamRes.ok || !submissionsRes.ok) {
+      if (!teamRes.ok || !submissionsRes.ok || !leaderboardRes.ok) {
         throw new Error('Failed to fetch team data');
       }
 
       const teamData = await teamRes.json();
       const submissionsData = await submissionsRes.json();
+      const leaderboardData = await leaderboardRes.json();
+      
+      // Calculate standard competition ranking (1224)
+      const filteredTeams = leaderboardData.data
+        .filter(team => team.role !== 'admin')
+        .sort((a, b) => b.points - a.points);
+        
+      let currentRank = 1;
+      let currentPoints = filteredTeams.length > 0 ? filteredTeams[0].points : 0;
+      let teamsAtCurrentRank = 0;
+      let myRank = 0;
+      
+      filteredTeams.forEach((team, index) => {
+        if (team.points < currentPoints) {
+          currentRank = currentRank + teamsAtCurrentRank;
+          currentPoints = team.points;
+          teamsAtCurrentRank = 1;
+        } else {
+          teamsAtCurrentRank++;
+        }
+        
+        if (team._id === teamData.data._id) {
+          myRank = currentRank;
+        }
+      });
 
       // Calculate stats
       const approvedSubmissions = submissionsData.data.filter(sub => sub.status === 'approved');
@@ -40,7 +68,7 @@ export default function Team() {
         stats: {
           totalPoints: teamData.data.points || 0, // Use points from team data
           completedChallenges: approvedSubmissions.length,
-          rank: teamData.data.rank || 0
+          rank: myRank || 0
         }
       });
     } catch (err) {
@@ -155,15 +183,15 @@ export default function Team() {
             <div className="absolute inset-0 bg-gradient-to-br from-purple-500/20 to-blue-500/20 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
             <div className="relative">
               <div className="flex items-center gap-3 mb-3">
-                <div className="p-2 bg-green-500/20 rounded-lg">
-                  <svg className="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+                <div className="p-2 bg-yellow-500/20 rounded-lg">
+                  <svg className="w-6 h-6 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 3l.848 8.47L12 21l6.152-9.53L19 3H5zm7 5a2 2 0 100-4 2 2 0 000 4z"/>
                   </svg>
                 </div>
                 <p className="text-gray-400 text-sm">Current Rank</p>
               </div>
-              <p className="text-white text-3xl font-bold bg-gradient-to-r from-green-400 to-blue-400 bg-clip-text text-transparent">
-                #{team.stats.rank}
+              <p className="text-white text-3xl font-bold bg-gradient-to-r from-yellow-400 to-blue-400 bg-clip-text text-transparent">
+                {team.stats.rank}
               </p>
             </div>
           </div>

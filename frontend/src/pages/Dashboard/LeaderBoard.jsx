@@ -40,6 +40,24 @@ export default function Leaderboard() {
       const filteredTeams = leaderboardData.data
         .filter(team => team.role !== 'admin')
         .sort((a, b) => b.points - a.points);
+        
+      // Assign standard competition ranking (1224)
+      let currentRank = 1;
+      let currentPoints = filteredTeams.length > 0 ? filteredTeams[0].points : 0;
+      let teamsAtCurrentRank = 0;
+      
+      filteredTeams.forEach((team, index) => {
+        if (team.points < currentPoints) {
+          // New lower score, so rank becomes index + 1
+          currentRank = currentRank + teamsAtCurrentRank;
+          currentPoints = team.points;
+          teamsAtCurrentRank = 1;
+        } else {
+          // Same score as previous team(s)
+          teamsAtCurrentRank++;
+        }
+        team.rank = currentRank;
+      });
 
       setTeams(filteredTeams);
       setCurrentTeamId(teamData.data._id);
@@ -101,7 +119,7 @@ export default function Leaderboard() {
                     : "bg-gray-800 text-gray-400"
                 }`}>
                   <span className="font-bold text-sm">
-                    {index + 1}
+                    {team.rank}
                   </span>
                   {index < 3 && (
                     <div className="absolute inset-0 bg-gradient-to-br from-purple-500/30 to-blue-500/30 rounded-full" />
