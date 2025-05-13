@@ -1,10 +1,13 @@
+require('dotenv').config();
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
 async function createAdmin() {
   try {
     // Connect to MongoDB
-    await mongoose.connect('mongodb://localhost:27017/thinkai');
+    const mongoUri = process.env.MONGODB_URI || 'mongodb://localhost:27017/thinkai';
+    console.log('Connecting to MongoDB URI:', mongoUri);
+    await mongoose.connect(mongoUri);
     console.log('Connected to MongoDB');
 
     // First, delete any existing admin
@@ -13,7 +16,7 @@ async function createAdmin() {
 
     // Hash password
     const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash('admin123', salt);
+    const hashedPassword = await bcrypt.hash('admin', salt);
     console.log('Generated hashed password');
 
     // Create admin user directly in MongoDB to bypass any model validation

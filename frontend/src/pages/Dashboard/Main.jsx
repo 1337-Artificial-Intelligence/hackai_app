@@ -27,8 +27,10 @@ export default function Main() {
   const fetchTeamData = async () => {
     try {
       const token = localStorage.getItem('token');
+      // Token will always exist due to ProtectedRoute, but adding a safety check
       if (!token) {
-        throw new Error('No authentication token found');
+        navigate('/sign');
+        return;
       }
 
       const response = await fetch(`${import.meta.env.VITE_API_URL}/api/teams/me`, {

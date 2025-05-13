@@ -9,6 +9,7 @@ import Admin from "./pages/Admin/Admin";
 import Graph from "./pages/Dashboard/Graph";
 import NotFound from "./pages/NotFound";
 import { useEffect } from "react";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 const App = () => {
 
@@ -21,12 +22,20 @@ const App = () => {
       <Routes>
         <Route index path="/" element={<Home />} />
         <Route path="/sign" element={<Sign />} />
-        <Route path="/dashboard" element={<Dashboard />}>
+        <Route path="/dashboard" element={
+          <ProtectedRoute>
+            <Dashboard />
+          </ProtectedRoute>
+        }>
           <Route path="main" element={<Main />} />
           <Route path="challenge/:id" element={<ChallengePage />} />
           <Route path="Graph" element={<Graph />} />
         </Route>
-        <Route path="/admin" element={<Admin />} />
+        <Route path="/admin" element={
+          <ProtectedRoute>
+            <Admin />
+          </ProtectedRoute>
+        } />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>

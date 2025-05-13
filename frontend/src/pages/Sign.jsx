@@ -86,7 +86,7 @@ export default function CardWithForm() {
       <div className="w-screen min-h-screen text-white md:px-6 px-3 flex justify-center items-center bg-black">
         <nav className="bg-black fixed top-0 w-full py-3 flex justify-between z-10 items-center">
           <div className="max-w-7xl w-full mx-auto flex justify-between items-center">
-            <img src="/assets/logo.jpg" className="md:w-48 w-36" alt="" />
+            <img src="/assets/logo_l.png" className="md:w-48 w-36" alt="" />
             <Link
               to="/"
               className="inline-flex gap-2 md:h-12 h-9 font-extrabold animate-shimmer items-center hover:underline cursor-pointer justify-center rounded-md"

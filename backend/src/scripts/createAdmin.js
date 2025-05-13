@@ -10,7 +10,7 @@ const createAdminUser = async () => {
     const adminData = {
       teamName: 'admin',
       members: [{ name: 'Admin User' }],
-      password: 'admin123', // This will be hashed automatically by the model
+      password: 'admin', // This will be hashed automatically by the model
       role: 'admin',
       isActive: true
     };
