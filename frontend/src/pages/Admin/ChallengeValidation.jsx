@@ -181,6 +181,7 @@ export default function ChallengeValidation() {
               <tr>
                 <th className="text-left py-4 px-6 text-gray-300 font-medium">Team</th>
                 <th className="text-left py-4 px-6 text-gray-300 font-medium">Challenge</th>
+                <th className="text-left py-4 px-6 text-gray-300 font-medium">Date</th>
                 <th className="text-left py-4 px-6 text-gray-300 font-medium">Status</th>
                 <th className="text-left py-4 px-6 text-gray-300 font-medium">Actions</th>
               </tr>
@@ -190,6 +191,15 @@ export default function ChallengeValidation() {
                 <tr key={submission._id} className="border-t border-gray-800 hover:bg-gray-800/50 transition-colors">
                   <td className="py-4 px-6 text-white">{submission.team?.teamName || 'Unknown Team'}</td>
                   <td className="py-4 px-6 text-gray-300">{submission.challenge?.title || 'Unknown Challenge'}</td>
+                  <td className="py-4 px-6 text-gray-400">
+                    {new Date(submission.createdAt).toLocaleString('en-US', {
+                      year: 'numeric',
+                      month: 'short',
+                      day: 'numeric',
+                      hour: '2-digit',
+                      minute: '2-digit'
+                    })}
+                  </td>
                   <td className="py-4 px-6">{getStatusBadge(submission.status)}</td>
                   <td className="py-4 px-6">
                     <button
