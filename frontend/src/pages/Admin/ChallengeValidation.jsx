@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { CheckCircle2, XCircle, Clock, Search, GitPullRequestArrow, AlertTriangle, X } from 'lucide-react';
+import { CheckCircle2, XCircle, Clock, Search, GitPullRequestArrow, AlertTriangle, X, Filter, ChevronDown } from 'lucide-react';
 
 export default function ChallengeValidation() {
   const [selectedSubmission, setSelectedSubmission] = useState(null);
@@ -8,10 +8,34 @@ export default function ChallengeValidation() {
   const [submissions, setSubmissions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [filters, setFilters] = useState({
+    team: '',
+    challenge: '',
+    status: ''
+  });
+  const [uniqueTeams, setUniqueTeams] = useState([]);
+  const [uniqueChallenges, setUniqueChallenges] = useState([]);
 
   useEffect(() => {
     fetchSubmissions();
   }, []);
+  
+  // Extract unique teams and challenges for filters
+  useEffect(() => {
+    if (submissions.length > 0) {
+      // Extract unique team names
+      const teams = [...new Set(submissions
+        .filter(sub => sub.team?.teamName)
+        .map(sub => sub.team.teamName))];
+      setUniqueTeams(teams);
+      
+      // Extract unique challenge titles
+      const challenges = [...new Set(submissions
+        .filter(sub => sub.challenge?.title)
+        .map(sub => sub.challenge.title))];
+      setUniqueChallenges(challenges);
+    }
+  }, [submissions]);
 
   const fetchSubmissions = async () => {
     try {
@@ -80,10 +104,26 @@ export default function ChallengeValidation() {
     );
   };
 
-  const filteredSubmissions = submissions.filter(sub =>
-    sub.team?.teamName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    sub.challenge?.title?.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredSubmissions = submissions.filter(sub => {
+    // Search query filter
+    const matchesSearch = searchQuery === '' || 
+      sub.team?.teamName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      sub.challenge?.title?.toLowerCase().includes(searchQuery.toLowerCase());
+      
+    // Team filter
+    const matchesTeam = filters.team === '' || 
+      sub.team?.teamName === filters.team;
+      
+    // Challenge filter
+    const matchesChallenge = filters.challenge === '' || 
+      sub.challenge?.title === filters.challenge;
+      
+    // Status filter
+    const matchesStatus = filters.status === '' || 
+      sub.status === filters.status;
+      
+    return matchesSearch && matchesTeam && matchesChallenge && matchesStatus;
+  });
 
   if (loading) {
     return (
@@ -158,19 +198,95 @@ export default function ChallengeValidation() {
   return (
     <div className="min-h-screen bg-gray-900 p-6 md:p-8 lg:p-12">
       <div className="max-w-6xl mx-auto">
-        <div className="flex flex-col md:flex-row justify-between items-center mb-8">
-          <h1 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent mb-4 md:mb-0">
-            Challenge Submissions
-          </h1>
-          <div className="relative w-full md:w-64">
-            <input
-              type="text"
-              placeholder="Search submissions..."
-              className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white pl-10"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-            <Search className="w-5 h-5 absolute left-3 top-3 text-gray-400" />
+        <div className="flex flex-col space-y-6 mb-8">
+          <div className="flex flex-col md:flex-row justify-between items-center">
+            <h1 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent mb-4 md:mb-0">
+              Challenge Submissions
+            </h1>
+            <div className="relative w-full md:w-64">
+              <input
+                type="text"
+                placeholder="Search submissions..."
+                className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white pl-10"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+              <Search className="w-5 h-5 absolute left-3 top-3 text-gray-400" />
+            </div>
+          </div>
+          
+          {/* Filters */}
+          <div className="bg-gray-800/50 p-4 rounded-lg border border-gray-700">
+            <div className="flex items-center gap-2 mb-4">
+              <Filter className="text-purple-400 w-5 h-5" />
+              <h3 className="text-white font-medium">Filter Submissions</h3>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {/* Team Filter */}
+              <div>
+                <label className="block text-gray-400 text-sm mb-2">Team</label>
+                <div className="relative">
+                  <select
+                    className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white appearance-none"
+                    value={filters.team}
+                    onChange={(e) => setFilters({...filters, team: e.target.value})}
+                  >
+                    <option value="">All Teams</option>
+                    {uniqueTeams.map(team => (
+                      <option key={team} value={team}>{team}</option>
+                    ))}
+                  </select>
+                  <ChevronDown className="absolute right-3 top-3 text-gray-400 w-4 h-4 pointer-events-none" />
+                </div>
+              </div>
+              
+              {/* Challenge Filter */}
+              <div>
+                <label className="block text-gray-400 text-sm mb-2">Challenge</label>
+                <div className="relative">
+                  <select
+                    className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white appearance-none"
+                    value={filters.challenge}
+                    onChange={(e) => setFilters({...filters, challenge: e.target.value})}
+                  >
+                    <option value="">All Challenges</option>
+                    {uniqueChallenges.map(challenge => (
+                      <option key={challenge} value={challenge}>{challenge}</option>
+                    ))}
+                  </select>
+                  <ChevronDown className="absolute right-3 top-3 text-gray-400 w-4 h-4 pointer-events-none" />
+                </div>
+              </div>
+              
+              {/* Status Filter */}
+              <div>
+                <label className="block text-gray-400 text-sm mb-2">Status</label>
+                <div className="relative">
+                  <select
+                    className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white appearance-none"
+                    value={filters.status}
+                    onChange={(e) => setFilters({...filters, status: e.target.value})}
+                  >
+                    <option value="">All Statuses</option>
+                    <option value="pending">Pending</option>
+                    <option value="approved">Approved</option>
+                    <option value="rejected">Rejected</option>
+                  </select>
+                  <ChevronDown className="absolute right-3 top-3 text-gray-400 w-4 h-4 pointer-events-none" />
+                </div>
+              </div>
+            </div>
+            
+            {/* Clear filters button */}
+            {(filters.team || filters.challenge || filters.status) && (
+              <button
+                onClick={() => setFilters({team: '', challenge: '', status: ''})}
+                className="mt-4 text-sm text-purple-400 hover:text-purple-300 flex items-center gap-1"
+              >
+                <X className="w-4 h-4" /> Clear all filters
+              </button>
+            )}
           </div>
         </div>
 
