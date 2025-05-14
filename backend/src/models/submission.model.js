@@ -22,7 +22,7 @@ const submissionSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ['pending', 'approved', 'rejected'],
+    enum: ['pending', 'approved', 'rejected', 'bypassed'],
     default: 'pending'
   },
   feedback: {

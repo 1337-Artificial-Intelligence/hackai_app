@@ -1,4 +1,4 @@
-import { Download, Github, Link2, FileText, AlertTriangle } from "lucide-react";
+import { Download, Github, Link2, FileText, AlertTriangle, ArrowRightCircle } from "lucide-react";
 import { ArrowLeftIcon } from "lucide-react";
 import { Link, useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
@@ -180,6 +180,7 @@ export default function ChallengePage() {
                 <span className={`px-3 py-1 rounded-full text-xs font-medium ${
                   challenge.submission.status === 'approved' ? 'bg-green-500/10 text-green-400' :
                   challenge.submission.status === 'pending' ? 'bg-yellow-500/10 text-yellow-400' :
+                  challenge.submission.status === 'bypassed' ? 'bg-blue-500/10 text-blue-400' :
                   'bg-red-500/10 text-red-400'
                 }`}>
                   {challenge.submission.status.charAt(0).toUpperCase() + challenge.submission.status.slice(1)}
@@ -246,6 +247,42 @@ export default function ChallengePage() {
                     <>Cancel Submission & Try Again</>
                   )}
                 </button>
+              </div>
+            </div>
+          ) : challenge.submission?.status === 'bypassed' ? (
+            <div className="mb-6 p-6 bg-gray-800 rounded-lg border border-blue-700/30">
+              <h3 className="text-xl font-semibold text-white mb-4 flex items-center">
+                <span className="w-2 h-2 rounded-full bg-blue-500 mr-2"></span>
+                Challenge Bypassed
+              </h3>
+              
+              <div className="mb-4">
+                <p className="text-gray-400 mb-2">Your solution has been bypassed (0 points):</p>
+                <a 
+                  href={`${challenge.submission.githubLink}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-400 hover:underline break-all flex items-center"
+                >
+                  <Github className="w-4 h-4 mr-2 inline" />
+                  {challenge.submission.githubLink}
+                </a>
+                
+                {challenge.submission.feedback && (
+                  <div className="mt-4 p-4 bg-blue-500/10 border border-blue-500/20 rounded-lg">
+                    <h4 className="text-white font-medium mb-2 flex items-center">
+                      <ArrowRightCircle className="w-4 h-4 mr-2 text-blue-400" />
+                      Reviewer Feedback
+                    </h4>
+                    <p className="text-gray-300 text-sm italic">"{challenge.submission.feedback}"</p>
+                  </div>
+                )}
+                
+                <div className="mt-4 p-4 bg-yellow-500/10 border border-yellow-500/20 rounded-lg">
+                  <p className="text-gray-300 text-sm">
+                    <span className="text-yellow-400 font-medium">Note:</span> You can proceed to the next challenges, but this submission received 0 points.
+                  </p>
+                </div>
               </div>
             </div>
           ) : challenge.submission?.status === 'rejected' ? (

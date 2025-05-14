@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { CheckCircle2, XCircle, Clock, Search, GitPullRequestArrow, AlertTriangle, X, Filter, ChevronDown } from 'lucide-react';
+import { CheckCircle2, XCircle, Clock, Search, GitPullRequestArrow, AlertTriangle, X, Filter, ChevronDown, ArrowRightCircle } from 'lucide-react';
 
 export default function ChallengeValidation() {
   const [selectedSubmission, setSelectedSubmission] = useState(null);
@@ -92,13 +92,15 @@ export default function ChallengeValidation() {
     const styles = {
       pending: 'bg-yellow-500/20 text-yellow-400',
       approved: 'bg-green-500/20 text-green-400',
-      rejected: 'bg-red-500/20 text-red-400'
+      rejected: 'bg-red-500/20 text-red-400',
+      bypassed: 'bg-blue-500/20 text-blue-400'
     };
     return (
       <span className={`px-3 py-1 rounded-full text-sm flex items-center ${styles[status]}`}>
         {status === 'pending' && <Clock className="w-4 h-4 mr-2" />}
         {status === 'approved' && <CheckCircle2 className="w-4 h-4 mr-2" />}
         {status === 'rejected' && <XCircle className="w-4 h-4 mr-2" />}
+        {status === 'bypassed' && <ArrowRightCircle className="w-4 h-4 mr-2" />}
         {status.charAt(0).toUpperCase() + status.slice(1)}
       </span>
     );
@@ -146,54 +148,98 @@ export default function ChallengeValidation() {
   }
 
   // Confirmation Dialog
-  const renderConfirmation = () => (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-gray-900 rounded-xl border border-gray-800 p-6 w-full max-w-md shadow-2xl">
-        <div className="text-center">
-          <AlertTriangle className="w-12 h-12 text-yellow-500 mx-auto mb-4" />
-          <h3 className="text-xl font-bold text-white mb-2">
-            {confirmAction?.type === 'approve' 
-              ? 'Approve Submission?' 
-              : 'Reject Submission?'}
-          </h3>
-          <div className="mb-4">
-            <label className="block text-gray-400 text-sm mb-2">Feedback (optional)</label>
-            <textarea
-              id="feedback"
-              className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-              rows="3"
-              placeholder="Enter feedback for the team..."
-            ></textarea>
-          </div>
-          <div className="flex justify-center gap-4">
-            <button
-              onClick={() => setConfirmAction(null)}
-              className="px-6 py-2 rounded-lg bg-gray-800 text-gray-300 hover:bg-gray-700 transition-colors"
-            >
-              Cancel
-            </button>
-            <button
-              onClick={() => {
-                const feedback = document.getElementById('feedback').value;
-                handleValidation(
-                  confirmAction.id,
-                  confirmAction.type === 'approve' ? 'approved' : 'rejected',
-                  feedback
-                );
-              }}
-              className={`px-6 py-2 rounded-lg text-white ${
-                confirmAction?.type === 'approve'
-                  ? 'bg-gradient-to-r from-green-500 to-emerald-500'
-                  : 'bg-gradient-to-r from-red-500 to-rose-500'
-              } hover:opacity-90 transition-opacity`}
-            >
-              {confirmAction?.type === 'approve' ? 'Confirm Approval' : 'Confirm Rejection'}
-            </button>
+  const renderConfirmation = () => {
+    // Get icon and text based on action type
+    const getActionContent = () => {
+      switch (confirmAction?.type) {
+        case 'approve':
+          return {
+            title: 'Approve Submission?',
+            buttonText: 'Confirm Approval',
+            buttonClass: 'bg-gradient-to-r from-green-500 to-emerald-500',
+            icon: <CheckCircle2 className="w-12 h-12 text-green-500 mx-auto mb-4" />
+          };
+        case 'reject':
+          return {
+            title: 'Reject Submission?',
+            buttonText: 'Confirm Rejection',
+            buttonClass: 'bg-gradient-to-r from-red-500 to-rose-500',
+            icon: <XCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
+          };
+        case 'bypass':
+          return {
+            title: 'Bypass Challenge?',
+            buttonText: 'Confirm Bypass',
+            buttonClass: 'bg-gradient-to-r from-blue-500 to-purple-500',
+            icon: <ArrowRightCircle className="w-12 h-12 text-blue-500 mx-auto mb-4" />
+          };
+        default:
+          return {
+            title: 'Confirm Action',
+            buttonText: 'Confirm',
+            buttonClass: 'bg-gradient-to-r from-purple-500 to-blue-500',
+            icon: <AlertTriangle className="w-12 h-12 text-yellow-500 mx-auto mb-4" />
+          };
+      }
+    };
+    
+    const actionContent = getActionContent();
+    
+    return (
+      <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+        <div className="bg-gray-900 rounded-xl border border-gray-800 p-6 w-full max-w-md shadow-2xl">
+          <div className="text-center">
+            {actionContent.icon}
+            <h3 className="text-xl font-bold text-white mb-2">
+              {actionContent.title}
+            </h3>
+            {confirmAction?.type === 'bypass' && (
+              <p className="text-gray-300 mb-4">
+                The team will be allowed to progress but will receive 0 points for this challenge.
+              </p>
+            )}
+            <div className="mb-4">
+              <label className="block text-gray-400 text-sm mb-2">Feedback {confirmAction?.type === 'bypass' ? '(recommended)' : '(optional)'}</label>
+              <textarea
+                id="feedback"
+                className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                rows="3"
+                placeholder={confirmAction?.type === 'bypass' ? 'Explain to the team why their submission is being bypassed...' : 'Enter feedback for the team...'}
+              ></textarea>
+            </div>
+            <div className="flex justify-center gap-4">
+              <button
+                onClick={() => setConfirmAction(null)}
+                className="px-6 py-2 rounded-lg bg-gray-800 text-gray-300 hover:bg-gray-700 transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => {
+                  const feedback = document.getElementById('feedback').value;
+                  const status = {
+                    'approve': 'approved',
+                    'reject': 'rejected',
+                    'bypass': 'bypassed'
+                  }[confirmAction.type];
+                  
+                  handleValidation(
+                    confirmAction.id,
+                    status,
+                    feedback
+                  );
+                }}
+                className={`px-6 py-2 rounded-lg text-white ${actionContent.buttonClass} hover:opacity-90 transition-opacity`}
+              >
+                {actionContent.buttonText}
+              </button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  };
+
 
   return (
     <div className="min-h-screen bg-gray-900 p-6 md:p-8 lg:p-12">
@@ -272,6 +318,7 @@ export default function ChallengeValidation() {
                     <option value="pending">Pending</option>
                     <option value="approved">Approved</option>
                     <option value="rejected">Rejected</option>
+                    <option value="bypassed">Bypassed</option>
                   </select>
                   <ChevronDown className="absolute right-3 top-3 text-gray-400 w-4 h-4 pointer-events-none" />
                 </div>
@@ -399,7 +446,7 @@ export default function ChallengeValidation() {
                 )}
 
                 {selectedSubmission.status === 'pending' && (
-                  <div className="flex justify-end gap-4">
+                  <div className="flex flex-wrap justify-end gap-4">
                     <button
                       onClick={() => setConfirmAction({
                         type: 'reject',
@@ -409,6 +456,16 @@ export default function ChallengeValidation() {
                     >
                       <XCircle className="w-5 h-5 mr-2" />
                       Reject Submission
+                    </button>
+                    <button
+                      onClick={() => setConfirmAction({
+                        type: 'bypass',
+                        id: selectedSubmission._id
+                      })}
+                      className="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-lg hover:opacity-90 transition-opacity flex items-center"
+                    >
+                      <ArrowRightCircle className="w-5 h-5 mr-2" />
+                      Bypass (0 Points)
                     </button>
                     <button
                       onClick={() => setConfirmAction({
