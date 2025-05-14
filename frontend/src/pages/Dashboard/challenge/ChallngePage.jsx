@@ -10,10 +10,42 @@ export default function ChallengePage() {
   const [error, setError] = useState(null);
   const [githubLink, setGithubLink] = useState("");
   const [submitStatus, setSubmitStatus] = useState({ loading: false, error: null, success: false });
+  const [cancelingSubmission, setCancelingSubmission] = useState(false);
 
   useEffect(() => {
     fetchChallenge();
   }, [id]);
+
+  const cancelSubmission = async () => {
+    try {
+      setCancelingSubmission(true);
+      const token = localStorage.getItem('token');
+      
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/submissions/${challenge.submission._id}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to cancel submission');
+      }
+      
+      // Refetch challenge data to update UI
+      await fetchChallenge();
+      
+      // Reset form state
+      setGithubLink("");
+      setSubmitStatus({ loading: false, error: null, success: false });
+    } catch (err) {
+      console.error('Error canceling submission:', err);
+      setSubmitStatus({ loading: false, error: err.message, success: false });
+    } finally {
+      setCancelingSubmission(false);
+    }
+  };
 
   const fetchChallenge = async () => {
     try {
@@ -45,6 +77,11 @@ export default function ChallengePage() {
 
       // Find submission for this challenge
       const submission = submissionData.data?.find(sub => sub.challenge._id === id);
+      
+      // If there's a submission, pre-populate the githubLink field
+      if (submission) {
+        setGithubLink(submission.githubLink || "");
+      }
       
       // Combine challenge with submission data
       const challengeWithSubmission = {
@@ -91,8 +128,10 @@ export default function ChallengePage() {
         throw new Error(data.message || 'Failed to submit challenge');
       }
 
+      // Refetch challenge to update with new submission
+      await fetchChallenge();
+      
       setSubmitStatus({ loading: false, error: null, success: true });
-      setGithubLink(""); // Clear the input
     } catch (err) {
       console.error('Error submitting challenge:', err);
       setSubmitStatus({ loading: false, error: err.message, success: false });
@@ -156,8 +195,11 @@ export default function ChallengePage() {
         {/* Submission Section */}
         <div className="mb-10">
           {challenge.submission?.status === 'approved' ? (
-            <div className="mb-6 p-4 bg-gray-800 rounded-lg border border-gray-700">
-              <h3 className="text-xl font-semibold text-white mb-4">Approved Solution</h3>
+            <div className="mb-6 p-4 bg-gray-800 rounded-lg border border-green-700/30">
+              <h3 className="text-xl font-semibold text-white mb-4 flex items-center">
+                <span className="w-2 h-2 rounded-full bg-green-500 mr-2"></span>
+                Approved Solution
+              </h3>
               <a
                 href={`${challenge.submission.githubLink}`}
                 target="_blank"
@@ -168,8 +210,97 @@ export default function ChallengePage() {
                 View Solution on GitHub
               </a>
             </div>
+          ) : challenge.submission?.status === 'pending' ? (
+            <div className="mb-6 p-6 bg-gray-800 rounded-lg border border-yellow-700/30">
+              <h3 className="text-xl font-semibold text-white mb-4 flex items-center">
+                <span className="w-2 h-2 rounded-full bg-yellow-500 mr-2"></span>
+                Pending Submission
+              </h3>
+              
+              <div className="mb-4">
+                <p className="text-gray-400 mb-2">Your submitted solution is pending review:</p>
+                <a 
+                  href={`${challenge.submission.githubLink}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-400 hover:underline break-all flex items-center"
+                >
+                  <Github className="w-4 h-4 mr-2 inline" />
+                  {challenge.submission.githubLink}
+                </a>
+              </div>
+              
+              <div className="border-t border-gray-700 my-4 pt-4">
+                <p className="text-gray-400 mb-4">If you want to change your submission, you can cancel it and try again:</p>
+                <button
+                  onClick={cancelSubmission}
+                  disabled={cancelingSubmission}
+                  className="px-4 py-2 bg-red-500/20 text-red-400 border border-red-500/30 rounded hover:bg-red-500/30 transition-colors flex items-center"
+                >
+                  {cancelingSubmission ? (
+                    <>
+                      <div className="animate-spin rounded-full h-4 w-4 border-2 border-red-400 mr-2" />
+                      Canceling...
+                    </>
+                  ) : (
+                    <>Cancel Submission & Try Again</>
+                  )}
+                </button>
+              </div>
+            </div>
+          ) : challenge.submission?.status === 'rejected' ? (
+            <div className="mb-6 p-6 bg-gray-800 rounded-lg border border-red-700/30">
+              <h3 className="text-xl font-semibold text-white mb-4 flex items-center">
+                <span className="w-2 h-2 rounded-full bg-red-500 mr-2"></span>
+                Submission Rejected
+              </h3>
+              
+              <div className="mb-4">
+                <p className="text-gray-400 mb-2">Your previous submission was rejected:</p>
+                <a 
+                  href={`${challenge.submission.githubLink}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-400 hover:underline break-all flex items-center"
+                >
+                  <Github className="w-4 h-4 mr-2 inline" />
+                  {challenge.submission.githubLink}
+                </a>
+              </div>
+              
+              <div className="border-t border-gray-700 my-4 pt-4">
+                <h4 className="text-white font-medium mb-2">New Submission</h4>
+                <div className="flex flex-col md:flex-row gap-4 mb-2">
+                  <input
+                    type="text"
+                    value={githubLink}
+                    onChange={(e) => setGithubLink(e.target.value)}
+                    placeholder="Paste GitHub repository URL"
+                    className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-white focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  />
+                  <button
+                    onClick={handleSubmit}
+                    disabled={submitStatus.loading}
+                    className="w-full md:w-auto px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-lg hover:opacity-90 transition-opacity flex items-center justify-center disabled:opacity-50"
+                  >
+                    {submitStatus.loading ? (
+                      <>
+                        <div className="animate-spin rounded-full h-5 w-5 border-2 border-white mr-2" />
+                        Submitting...
+                      </>
+                    ) : (
+                      <>Submit New Solution</>
+                    )}
+                  </button>
+                </div>
+                {submitStatus.error && (
+                  <p className="text-red-500 text-sm mt-2">{submitStatus.error}</p>
+                )}
+              </div>
+            </div>
           ) : (
             <>
+              <h3 className="text-xl font-semibold text-white mb-4">Submit Your Solution</h3>
               <div className="flex flex-col md:flex-row gap-4 mb-6">
                 <input
                   type="text"
