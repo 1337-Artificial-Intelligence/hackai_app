@@ -1,11 +1,15 @@
-require('dotenv').config();
+// Load environment variables from root .env file
+require('dotenv').config({ path: require('path').resolve(__dirname, '../../.env') });
 const mongoose = require('mongoose');
 const Challenge = require('../models/challenge.model');
 const { challengeData, challengeIds } = require('../data/challenges');
 
 const seedChallenges = async () => {
   try {
-    await mongoose.connect(process.env.MONGODB_URI);
+    // Connect to MongoDB with fallback URI
+    const mongoUri = process.env.MONGODB_URI || 'mongodb://localhost:27017/thinkai';
+    console.log('Connecting to MongoDB URI:', mongoUri);
+    await mongoose.connect(mongoUri);
     console.log('Connected to MongoDB');
 
     // Clear existing challenges
