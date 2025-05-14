@@ -446,37 +446,40 @@ export default function ChallengeValidation() {
                 )}
 
                 {selectedSubmission.status === 'pending' && (
-                  <div className="flex flex-wrap justify-end gap-4">
-                    <button
-                      onClick={() => setConfirmAction({
-                        type: 'reject',
-                        id: selectedSubmission._id
-                      })}
-                      className="px-6 py-3 bg-gradient-to-r from-red-500 to-rose-500 text-white rounded-lg hover:opacity-90 transition-opacity flex items-center"
-                    >
-                      <XCircle className="w-5 h-5 mr-2" />
-                      Reject Submission
-                    </button>
-                    <button
-                      onClick={() => setConfirmAction({
-                        type: 'bypass',
-                        id: selectedSubmission._id
-                      })}
-                      className="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-lg hover:opacity-90 transition-opacity flex items-center"
-                    >
-                      <ArrowRightCircle className="w-5 h-5 mr-2" />
-                      Bypass (0 Points)
-                    </button>
-                    <button
-                      onClick={() => setConfirmAction({
-                        type: 'approve',
-                        id: selectedSubmission._id
-                      })}
-                      className="px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-lg hover:opacity-90 transition-opacity flex items-center"
-                    >
-                      <CheckCircle2 className="w-5 h-5 mr-2" />
-                      Approve Submission
-                    </button>
+                  <div className="border-t border-gray-700 mt-6 pt-6">
+                    <h3 className="text-white font-medium mb-4">Review Actions</h3>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                      <button
+                        onClick={() => setConfirmAction({
+                          type: 'reject',
+                          id: selectedSubmission._id
+                        })}
+                        className="px-4 py-3 bg-gradient-to-r from-red-500 to-rose-500 text-white rounded-lg hover:opacity-90 transition-opacity flex items-center justify-center"
+                      >
+                        <XCircle className="w-5 h-5 mr-2" />
+                        Reject
+                      </button>
+                      <button
+                        onClick={() => setConfirmAction({
+                          type: 'bypass',
+                          id: selectedSubmission._id
+                        })}
+                        className="px-4 py-3 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-lg hover:opacity-90 transition-opacity flex items-center justify-center"
+                      >
+                        <ArrowRightCircle className="w-5 h-5 mr-2" />
+                        Bypass (0 Points)
+                      </button>
+                      <button
+                        onClick={() => setConfirmAction({
+                          type: 'approve',
+                          id: selectedSubmission._id
+                        })}
+                        className="px-4 py-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-lg hover:opacity-90 transition-opacity flex items-center justify-center"
+                      >
+                        <CheckCircle2 className="w-5 h-5 mr-2" />
+                        Approve
+                      </button>
+                    </div>
                   </div>
                 )}
               </div>
