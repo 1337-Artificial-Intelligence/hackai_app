@@ -263,24 +263,24 @@ export default function TeamManagement() {
 
         {/* Edit/Create Modal */}
         {isModalOpen && (
-          <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4">
-            <div className="bg-gray-900 rounded-xl p-6 w-full max-w-md">
-              <div className="flex justify-between items-center mb-6">
-                <h3 className="text-xl font-bold text-white">
-                  {currentTeam ? 'Edit Team' : 'Add New Team'}
-                </h3>
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+            <div className="bg-gray-900 rounded-xl border border-gray-800 w-full max-w-[95%] md:max-w-xl shadow-2xl mx-2 max-h-[90vh] flex flex-col">
+              <div className="flex justify-between items-center p-4 md:p-6 border-b border-gray-800">
+                <h2 className="text-lg md:text-xl font-bold text-white">
+                  {currentTeam ? 'Edit Team' : 'Create New Team'}
+                </h2>
                 <button
                   onClick={handleCloseModal}
-                  className="text-gray-400 hover:text-gray-300"
+                  className="text-gray-400 hover:text-white"
                 >
-                  <X className="w-5 h-5" />
+                  <X className="w-6 h-6" />
                 </button>
               </div>
 
-              <form onSubmit={handleSubmit}>
-                <div className="space-y-4">
+              <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto p-4 md:p-6">
+                <div className="space-y-4 md:space-y-6">
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-1">
+                    <label className="block text-sm md:text-base text-gray-300 mb-2">
                       Team Name
                     </label>
                     <input
@@ -288,91 +288,111 @@ export default function TeamManagement() {
                       name="teamName"
                       value={formData.teamName}
                       onChange={handleInputChange}
-                      className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white"
+                      className="w-full bg-gray-800 rounded-lg px-4 py-2 md:py-3 text-sm md:text-base text-white focus:ring-2 focus:ring-purple-500"
                       required
+                      placeholder="Enter team name"
                     />
                   </div>
+                  
+                  <div className="border-t border-gray-800 pt-4 md:pt-6">
+                    <h3 className="text-md font-medium text-white mb-3 flex items-center">
+                      <Users className="w-4 h-4 mr-2 text-purple-400" />
+                      Team Members
+                    </h3>
+                    
+                    <div className="space-y-4">
+                      <div>
+                        <label className="block text-sm md:text-base text-gray-300 mb-2">
+                          Member 1
+                        </label>
+                        <input
+                          type="text"
+                          name="member1"
+                          value={formData.member1}
+                          onChange={handleInputChange}
+                          className="w-full bg-gray-800 rounded-lg px-4 py-2 md:py-3 text-sm md:text-base text-white focus:ring-2 focus:ring-purple-500"
+                          required
+                          placeholder="Enter member name"
+                        />
+                      </div>
 
-                  <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-1">
-                      Member 1
-                    </label>
-                    <input
-                      type="text"
-                      name="member1"
-                      value={formData.member1}
-                      onChange={handleInputChange}
-                      className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white"
-                    />
+                      <div>
+                        <label className="block text-sm md:text-base text-gray-300 mb-2">
+                          Member 2 (Optional)
+                        </label>
+                        <input
+                          type="text"
+                          name="member2"
+                          value={formData.member2}
+                          onChange={handleInputChange}
+                          className="w-full bg-gray-800 rounded-lg px-4 py-2 md:py-3 text-sm md:text-base text-white focus:ring-2 focus:ring-purple-500"
+                          placeholder="Enter member name"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-sm md:text-base text-gray-300 mb-2">
+                          Member 3 (Optional)
+                        </label>
+                        <input
+                          type="text"
+                          name="member3"
+                          value={formData.member3}
+                          onChange={handleInputChange}
+                          className="w-full bg-gray-800 rounded-lg px-4 py-2 md:py-3 text-sm md:text-base text-white focus:ring-2 focus:ring-purple-500"
+                          placeholder="Enter member name"
+                        />
+                      </div>
+                    </div>
                   </div>
 
-                  <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-1">
-                      Member 2
-                    </label>
-                    <input
-                      type="text"
-                      name="member2"
-                      value={formData.member2}
-                      onChange={handleInputChange}
-                      className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-1">
-                      Member 3
-                    </label>
-                    <input
-                      type="text"
-                      name="member3"
-                      value={formData.member3}
-                      onChange={handleInputChange}
-                      className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-1">
-                      Password
-                    </label>
-                    <div className="flex gap-2">
+                  <div className="border-t border-gray-800 pt-4 md:pt-6">
+                    <div>
+                      <label className="block text-sm md:text-base text-gray-300 mb-2">
+                        Password {!currentTeam && <span className="text-red-400 font-medium">(Required for new teams)</span>}
+                      </label>
                       <input
-                        type="text"
+                        type="password"
                         name="password"
                         value={formData.password}
                         onChange={handleInputChange}
-                        className="flex-1 px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white"
+                        className="w-full bg-gray-800 rounded-lg px-4 py-2 md:py-3 text-sm md:text-base text-white focus:ring-2 focus:ring-purple-500"
                         required={!currentTeam}
+                        placeholder={currentTeam ? "Enter new password (leave empty to keep current)" : "Enter password"}
                       />
-                      <button
-                        type="button"
-                        onClick={generatePassword}
-                        className="px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-                      >
-                        Generate
-                      </button>
                     </div>
                   </div>
 
                   {error && (
-                    <div className="text-red-500 text-sm mt-2">{error}</div>
+                    <div className="text-red-500 text-sm mt-4 p-3 bg-red-500/10 border border-red-500/30 rounded-lg">
+                      {error}
+                    </div>
                   )}
 
-                  <div className="flex justify-end gap-3 mt-6">
+                  <div className="flex justify-end pt-4 border-t border-gray-800 mt-6">
                     <button
                       type="button"
                       onClick={handleCloseModal}
-                      className="px-4 py-2 text-gray-300 hover:text-white"
+                      className="px-6 py-2 md:py-3 bg-gray-800 text-white rounded-lg mr-3 hover:bg-gray-700 transition-colors"
                     >
                       Cancel
                     </button>
                     <button
                       type="submit"
+                      className="px-6 py-2 md:py-3 bg-gradient-to-r from-purple-500 to-blue-500 text-white rounded-lg flex items-center hover:opacity-90 transition-opacity"
                       disabled={isLoading}
-                      className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
                     >
-                      {isLoading ? 'Saving...' : 'Save Team'}
+                      {isLoading ? (
+                        <>
+                          <div className="animate-spin rounded-full h-5 w-5 border-2 border-white mr-2" />
+                          Saving...
+                        </>
+                      ) : (
+                        <>
+                          <Save className="w-5 h-5 mr-2" />
+                          {currentTeam ? 'Update Team' : 'Create Team'}
+                        </>
+                      )}
                     </button>
                   </div>
                 </div>
