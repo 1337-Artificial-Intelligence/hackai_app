@@ -1,4 +1,4 @@
-import { Download, Github, Link2, FileText } from "lucide-react";
+import { Download, Github, Link2, FileText, AlertTriangle } from "lucide-react";
 import { ArrowLeftIcon } from "lucide-react";
 import { Link, useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
@@ -266,6 +266,16 @@ export default function ChallengePage() {
                   <Github className="w-4 h-4 mr-2 inline" />
                   {challenge.submission.githubLink}
                 </a>
+                
+                {challenge.submission.feedback && (
+                  <div className="mt-4 p-4 bg-red-500/10 border border-red-500/20 rounded-lg">
+                    <h4 className="text-white font-medium mb-2 flex items-center">
+                      <AlertTriangle className="w-4 h-4 mr-2 text-red-400" />
+                      Reviewer Feedback
+                    </h4>
+                    <p className="text-gray-300 text-sm italic">"{challenge.submission.feedback}"</p>
+                  </div>
+                )}
               </div>
               
               <div className="border-t border-gray-700 my-4 pt-4">
@@ -275,7 +285,7 @@ export default function ChallengePage() {
                     type="text"
                     value={githubLink}
                     onChange={(e) => setGithubLink(e.target.value)}
-                    placeholder="Paste GitHub repository URL"
+                    placeholder="Submission URL"
                     className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-white focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                   />
                   <button
@@ -306,7 +316,7 @@ export default function ChallengePage() {
                   type="text"
                   value={githubLink}
                   onChange={(e) => setGithubLink(e.target.value)}
-                  placeholder="Paste GitHub repository URL"
+                  placeholder="Submission URL"
                   className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                 />
                 <button

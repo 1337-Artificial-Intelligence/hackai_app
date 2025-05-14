@@ -166,7 +166,7 @@ export default function Staff() {
       [
         "/assets/profiles/1337ai/mossaab.jpeg",
         "Mossaab amimar",
-        "Backend Developer / student @ 1337",
+        "Full Stack Developer / student @ 1337",
       ],
       [
         "/assets/profiles/1337ai/imran.jpg",
