@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import { ArrowLeftIcon, LogOut } from "lucide-react";
 import ChallengeManagement from "./ChallengeManagement";
@@ -24,7 +24,16 @@ export default function Admin() {
     { teamName: "Your Team", points: 320, rank: 5 },
   ];
 
-  const [activeTab, setActiveTab] = useState("Teams");
+  // Load the active tab from localStorage or default to "Teams"
+  const [activeTab, setActiveTab] = useState(() => {
+    const savedTab = localStorage.getItem("adminActiveTab");
+    return savedTab || "Teams";
+  });
+  
+  // Save active tab to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem("adminActiveTab", activeTab);
+  }, [activeTab]);
 
   return (
     <div>
@@ -39,8 +48,8 @@ export default function Admin() {
                 to="/"
                 className="inline-flex gap-2 md:h-12 h-9 font-extrabold animate-shimmer text-white items-center hover:underline cursor-pointer justify-center rounded-md"
               >
-                <ArrowLeftIcon size={18} className="text-xl" />
-                Back to home
+                {/* <ArrowLeftIcon size={18} className="text-xl" />
+                Back to home */}
               </Link>
               <button
                 onClick={handleLogout}
@@ -63,7 +72,10 @@ export default function Admin() {
                       ? "bg-gradient-to-r from-purple-500 to-blue-500 text-white shadow-purple/30"
                       : "text-gray-300 hover:bg-gray-800/50 hover:text-white"
                   }`}
-                  onClick={() => setActiveTab(tab)}
+                  onClick={() => {
+                    setActiveTab(tab);
+                    // No need to set localStorage here as the useEffect will handle it
+                  }}
                 >
                   <span className="relative z-10 font-medium text-sm">
                     {tab}

@@ -7,7 +7,16 @@ import Team from "./Team";
 LeaderBoard;
 export default function Main() {
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState("Challenges");
+  // Load the active tab from localStorage or default to "Challenges"
+  const [activeTab, setActiveTab] = useState(() => {
+    const savedTab = localStorage.getItem("teamActiveTab");
+    return savedTab || "Challenges";
+  });
+  
+  // Save active tab to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem("teamActiveTab", activeTab);
+  }, [activeTab]);
   const [showNamePopup, setShowNamePopup] = useState(false);
   const [teamData, setTeamData] = useState(null);
   const [error, setError] = useState(null);
