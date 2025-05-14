@@ -5,6 +5,7 @@ import ChallengeManagement from "./ChallengeManagement";
 import Leaderboard from "../Dashboard/LeaderBoard";
 import TeamManagement from "./Teams";
 import ChallengeValidation from "./ChallengeValidation";
+import TeamProgress from "./TeamProgress";
 
 export default function Admin() {
   const navigate = useNavigate();
@@ -52,8 +53,8 @@ export default function Admin() {
           </div>
         </nav>
         <div className="max-w-7xl mx-auto ">
-          <div className="flex mb-8 mt-10 bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl p-1.5 border border-gray-700 w-fit shadow-xl">
-            {["Teams", "Challenges", "Submissions", "Leaderboard"].map(
+          <div className="flex mb-8 mt-10 bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl p-1.5 border border-gray-700 w-fit shadow-xl overflow-x-auto">
+            {["Teams", "Challenges", "Submissions", "Leaderboard", "Progress"].map(
               (tab) => (
                 <button
                   key={tab}
@@ -85,6 +86,7 @@ export default function Admin() {
           )}
           {activeTab == "Submissions" && <ChallengeValidation />}
           {activeTab == "Teams" && <TeamManagement />}
+          {activeTab == "Progress" && <TeamProgress />}
         </div>
       </div>
     </div>
