@@ -17,7 +17,7 @@ import ContactUs from "../components/ContactUs";
 
 import Staff from "../components/Staff";
 import Prizes from "../components/Prizes";
-import MainTitle from "../components/title";
+import MainTitle from "../components/Title";
 import StyledNeon from "../components/StyledNeon";
 
 export default function Home() {
