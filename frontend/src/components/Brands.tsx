@@ -36,6 +36,10 @@ const BRANDS: Brand[] = [
     name: "Brand 7",
     logo: "/assets/brands/AHG-logo.png",
   },
+  {
+    name: "Brand 8",
+    logo: "/assets/brands/siana_1.png",
+  }
 ];
 
 interface BrandsCarouselProps extends React.HTMLAttributes<HTMLDivElement> {
