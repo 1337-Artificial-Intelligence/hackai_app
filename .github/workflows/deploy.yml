@@ -12,7 +12,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: 🎉 Deploy in EC2
+    - name: 🎉 Deploy in GCP
       env:
           PRIVATE_KEY: ${{ secrets.PASSWORD  }}
           HOSTNAME : ${{ secrets.HOST  }}
