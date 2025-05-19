@@ -1,0 +1,25 @@
+name: 🚀 CI/CD HackAi app
+
+on:
+  push:
+    branches:    
+      - main
+
+jobs:
+#First we will see the application build or not , then we will deploy in EC2
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: 🎉 Deploy in EC2
+      env:
+          PRIVATE_KEY: ${{ secrets.PASSWORD  }}
+          HOSTNAME : ${{ secrets.HOST  }}
+          USER_NAME : ${{ secrets.USERNAME  }}
+
+      run: |
+        echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
+        ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} '
+          sh /home/imran_baali19/thinkai_main/redeploy.sh
+        '
