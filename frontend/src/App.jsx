@@ -6,7 +6,6 @@ import Dashboard from "./pages/Dashboard/Dashboard";
 import Main from "./pages/Dashboard/Main";
 import ChallengePage from "./pages/Dashboard/challenge/ChallngePage";
 import Admin from "./pages/Admin/Admin";
-import Graph from "./pages/Dashboard/Graph";
 import NotFound from "./pages/NotFound";
 import { useEffect } from "react";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -29,7 +28,7 @@ const App = () => {
         }>
           <Route path="main" element={<Main />} />
           <Route path="challenge/:id" element={<ChallengePage />} />
-          <Route path="Graph" element={<Graph />} />
+          {/* <Route path="graph" element={<Graph />} /> */}
         </Route>
         <Route path="/admin" element={
           <ProtectedRoute>

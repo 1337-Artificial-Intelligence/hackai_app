@@ -6,14 +6,15 @@ import Leaderboard from "../Dashboard/LeaderBoard";
 import TeamManagement from "./Teams";
 import ChallengeValidation from "./ChallengeValidation";
 import TeamProgress from "./TeamProgress";
+import Graph from "../../components/graph";
 
 export default function Admin() {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    navigate('/');
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    navigate("/");
   };
 
   const leaderboardData = [
@@ -29,7 +30,7 @@ export default function Admin() {
     const savedTab = localStorage.getItem("adminActiveTab");
     return savedTab || "Teams";
   });
-  
+
   // Save active tab to localStorage whenever it changes
   useEffect(() => {
     localStorage.setItem("adminActiveTab", activeTab);
@@ -62,35 +63,38 @@ export default function Admin() {
           </div>
         </nav>
         <div className="max-w-7xl mx-auto ">
-          <div className="flex mb-8 mt-10 bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl p-1.5 border border-gray-700 w-fit shadow-xl overflow-x-auto">
-            {["Teams", "Challenges", "Submissions", "Leaderboard", "Progress"].map(
-              (tab) => (
-                <button
-                  key={tab}
-                  className={`relative px-6 py-3 rounded-lg transition-all duration-300 ${
-                    activeTab === tab
-                      ? "bg-gradient-to-r from-purple-500 to-blue-500 text-white shadow-purple/30"
-                      : "text-gray-300 hover:bg-gray-800/50 hover:text-white"
-                  }`}
-                  onClick={() => {
-                    setActiveTab(tab);
-                    // No need to set localStorage here as the useEffect will handle it
-                  }}
-                >
-                  <span className="relative z-10 font-medium text-sm">
-                    {tab}
-                  </span>
-                  {activeTab === tab && (
-                    <div className="absolute inset-0 bg-gradient-to-r from-purple-500/30 to-blue-500/30 rounded-lg" />
-                  )}
-                  {activeTab !== tab && (
-                    <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity">
-                      <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-blue-500/10 rounded-lg" />
-                    </div>
-                  )}
-                </button>
-              )
-            )}
+          <div className="flex flex-wrap mb-8 mt-10 bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl p-1.5 border border-gray-700 w-fit shadow-xl overflow-x-auto">
+            {[
+              "Teams",
+              "Challenges",
+              "Submissions",
+              "Leaderboard",
+              "Progress",
+              "Graph"
+            ].map((tab) => (
+              <button
+                key={tab}
+                className={`relative px-6 py-3 rounded-lg transition-all duration-300 ${
+                  activeTab === tab
+                    ? "bg-gradient-to-r from-purple-500 to-blue-500 text-white shadow-purple/30"
+                    : "text-gray-300 hover:bg-gray-800/50 hover:text-white"
+                }`}
+                onClick={() => {
+                  setActiveTab(tab);
+                  // No need to set localStorage here as the useEffect will handle it
+                }}
+              >
+                <span className="relative z-10 font-medium text-sm">{tab}</span>
+                {activeTab === tab && (
+                  <div className="absolute inset-0 bg-gradient-to-r from-purple-500/30 to-blue-500/30 rounded-lg" />
+                )}
+                {activeTab !== tab && (
+                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-blue-500/10 rounded-lg" />
+                  </div>
+                )}
+              </button>
+            ))}
           </div>
           {activeTab == "Challenges" && <ChallengeManagement />}
           {activeTab == "Leaderboard" && (
@@ -99,6 +103,7 @@ export default function Admin() {
           {activeTab == "Submissions" && <ChallengeValidation />}
           {activeTab == "Teams" && <TeamManagement />}
           {activeTab == "Progress" && <TeamProgress />}
+          {activeTab == "Graph" && <Graph />}
         </div>
       </div>
     </div>

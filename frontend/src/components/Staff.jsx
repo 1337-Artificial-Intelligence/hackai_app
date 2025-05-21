@@ -184,6 +184,11 @@ export default function Staff() {
         "Full Stack Developer / student @ 1337",
       ],
       [
+        "/assets/profiles/1337ai/hassan.jpg",
+        "Hassan karrach",
+        "Frontend Developer / student @ 1337",
+      ],
+      [
         "/assets/profiles/1337ai/imran.jpg",
         "Imran Baali",
         "Frontend Developer / student @ 1337",
