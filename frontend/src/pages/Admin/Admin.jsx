@@ -40,7 +40,7 @@ export default function Admin() {
     <div>
       {" "}
       <div className="dark min-h-screen pb-10 bg-black md:px-6 px-3">
-        <nav className="bg-black  w-full py-3 flex justify-between relative z-10 top-0 items-center">
+        <nav className="bg-black  w-full p-3 flex justify-between relative z-10 top-0 items-center">
           <div className="max-w-7xl w-full  mx-auto flex justify-between items-center">
             <img src="/assets/logo_l.png" className="md:w-48 w-36" alt="" />
 
