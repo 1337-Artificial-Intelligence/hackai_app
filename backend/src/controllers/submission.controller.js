@@ -68,7 +68,7 @@ exports.getSubmissions = async (req, res) => {
   try {
     const submissions = await Submission.find()
       .populate('team', 'teamName')
-      .populate('challenge', 'title')
+      .populate('challenge', 'title description tag isAIChallenge points')
       .sort('-createdAt');
 
     res.json({
@@ -142,6 +142,11 @@ exports.validateSubmission = async (req, res) => {
     submission.feedback = feedback;
     submission.reviewedBy = reviewer._id;
     submission.reviewedAt = Date.now();
+    
+    // If this is an AI challenge and score was provided, save the score
+    if (req.body.score !== undefined) {
+      submission.score = req.body.score;
+    }
 
     await submission.save();
 
@@ -150,8 +155,14 @@ exports.validateSubmission = async (req, res) => {
       const team = await Team.findById(submission.team);
       const challenge = await Challenge.findById(submission.challenge);
 
-      // Add points
-      team.points += challenge.points;
+      // Check if this is an AI challenge
+      if (challenge.isAIChallenge) {
+        // For AI challenges, we need to recalculate points for all teams
+        await recalculateAIChallengePoints(challenge._id);
+      } else {
+        // For regular challenges, add the fixed points
+        team.points += challenge.points;
+      }
 
       // Add to completed challenges
       team.completedChallenges.push(challenge._id);
@@ -176,7 +187,8 @@ exports.validateSubmission = async (req, res) => {
         console.log('Emitted leaderboard-update event');
       }
     }
-
+    
+    // Send response
     res.json({
       success: true,
       data: submission
@@ -188,3 +200,144 @@ exports.validateSubmission = async (req, res) => {
     res.status(400).json({ message: error.message });
   }
 };
+
+// @desc    Get submissions for a specific challenge
+// @route   GET /api/submissions/challenge/:id
+// @access  Public
+exports.getChallengeSubmissions = async (req, res) => {
+  try {
+    const challengeId = req.params.id;
+    
+    // Get the challenge to check if it's an AI challenge
+    const challenge = await Challenge.findById(challengeId);
+    if (!challenge) {
+      return res.status(404).json({ message: 'Challenge not found' });
+    }
+    
+    // Get approved submissions for this challenge
+    const submissions = await Submission.find({
+      challenge: challengeId,
+      status: 'approved'
+    })
+    .populate('team', 'teamName') // Only get team name, not all team data
+    .sort({ score: -1 }) // Sort by score descending
+    .lean(); // Convert to plain JS object for better performance
+
+    // If it's an AI challenge, include scores in the response
+    if (challenge.isAIChallenge) {
+      const leaderboardData = submissions.map((sub, index) => ({
+        rank: index + 1,
+        teamName: sub.team?.teamName || 'Unknown Team',
+        score: sub.score || 0,
+        aiPoints: sub.aiPoints || 0
+      }));
+      
+      return res.json({
+        success: true,
+        isAIChallenge: true,
+        count: leaderboardData.length,
+        data: leaderboardData
+      });
+    }
+    
+    // For regular challenges, just return the count of approved submissions
+    return res.json({
+      success: true,
+      isAIChallenge: false,
+      count: submissions.length,
+      data: submissions.map(sub => ({
+        teamName: sub.team?.teamName || 'Unknown Team'
+      }))
+    });
+  } catch (error) {
+    console.error('Error getting challenge submissions:', error);
+    res.status(400).json({ message: error.message });
+  }
+};
+
+/**
+ * Recalculate points for all teams that completed an AI Challenge
+ * Points are awarded based on ranking (100 points for highest score, scaled down to 0)
+ */
+async function recalculateAIChallengePoints(challengeId) {
+  try {
+    // Get all approved submissions for this challenge
+    const submissions = await Submission.find({
+      challenge: challengeId,
+      status: 'approved',
+      score: { $exists: true, $ne: null } // Only include submissions with scores
+    }).sort({ score: -1 }); // Sort by score descending
+
+    if (submissions.length === 0) return;
+
+    // Calculate points based on ranking
+    const highestScore = submissions[0].score;
+    const lowestScore = submissions.length > 1 ? 
+      submissions[submissions.length - 1].score : 
+      highestScore;
+
+    // Calculate and update AI points for each submission
+    for (let i = 0; i < submissions.length; i++) {
+      const submission = submissions[i];
+      
+      // If all scores are the same, everyone gets 100 points
+      let aiPoints = 100;
+      
+      // Otherwise, scale points from 100 (highest) to 0 (lowest) based on score ranking
+      if (highestScore !== lowestScore) {
+        // Normalize the score between 0 and 1
+        const normalizedScore = (submission.score - lowestScore) / (highestScore - lowestScore);
+        // Scale to 0-100 range
+        aiPoints = Math.round(normalizedScore * 100);
+      }
+      
+      // Update submission with calculated AI points
+      submission.aiPoints = aiPoints;
+      await submission.save();
+      
+      // Update team points by recalculating all challenge points
+      await updateTeamPoints(submission.team);
+    }
+  } catch (error) {
+    console.error('Error recalculating AI challenge points:', error);
+  }
+}
+
+/**
+ * Update a team's total points by summing all their approved challenge points
+ */
+async function updateTeamPoints(teamId) {
+  try {
+    const team = await Team.findById(teamId);
+    if (!team) return;
+    
+    // Get all approved submissions for this team
+    const regularSubmissions = await Submission.find({
+      team: teamId,
+      status: 'approved'
+    }).populate('challenge');
+    
+    // Calculate total points
+    let totalPoints = 0;
+    
+    // Process each submission separately
+    for (const sub of regularSubmissions) {
+      // For regular challenges
+      if (!sub.challenge.isAIChallenge) {
+        totalPoints += sub.challenge.points || 0;
+      }
+      // For AI challenges
+      else if (sub.score !== undefined && sub.aiPoints !== undefined) {
+        totalPoints += sub.aiPoints || 0;
+        console.log(`Adding AI points: ${sub.aiPoints} for team ${team.teamName}, total now: ${totalPoints}`);
+      }
+    }
+    
+    // Update team points
+    console.log(`Final points for team ${team.teamName}: ${totalPoints}`);
+    team.points = totalPoints;
+    await team.save();
+  } catch (error) {
+    console.error('Error updating team points:', error);
+  }
+}

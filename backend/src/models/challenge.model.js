@@ -36,6 +36,10 @@ const challengeSchema = new mongoose.Schema({
   isActive: {
     type: Boolean,
     default: true
+  },
+  isAIChallenge: {
+    type: Boolean,
+    default: false
   }
 }, {
   timestamps: true,

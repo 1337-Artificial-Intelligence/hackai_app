@@ -4,6 +4,7 @@ const {
   createSubmission,
   getSubmissions,
   getTeamSubmissions,
+  getChallengeSubmissions,
   validateSubmission
 } = require('../controllers/submission.controller');
 const { protect, authorize } = require('../middleware/auth.middleware');
@@ -16,6 +17,9 @@ router
   .get(authorize('admin', 'mentor'), getSubmissions);
 
 router.get('/team', getTeamSubmissions);
+
+// Get submissions for a specific challenge (for mini-leaderboard)
+router.get('/challenge/:id', getChallengeSubmissions);
 
 router.put('/:id/validate', authorize('admin', 'mentor'), validateSubmission);
 
