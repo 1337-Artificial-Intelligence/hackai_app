@@ -118,7 +118,7 @@ export default function Leaderboard() {
                     : "bg-gray-800 text-gray-400"
                 }`}>
                   <span className="font-bold text-sm">
-                    {team.rank}
+                    {index + 1}
                   </span>
                   {index < 3 && (
                     <div className="absolute inset-0 bg-gradient-to-br from-purple-500/30 to-blue-500/30 rounded-full" />
