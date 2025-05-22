@@ -25,6 +25,7 @@ export default function ChallengeManagement() {
     subject: null,
     dependencies: [],
     points: 100,
+    isAIChallenge: false,
   });
 
   useEffect(() => {
@@ -96,7 +97,8 @@ export default function ChallengeManagement() {
         tag: formData.tag,
         resources: formData.resources.filter(Boolean),
         dependencies: formData.dependencies,
-        points: parseInt(formData.points) || 100
+        points: parseInt(formData.points) || 100,
+        isAIChallenge: formData.isAIChallenge
       };
 
       const response = await fetch(url, {
@@ -155,8 +157,9 @@ export default function ChallengeManagement() {
       description: "",
       tag: "",
       resources: [""],
-      subject: null,
-      dependencies: []
+      dependencies: [],
+      points: 100,
+      isAIChallenge: false,
     });
     setSelectedChallenge(null);
   };
@@ -169,8 +172,8 @@ export default function ChallengeManagement() {
       tag: challenge.tag,
       resources: challenge.resources?.length ? challenge.resources : [""],
       dependencies: challenge.dependencies?.map(String) || [],
-      subject: null,
-      points: challenge.points || 100
+      points: challenge.points || 100,
+      isAIChallenge: challenge.isAIChallenge || false,
     });
     setShowModal(true);
   };
@@ -298,6 +301,25 @@ export default function ChallengeManagement() {
                         min="0"
                         required
                       />
+                    </div>
+                    
+                    <div>
+                      <label className="flex items-center space-x-2 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          name="isAIChallenge"
+                          checked={formData.isAIChallenge}
+                          onChange={(e) => setFormData({...formData, isAIChallenge: e.target.checked})}
+                          className="form-checkbox h-5 w-5 text-purple-500 rounded focus:ring-purple-500"
+                        />
+                        <span className="text-sm md:text-base text-gray-300">
+                          AI Challenge (Score-based)
+                        </span>
+                      </label>
+                      <p className="text-xs text-gray-500 mt-1 ml-7">
+                        AI Challenges require mentors to input scores when validating submissions.
+                        Points are awarded based on ranking (highest score gets 100 points).
+                      </p>
                     </div>
 
                     <div>

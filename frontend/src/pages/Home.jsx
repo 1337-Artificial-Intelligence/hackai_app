@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { LampDemo } from "../components/ui/lamp";
 import { Cover } from "../components/ui/cover";
 import { TextHoverEffect } from "../components/ui/text-hover-effect";
@@ -21,6 +21,14 @@ import MainTitle from "../components/Title";
 import StyledNeon from "../components/StyledNeon";
 
 export default function Home() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  
+  useEffect(() => {
+    // Check if user is authenticated
+    const token = localStorage.getItem('token');
+    setIsAuthenticated(!!token);
+  }, []);
+  
   const testimonials = [
     {
       quote:
@@ -60,14 +68,21 @@ export default function Home() {
         <div className="max-w-7xl w-full  mx-auto flex justify-between items-center">
           <img src="/assets/logo_l.png" className="md:w-40 w-36" alt="" />
 
-          <Link
-            // open this https://forms.gle/oBn1QXJRXZ7b33wPA in new tab
-            to="https://forms.gle/oBn1QXJRXZ7b33wPA"
-            target="_blank"
-            className="inline-flex md:h-12 h-9 animate-shimmer items-center cursor-pointer justify-center rounded-md border border-white bg-[linear-gradient(110deg,#000103,45%,#1e2631,55%,#000103)] bg-[length:200%_100%] px-6 font-medium text-gray-200 transition-colors focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-slate-50"
-          >
-            Register
-          </Link>
+          {isAuthenticated ? (
+            <Link
+              to="/dashboard"
+              className="inline-flex md:h-12 h-9 animate-shimmer items-center cursor-pointer justify-center rounded-md border border-white bg-[linear-gradient(110deg,#000103,45%,#1e2631,55%,#000103)] bg-[length:200%_100%] px-6 font-medium text-gray-200 transition-colors focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-slate-50"
+            >
+              Dashboard
+            </Link>
+          ) : (
+            <Link
+              to="/sign"
+              className="inline-flex md:h-12 h-9 animate-shimmer items-center cursor-pointer justify-center rounded-md border border-white bg-[linear-gradient(110deg,#000103,45%,#1e2631,55%,#000103)] bg-[length:200%_100%] px-6 font-medium text-gray-200 transition-colors focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-slate-50"
+            >
+              Login
+            </Link>
+          )}
         </div>
       </nav>
       <div className="MainSec min-h-screen max-w-7xl w-full z-[9000] mx-auto px-3 flex flex-col justify-center items-center overflow-hidden">

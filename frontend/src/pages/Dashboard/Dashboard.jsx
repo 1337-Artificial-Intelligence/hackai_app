@@ -14,8 +14,8 @@ export default function Dashboard() {
             to="/"
             className="inline-flex gap-2 md:h-12 h-9 font-extrabold animate-shimmer text-white items-center hover:underline cursor-pointer justify-center rounded-md  "
           >
-            <ArrowLeftIcon size={18} className="text-xl" />
-            Back to home
+            {/* <ArrowLeftIcon size={18} className="text-xl" /> */}
+            {/* // Back to home */}
           </Link>
         </div>
       </nav>

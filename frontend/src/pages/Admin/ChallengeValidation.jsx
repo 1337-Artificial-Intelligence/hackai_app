@@ -8,6 +8,7 @@ export default function ChallengeValidation() {
   const [submissions, setSubmissions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [score, setScore] = useState('');
   const [filters, setFilters] = useState({
     team: '',
     challenge: '',
@@ -60,7 +61,7 @@ export default function ChallengeValidation() {
     }
   };
 
-  const handleValidation = async (submissionId, newStatus, feedback = '') => {
+  const handleValidation = async (submissionId, newStatus, feedback = '', score = null) => {
     try {
       const token = localStorage.getItem('token');
       const response = await fetch(`${import.meta.env.VITE_API_URL}/api/submissions/${submissionId}/validate`, {
@@ -71,7 +72,8 @@ export default function ChallengeValidation() {
         },
         body: JSON.stringify({
           status: newStatus,
-          feedback
+          feedback,
+          score: score !== null ? Number(score) : undefined
         })
       });
 
@@ -207,6 +209,26 @@ export default function ChallengeValidation() {
                 placeholder={confirmAction?.type === 'bypass' ? 'Explain to the team why their submission is being bypassed...' : 'Enter feedback for the team...'}
               ></textarea>
             </div>
+            
+            {/* Show score input for AI Challenges when approving */}
+            {confirmAction?.type === 'approve' && confirmAction?.isAIChallenge && (
+              <div className="mb-4">
+                <label className="block text-gray-400 text-sm mb-2">AI Score <span className="text-red-500">*</span></label>
+                <input
+                  type="number"
+                  id="score"
+                  value={score}
+                  onChange={(e) => setScore(e.target.value)}
+                  className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  placeholder="Enter AI score (required)"
+                  min="0"
+                  required={selectedSubmission?.challenge?.isAIChallenge}
+                />
+                <p className="text-xs text-gray-500 mt-1">
+                  Enter the score for this AI submission. Higher scores will receive more points.
+                </p>
+              </div>
+            )}
             <div className="flex justify-center gap-4">
               <button
                 onClick={() => setConfirmAction(null)}
@@ -223,11 +245,22 @@ export default function ChallengeValidation() {
                     'bypass': 'bypassed'
                   }[confirmAction.type];
                   
+                  // Check if score is required but not provided
+                  const isAIChallenge = confirmAction.isAIChallenge;
+                  if (isAIChallenge && confirmAction.type === 'approve' && (!score || score === '')) {
+                    alert('Please enter a score for this AI Challenge submission.');
+                    return;
+                  }
+                  
                   handleValidation(
                     confirmAction.id,
                     status,
-                    feedback
+                    feedback,
+                    isAIChallenge && confirmAction.type === 'approve' ? score : null
                   );
+                  
+                  // Reset score after submission
+                  setScore('');
                 }}
                 className={`px-6 py-2 rounded-lg text-white ${actionContent.buttonClass} hover:opacity-90 transition-opacity`}
               >
@@ -390,8 +423,13 @@ export default function ChallengeValidation() {
           <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
             <div className="bg-gray-900 rounded-xl border border-gray-800 p-6 w-full max-w-2xl shadow-2xl">
               <div className="flex justify-between items-center mb-4">
-                <h3 className="text-xl font-bold text-white">
+                <h3 className="text-xl font-bold text-white mb-4">
                   Submission Review - {selectedSubmission.challenge?.title}
+                  {selectedSubmission.challenge?.isAIChallenge && (
+                    <span className="ml-2 px-2 py-1 bg-yellow-500/20 text-yellow-400 text-sm rounded-full">
+                      AI Challenge
+                    </span>
+                  )}
                 </h3>
                 <button
                   onClick={() => setSelectedSubmission(null)}
@@ -472,7 +510,8 @@ export default function ChallengeValidation() {
                       <button
                         onClick={() => setConfirmAction({
                           type: 'approve',
-                          id: selectedSubmission._id
+                          id: selectedSubmission._id,
+                          isAIChallenge: selectedSubmission.challenge?.isAIChallenge
                         })}
                         className="px-4 py-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-lg hover:opacity-90 transition-opacity flex items-center justify-center"
                       >

@@ -34,6 +34,15 @@ const submissionSchema = new mongoose.Schema({
   },
   reviewedAt: {
     type: Date
+  },
+  score: {
+    type: Number,
+    min: 0
+  },
+  aiPoints: {
+    type: Number,
+    min: 0,
+    default: 0
   }
 }, {
   timestamps: true

@@ -7,8 +7,10 @@ import Main from "./pages/Dashboard/Main";
 import ChallengePage from "./pages/Dashboard/challenge/ChallngePage";
 import Admin from "./pages/Admin/Admin";
 import NotFound from "./pages/NotFound";
+import PublicLeaderboard from "./pages/PublicLeaderboard";
 import { useEffect } from "react";
 import ProtectedRoute from "./components/ProtectedRoute";
+import AdminProtectedRoute from "./components/AdminProtectedRoute";
 
 const App = () => {
 
@@ -26,15 +28,16 @@ const App = () => {
             <Dashboard />
           </ProtectedRoute>
         }>
-          <Route path="main" element={<Main />} />
+          <Route index element={<Main />} />
           <Route path="challenge/:id" element={<ChallengePage />} />
           {/* <Route path="graph" element={<Graph />} /> */}
         </Route>
         <Route path="/admin" element={
-          <ProtectedRoute>
+          <AdminProtectedRoute>
             <Admin />
-          </ProtectedRoute>
+          </AdminProtectedRoute>
         } />
+        <Route path="/leaderboard" element={<PublicLeaderboard />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>

@@ -10,7 +10,8 @@ export default function TeamManagement() {
     member1: '',
     member2: '',
     member3: '',
-    password: ''
+    password: '',
+    role: 'team'
   });
   const [confirmAction, setConfirmAction] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -89,7 +90,8 @@ export default function TeamManagement() {
         body: JSON.stringify({
           teamName: formData.teamName,
           password: formData.password,
-          members: [formData.member1, formData.member2, formData.member3].filter(Boolean)
+          members: [formData.member1, formData.member2, formData.member3].filter(Boolean),
+          role: formData.role
         })
       });
 
@@ -136,7 +138,8 @@ export default function TeamManagement() {
         member1: data.members?.[0] || '',
         member2: data.members?.[1] || '',
         member3: data.members?.[2] || '',
-        password: '' // Leave password empty for security
+        password: '', // Leave password empty for security
+        role: data.role || 'team'
       });
       setIsModalOpen(true);
     } catch (err) {
@@ -148,14 +151,15 @@ export default function TeamManagement() {
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setCurrentTeam(null);
+    setError(null);
     setFormData({
       teamName: '',
       member1: '',
       member2: '',
       member3: '',
-      password: ''
+      password: '',
+      role: 'team'
     });
-    setError(null);
   };
 
   const handleConfirmAction = async () => {
@@ -220,6 +224,7 @@ export default function TeamManagement() {
               <tr>
                 <th className="text-left py-4 px-6 text-gray-300 font-medium">Team Name</th>
                 <th className="text-left py-4 px-6 text-gray-300 font-medium">Members</th>
+                <th className="text-left py-4 px-6 text-gray-300 font-medium">Role</th>
                 <th className="text-left py-4 px-6 text-gray-300 font-medium">Actions</th>
               </tr>
             </thead>
@@ -237,6 +242,17 @@ export default function TeamManagement() {
                           {member}
                         </div>
                       ))}
+                    </div>
+                  </td>
+                  <td className="py-4 px-6">
+                    <div className={`inline-flex px-3 py-1 rounded-full text-xs font-medium ${
+                      team.role === 'admin' 
+                        ? 'bg-red-500/20 text-red-400' 
+                        : team.role === 'mentor' 
+                          ? 'bg-blue-500/20 text-blue-400' 
+                          : 'bg-green-500/20 text-green-400'
+                    }`}>
+                      {team.role === 'admin' ? 'Admin' : team.role === 'mentor' ? 'Mentor' : 'Team'}
                     </div>
                   </td>
                   <td className="py-4 px-6">
@@ -347,9 +363,35 @@ export default function TeamManagement() {
                   </div>
 
                   <div className="border-t border-gray-800 pt-4 md:pt-6">
+                    <div className="mb-4">
+                      <label className="block text-sm md:text-base text-gray-300 mb-2">
+                        Role
+                      </label>
+                      <div className="relative">
+                        <select
+                          name="role"
+                          value={formData.role}
+                          onChange={handleInputChange}
+                          className="w-full appearance-none bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 md:py-3 text-sm md:text-base text-white focus:ring-2 focus:ring-purple-500 focus:border-transparent pr-10"
+                        >
+                          <option value="team">Team</option>
+                          <option value="mentor">Mentor</option>
+                        </select>
+                        <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                          <svg className="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                            <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+                          </svg>
+                        </div>
+                      </div>
+                      <p className="text-xs text-gray-400 mt-1">
+                        {formData.role === 'team' && "Regular participant team account"}
+                        {formData.role === 'mentor' && "Can validate submissions but cannot manage teams or challenges"}
+                      </p>
+                    </div>
+
                     <div>
                       <label className="block text-sm md:text-base text-gray-300 mb-2">
-                        Password {!currentTeam && <span className="text-red-400 font-medium">(Required for new teams)</span>}
+                        Password {!currentTeam && <span className="text-red-400 font-medium">(Required for new accounts)</span>}
                       </label>
                       <input
                         type="password"

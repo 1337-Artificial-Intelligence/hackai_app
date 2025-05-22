@@ -11,10 +11,19 @@ export default function ChallengePage() {
   const [githubLink, setGithubLink] = useState("");
   const [submitStatus, setSubmitStatus] = useState({ loading: false, error: null, success: false });
   const [cancelingSubmission, setCancelingSubmission] = useState(false);
+  const [leaderboardData, setLeaderboardData] = useState([]);
+  const [leaderboardLoading, setLeaderboardLoading] = useState(false);
 
   useEffect(() => {
     fetchChallenge();
   }, [id]);
+  
+  // Fetch leaderboard data when challenge changes and it's an AI challenge
+  useEffect(() => {
+    if (challenge?.isAIChallenge) {
+      fetchLeaderboardData();
+    }
+  }, [challenge]);
 
   const cancelSubmission = async () => {
     try {
@@ -44,6 +53,33 @@ export default function ChallengePage() {
       setSubmitStatus({ loading: false, error: err.message, success: false });
     } finally {
       setCancelingSubmission(false);
+    }
+  };
+
+  // Fetch leaderboard data for AI challenges
+  const fetchLeaderboardData = async () => {
+    if (!challenge?.isAIChallenge || !id) return;
+    
+    try {
+      setLeaderboardLoading(true);
+      const token = localStorage.getItem('token');
+      
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/submissions/challenge/${id}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to fetch leaderboard data');
+      }
+      
+      const data = await response.json();
+      setLeaderboardData(data.data || []);
+    } catch (err) {
+      console.error('Error fetching leaderboard data:', err);
+    } finally {
+      setLeaderboardLoading(false);
     }
   };
 
@@ -86,7 +122,9 @@ export default function ChallengePage() {
       // Combine challenge with submission data
       const challengeWithSubmission = {
         ...challengeData.data,
-        submission: submission || null
+        submission: submission || null,
+        // Make sure we preserve the isAIChallenge flag
+        isAIChallenge: challengeData.data.isAIChallenge || false
       };
 
       console.log('Challenge with submission:', challengeWithSubmission);
@@ -99,9 +137,23 @@ export default function ChallengePage() {
     }
   };
 
+  const isValidUrl = (url) => {
+    try {
+      new URL(url);
+      return true;
+    } catch (err) {
+      return false;
+    }
+  };
+
   const handleSubmit = async () => {
     if (!githubLink) {
       setSubmitStatus({ loading: false, error: "Please provide a GitHub repository URL", success: false });
+      return;
+    }
+    
+    if (!isValidUrl(githubLink)) {
+      setSubmitStatus({ loading: false, error: "Please enter a valid URL", success: false });
       return;
     }
 
@@ -164,7 +216,7 @@ export default function ChallengePage() {
 
   return (
     <div className="flex flex-col">
-      <Link to="/dashboard/main" className="flex justify-start items-center text-white my-2 underline font-bold">
+      <Link to="/dashboard" className="flex justify-start items-center text-white my-2 underline font-bold">
         <ArrowLeftIcon size={18} className="text-white text-md"/> Go Back
       </Link>
 
@@ -208,7 +260,7 @@ export default function ChallengePage() {
                 className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-purple-500 to-blue-500 text-white rounded-lg hover:opacity-90 transition-opacity"
               >
                 <Github className="w-5 h-5 mr-2" />
-                View Solution on GitHub
+                View Solution
               </a>
             </div>
           ) : challenge.submission?.status === 'pending' ? (
@@ -369,7 +421,7 @@ export default function ChallengePage() {
                   ) : (
                     <>
                       Submit Challenge
-                      <Github className="w-5 h-5 ml-2" />
+                      {/* <Github className="w-5 h-5 ml-2" /> */}
                     </>
                   )}
                 </button>
@@ -384,6 +436,73 @@ export default function ChallengePage() {
           )}
         </div>
 
+        {/* AI Challenge Mini-Leaderboard Section */}
+        {challenge.isAIChallenge && (
+          <div className="border-t border-gray-800 pt-8 mb-8">
+            <h2 className="text-2xl font-bold bg-gradient-to-r from-yellow-400 to-amber-400 bg-clip-text text-transparent mb-6 flex items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 mr-2 text-yellow-500">
+                <path fillRule="evenodd" d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z" clipRule="evenodd" />
+              </svg>
+              AI Challenge Leaderboard
+            </h2>
+            
+            {leaderboardLoading ? (
+              <div className="flex justify-center items-center py-8">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
+              </div>
+            ) : leaderboardData.length === 0 ? (
+              <div className="bg-gray-800 rounded-xl p-6 text-center">
+                <p className="text-gray-400">No submissions yet. Be the first to submit!</p>
+              </div>
+            ) : (
+              <div className="bg-gray-800 rounded-xl overflow-hidden border border-gray-700">
+                <div className="grid grid-cols-12 bg-gray-700/50 text-gray-300 text-sm font-medium p-4">
+                  <div className="col-span-1 text-center">#</div>
+                  <div className="col-span-5">Team</div>
+                  <div className="col-span-3 text-center">Score</div>
+                  <div className="col-span-3 text-center">Points</div>
+                </div>
+                
+                <div className="divide-y divide-gray-700">
+                  {leaderboardData.map((entry) => (
+                    <div key={entry.rank} className="grid grid-cols-12 p-4 items-center hover:bg-gray-700/20 transition-colors">
+                      <div className="col-span-1 text-center">
+                        {entry.rank <= 3 ? (
+                          <span className={`inline-flex items-center justify-center w-6 h-6 rounded-full font-bold
+                            ${entry.rank === 1 ? 'bg-yellow-500 text-gray-900' : 
+                              entry.rank === 2 ? 'bg-gray-400 text-gray-900' : 
+                              'bg-amber-700 text-gray-900'}`}>
+                            {entry.rank}
+                          </span>
+                        ) : (
+                          <span className="text-gray-500">{entry.rank}</span>
+                        )}
+                      </div>
+                      
+                      <div className="col-span-5 font-medium text-gray-300">                      
+                        {entry.teamName}
+                      </div>
+                      
+                      <div className="col-span-3 text-center font-mono text-blue-400">
+                        {entry.score}
+                      </div>
+                      
+                      <div className="col-span-3 text-center">
+                        <span className={`font-mono font-bold
+                          ${entry.rank === 1 ? 'text-yellow-500' : 
+                            entry.rank === 2 ? 'text-gray-400' : 
+                            entry.rank === 3 ? 'text-amber-700' : 'text-gray-300'}`}>
+                          {entry.aiPoints}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+        
         {/* Resources Section */}
         <div className="border-t border-gray-800 pt-8">
           <h2 className="text-2xl font-bold bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent mb-6">

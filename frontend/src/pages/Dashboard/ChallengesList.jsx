@@ -122,6 +122,8 @@ export default function ChallengesList() {
         return 'bg-yellow-500/10 text-yellow-400';
       case 'rejected':
         return 'bg-red-500/10 text-red-400';
+      case 'bypassed':
+        return 'bg-blue-500/10 text-blue-400';
       default:
         return 'bg-gray-500/10 text-gray-400';
     }
@@ -222,6 +224,7 @@ export default function ChallengesList() {
                   <div className="flex-shrink-0">
                     <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusBadgeStyle(challenge.submission.status)}`}>
                       {challenge.submission.status === 'not_submitted' ? 'Not Started' : 
+                       challenge.submission.status === 'bypassed' ? 'Bypassed' :
                        challenge.submission.status.charAt(0).toUpperCase() + challenge.submission.status.slice(1)}
                     </span>
                   </div>
@@ -272,7 +275,9 @@ export default function ChallengesList() {
                       onClick={() => handleStartChallenge(challenge._id)}
                       className="inline-flex items-center justify-center w-full px-4 py-2 text-sm font-medium rounded-lg transition-colors bg-gradient-to-r from-purple-500 to-blue-500 text-white hover:from-purple-600 hover:to-blue-600"
                     >
-                      {challenge.submission?.status === 'approved' ? 'View Solution' : 'Start Challenge'}
+                      {challenge.submission?.status === 'approved' ? 'View Solution' : 
+                       challenge.submission?.status === 'bypassed' ? 'Challenge Bypassed' : 
+                       'Start Challenge'}
                     </button>
                   )}
                 </div>

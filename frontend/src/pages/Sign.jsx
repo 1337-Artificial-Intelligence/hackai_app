@@ -32,10 +32,10 @@ export default function CardWithForm() {
       try {
         const userData = JSON.parse(user);
         // Redirect based on role
-        if (userData.role === 'admin') {
+        if (userData.role === 'admin' || userData.role === 'mentor') {
           navigate('/admin');
         } else {
-          navigate('/dashboard/main');
+          navigate('/dashboard');
         }
       } catch (err) {
         // If there's an error parsing user data, clear storage
@@ -69,10 +69,10 @@ export default function CardWithForm() {
       localStorage.setItem('user', JSON.stringify(data.data));
       
       // Redirect based on role
-      if (data.data.role === 'admin') {
+      if (data.data.role === 'admin' || data.data.role === 'mentor') {
         navigate('/admin');
       } else {
-        navigate('/dashboard/main');
+        navigate('/dashboard');
       }
     } catch (err) {
       setError(err.message);
