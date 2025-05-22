@@ -479,7 +479,7 @@ export default function ChallengePage() {
                         )}
                       </div>
                       
-                      <div className="col-span-5 font-medium">                      
+                      <div className="col-span-5 font-medium text-gray-300">                      
                         {entry.teamName}
                       </div>
                       
