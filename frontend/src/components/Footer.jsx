@@ -6,7 +6,7 @@ export default function Footer() {
       <div className="flex justify-center items-center gap-2 flex-wrap">
         {/* <p>© 2025 All rights reserved.</p> */}
         <div href="/" className="hover:underline font-bold cursor-pointer">
-          Developed with ❤️ by  Issam Laafar, Hassan karrach and Mossaab Amimar
+          Developed with ❤️ by  Issam Laafar, Hassan karrach,Imran Baali and Mossaab Amimar
         </div>
       </div>
       <div className="flex justify-center items-center font-bold underline gap-2 mt-2">

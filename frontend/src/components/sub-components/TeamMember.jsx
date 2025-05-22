@@ -9,7 +9,7 @@ export default function TeamMember({ img, name, role }) {
         alt="Bonnie Avatar"
       />
       <h3 class="mb-1 md:text-xl text-lg font-bold tracking-tight text-gray-900 dark:text-white">
-        <a href="#">{name}</a>
+        <div href="#">{name}</div>
       </h3>
       <p className="text-wrap">{role}</p>
     </div>
