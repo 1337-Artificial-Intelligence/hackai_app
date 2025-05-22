@@ -143,7 +143,7 @@ exports.deleteTeam = async (req, res) => {
 // @access  Private
 exports.getLeaderboard = async (req, res) => {
   try {
-    const teams = await Team.find({ isActive: true })
+    const teams = await Team.find({ isActive: true, role: { $ne: 'admin' } })
       .select('teamName points role members')
       .sort('-points');
 

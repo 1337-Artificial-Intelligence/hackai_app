@@ -36,9 +36,8 @@ export default function Leaderboard() {
       const leaderboardData = await leaderboardRes.json();
       const teamData = await teamRes.json();
 
-      // Filter out admin teams and sort by points
+      // Sort teams by points (admin filtering is now handled by the backend)
       const filteredTeams = leaderboardData.data
-        .filter(team => team.role !== 'admin')
         .sort((a, b) => b.points - a.points);
         
       // Assign standard competition ranking (1224)
