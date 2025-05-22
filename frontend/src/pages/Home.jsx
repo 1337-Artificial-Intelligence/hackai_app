@@ -17,7 +17,7 @@ import ContactUs from "../components/ContactUs";
 
 import Staff from "../components/Staff";
 import Prizes from "../components/Prizes";
-import MainTitle from "../components/title";
+import MainTitle from "../components/Title";
 import StyledNeon from "../components/StyledNeon";
 
 export default function Home() {
@@ -56,7 +56,7 @@ export default function Home() {
   const words = `Hack AI Morocco 2025: Unleashing Innovation and Creativity in a 4-Day Hackathon!`;
   return (
     <div className="dark bg-black pb-10  ">
-      <nav className="bg-black  w-full  py-3 flex justify-between relative z-10 top-0 items-center">
+      <nav className="bg-black  w-full  p-3 flex justify-between relative z-10 top-0 items-center">
         <div className="max-w-7xl w-full  mx-auto flex justify-between items-center">
           <img src="/assets/logo_l.png" className="md:w-40 w-36" alt="" />
 

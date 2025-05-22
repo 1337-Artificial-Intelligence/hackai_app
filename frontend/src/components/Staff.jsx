@@ -28,20 +28,29 @@ export default function Staff() {
         "/assets/profiles/speakers/jawad.jpeg",
         "Jawad Alaoui",
         "Software Engineer and CEO @ Norma",
-        
       ],
       [
         "/assets/profiles/speakers/mehdi.png",
         "Mehdi Bennani",
         "Research Engineer @ Google DeepMind",
-
       ],
     ],
     []
   );
 
   const jury = useMemo(
-    () => [[getRandomImage(), "Achraf Mamdouh", "SWE Google"]],
+    () => [
+      [
+        "/assets/profiles/extern/sara.jpeg",
+        "Sara El-Ateif",
+        "AI Google Developer Expert / Assistant Professor @ ENSIASDT",
+      ],
+      [
+        "/assets/profiles/speakers/jawad.jpeg",
+        "Jawad Alaoui",
+        "Software Engineer and CEO @ Norma",
+      ],
+    ],
     []
   );
 
@@ -52,6 +61,7 @@ export default function Staff() {
         "Otmane El Bourki",
         "AI Engineer @ Impactera ",
       ],
+        
       [
         "/assets/profiles/1337ai/jawaher.png",
         "Jawaher chennak",
@@ -78,7 +88,12 @@ export default function Staff() {
         "Machine Learning Engineer @ Hugging Face",
       ],
       [
-        "/assets/profiles/1337ai/abd.jpeg",
+        "/assets/profiles/extern/affaf.png",
+        "Afaf El Wafi",
+        "Data Scientist @ MP DATA",
+      ],
+      [
+        "/assets/profiles/1337ai/moujar.jpeg",
         "Abderrahmane Moujar",
         "Research Engineer @ AI Exploration LAB",
       ],
@@ -100,7 +115,7 @@ export default function Staff() {
       [
         "/assets/profiles/extern/yassir.png",
         "Yassir Bendou",
-        "PhD Graduate @ IMT Atlantique",
+        "Research scientist @ Sigma Nova",
       ],
       [
         "/assets/profiles/extern/imane.png",
@@ -139,7 +154,7 @@ export default function Staff() {
         "Student Activities Coordinator @ 1337",
       ],
       [
-        "/assets/profiles/1337ai/abd.jpeg",
+        "/assets/profiles/1337ai/moujar.jpeg",
         "Abderrahmane Moujar",
         "Research Engineer @ AI Exploration LAB",
       ],
@@ -161,7 +176,7 @@ export default function Staff() {
       [
         "/assets/profiles/1337ai/issam.jpeg",
         "Issam laafar",
-        "Frontend Developer / student @ 1337", 
+        "Frontend Developer / student @ 1337",
       ],
       [
         "/assets/profiles/1337ai/mossaab.jpeg",
@@ -169,9 +184,14 @@ export default function Staff() {
         "Full Stack Developer / student @ 1337",
       ],
       [
+        "/assets/profiles/1337ai/hassan.jpg",
+        "Hassan karrach",
+        "Frontend Developer / student @ 1337",
+      ],
+      [
         "/assets/profiles/1337ai/imran.jpg",
         "Imran Baali",
-        "Frontend Developer / student @ 1337", 
+        "Frontend Developer / student @ 1337",
       ],
       [
         "/assets/profiles/1337ai/yahya.jpeg",
@@ -251,9 +271,10 @@ export default function Staff() {
           </div>
         }
       >
-        <p className="text-gray-200 text-lg lg:text-xl font-medium max-w-2xl mx-auto">
-          🎉 Jury to be announced soon! Stay tuned for exciting updates. 👨‍⚖️
-        </p>
+        {/* <p className="text-gray-200 text-lg lg:text-xl font-medium max-w-2xl mx-auto"></p> */}
+        {jury.map(([img, name, role]) => (
+          <TeamMember key={name} img={img} name={name} role={role} />
+        ))}
       </MembersSection>
 
       {/* Mentors Section */}

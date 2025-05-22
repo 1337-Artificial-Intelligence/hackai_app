@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import ChallengesList from "./ChallengesList";
 import LeaderBoard from "./LeaderBoard";
+import Graph from "../../components/graph";
 import Team from "./Team";
 
 LeaderBoard;
@@ -248,8 +249,8 @@ export default function Main() {
       </div> */}
 
       {/* Navigation Tabs */}
-      <div className="flex mb-8 mt-10 bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl p-1.5 border border-gray-700 w-fit shadow-xl">
-        {["Challenges", "Leaderboard", "Team"].map((tab) => (
+      <div className="flex mb-8 flex-wrap mt-10 bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl p-1.5 border border-gray-700 w-fit shadow-xl">
+        {["Challenges", "Leaderboard", "Team","Graph"].map((tab) => (
           <button
             key={tab}
             className={`relative px-6 py-3 rounded-lg transition-all duration-300 ${
@@ -276,6 +277,7 @@ export default function Main() {
         <LeaderBoard leaderboardData={leaderboardData} />
       )}
       {activeTab === "Team" && <Team teamMembers={teamMembers} />}
+      {activeTab === "Graph" && <Graph/>}
     </div>
   );
 }
