@@ -11,7 +11,7 @@ const PublicLeaderboard = () => {
 
   useEffect(() => {
     // Create socket connection
-    const socket = io("http://localhost:5001");
+    const socket = io(import.meta.env.VITE_API_URL);
 
     // Join leaderboard room
     socket.emit("join-leaderboard");
@@ -36,7 +36,7 @@ const PublicLeaderboard = () => {
     try {
       setLoading(true);
       const { data } = await axios.get(
-        "http://localhost:5001/api/public/leaderboard"
+        `${import.meta.env.VITE_API_URL}/api/public/leaderboard`
       );
       setLeaderboard(data.data);
       setLoading(false);
