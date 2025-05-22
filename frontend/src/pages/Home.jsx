@@ -22,13 +22,13 @@ import StyledNeon from "../components/StyledNeon";
 
 export default function Home() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  
+
   useEffect(() => {
     // Check if user is authenticated
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
     setIsAuthenticated(!!token);
   }, []);
-  
+
   const testimonials = [
     {
       quote:
@@ -86,7 +86,7 @@ export default function Home() {
         </div>
       </nav>
       <div className="MainSec min-h-screen max-w-7xl w-full z-[9000] mx-auto px-3 flex flex-col justify-center items-center overflow-hidden">
-        <StyledNeon/>
+        <StyledNeon />
         <div className="w-full font-extrabold relative z-10 -mt-36">
           <TextHoverEffect text="HACK AI" />
         </div>
@@ -94,14 +94,26 @@ export default function Home() {
           <TextGenerateEffect className="text-center z-[9000]" words={words} />;
         </div>
         <div className="w-full flex relative z-10 justify-center items-center">
-          <Link
-            // to="/sign"
-            to="https://forms.gle/oBn1QXJRXZ7b33wPA"
-            target="_blank"
-            className="inline-flex h-12 animate-shimmer items-center cursor-pointer justify-center rounded-md border border-white bg-[linear-gradient(110deg,#000103,45%,#1e2631,55%,#000103)] bg-[length:200%_100%] px-6 font-medium text-gray-200 transition-colors focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-slate-50"
-          >
-            Register
-          </Link>
+          <div className="flex flex-wrap justify-center items-center gap-4">
+            <Link
+              // to="/sign"
+              to="https://forms.gle/oBn1QXJRXZ7b33wPA"
+              target="_blank"
+              className="inline-flex h-12 animate-shimmer items-center cursor-pointer justify-center rounded-md border border-white bg-[linear-gradient(110deg,#000103,45%,#1e2631,55%,#000103)] bg-[length:200%_100%] px-6 font-medium text-gray-200 transition-colors focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-slate-50"
+            >
+              Register
+            </Link>
+            <Link
+              // to="/sign"
+              to="/leaderboard"
+              target="_blank"
+              className="shadow-[0_0_0_3px_#000000_inset] flex justify-center items-center  h-12 bg-white px-6 py-2 bg-transparent border border-black dark:border-white dark:text-black text-black rounded-lg font-bold transform  "
+
+              // className="inline-flex h-12 animate-shimmer items-center cursor-pointer justify-center rounded-md border border-white bg-[linear-gradient(110deg,#000103,45%,#1e2631,55%,#000103)] bg-[length:200%_100%] px-6 font-medium text-gray-200 transition-colors focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-slate-50"
+            >
+              Leaderboard
+            </Link>
+          </div>
         </div>
       </div>
       <BackgroundBeams />
@@ -131,27 +143,27 @@ export default function Home() {
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.2 }} // Triggers when 20% is visible
-            transition={{ duration: 0.8, ease: "easeOut" }}
-          >
-            Announcement
-          </h1>
-          
-          <div className="VidContainer mt-6 w-full flex justify-center">
-            <iframe
+          transition={{ duration: 0.8, ease: "easeOut" }}
+        >
+          Announcement
+        </h1>
+
+        <div className="VidContainer mt-6 w-full flex justify-center">
+          <iframe
             className="w-full max-w-4xl aspect-video rounded-lg"
             src="https://player.vimeo.com/video/1078694431?title=0&amp;byline=0&amp;portrait=0&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479"
             allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media"
             title="HACK AI 2025"
-            ></iframe>
-          </div>
-          </div>
+          ></iframe>
+        </div>
+      </div>
 
-          <div className="md:p-6 p-2 overflow-x-hidden Testimonies mt-64 w-full flex flex-col justify-center items-center">
-          <h1
-            className="Headline text-3xl sm:text-4xl underline-offset-8 md:text-5xl lg:text-5xl font-extrabold text-center text-gray-900 dark:text-gray-200 leading-tight"
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.2 }} // Triggers when 20% is visible
+      <div className="md:p-6 p-2 overflow-x-hidden Testimonies mt-64 w-full flex flex-col justify-center items-center">
+        <h1
+          className="Headline text-3xl sm:text-4xl underline-offset-8 md:text-5xl lg:text-5xl font-extrabold text-center text-gray-900 dark:text-gray-200 leading-tight"
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }} // Triggers when 20% is visible
           transition={{ duration: 0.8, ease: "easeOut" }}
         >
           2025 Planning
@@ -191,14 +203,16 @@ export default function Home() {
           Unlock your potential at Hack AI – where bold ideas and cutting-edge
           innovation converge to shape the future of technology.
         </p>
-        <Link
-          // to="/sign"
-          to="https://forms.gle/oBn1QXJRXZ7b33wPA"
-          target="_blank"
-          className="shadow-[0_0_0_3px_#000000_inset] bg-white px-6 py-2 bg-transparent border border-black dark:border-white dark:text-black text-black rounded-lg font-bold transform hover:-translate-y-1 transition duration-400"
-        >
-          Register
-        </Link>
+        <div>
+          <Link
+            // to="/sign"
+            to="https://forms.gle/oBn1QXJRXZ7b33wPA"
+            target="_blank"
+            className="shadow-[0_0_0_3px_#000000_inset] bg-white px-6 py-2 bg-transparent border border-black dark:border-white dark:text-black text-black rounded-lg font-bold transform hover:-translate-y-1 transition duration-400"
+          >
+            Register
+          </Link>
+        </div>
       </div>
 
       <div className="Testimonies mt-64 max-w-7xl w-full mx-auto px-2 flex flex-col justify-center items-center">

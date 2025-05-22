@@ -250,7 +250,7 @@ export default function Main() {
 
       {/* Navigation Tabs */}
       <div className="flex mb-8 flex-wrap mt-10 bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl p-1.5 border border-gray-700 w-fit shadow-xl">
-        {["Challenges", "Leaderboard", "Team","Graph"].map((tab) => (
+        {["Challenges", "Leaderboard", "Team"].map((tab) => (
           <button
             key={tab}
             className={`relative px-6 py-3 rounded-lg transition-all duration-300 ${
@@ -277,7 +277,7 @@ export default function Main() {
         <LeaderBoard leaderboardData={leaderboardData} />
       )}
       {activeTab === "Team" && <Team teamMembers={teamMembers} />}
-      {activeTab === "Graph" && <Graph/>}
+      {/* {activeTab === "Graph" && <Graph/>} */}
     </div>
   );
 }

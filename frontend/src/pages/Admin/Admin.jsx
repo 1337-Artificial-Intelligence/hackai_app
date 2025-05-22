@@ -91,8 +91,7 @@ export default function Admin() {
               // These tabs are available for both admins and mentors
               "Submissions",
               "Leaderboard",
-              "Progress",
-              "Graph"
+              "Progress"
             ].map((tab) => (
               <button
                 key={tab}
@@ -128,7 +127,7 @@ export default function Admin() {
           )}
           {activeTab == "Submissions" && <ChallengeValidation />}
           {activeTab == "Progress" && <TeamProgress />}
-          {activeTab == "Graph" && <Graph />}
+          {/* {activeTab == "Graph" && <Graph />} */}
         </div>
       </div>
     </div>

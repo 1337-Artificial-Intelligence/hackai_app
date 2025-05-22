@@ -76,9 +76,9 @@ const PublicLeaderboard = () => {
             <Trophy className="text-yellow-500 mr-3 h-10 w-10" />
             Leaderboard
           </h1>
-          <div className="text-gray-400">
+          {/* <div className="text-gray-400">
             Last updated: {formattedTime}
-          </div>
+          </div> */}
         </div>
         
         <div className="bg-gray-800 rounded-xl overflow-hidden shadow-lg border border-gray-700">
