@@ -10,6 +10,20 @@ import Graph from "../../components/graph";
 
 export default function Admin() {
   const navigate = useNavigate();
+  const [userRole, setUserRole] = useState('admin'); // Default to admin for safety
+  
+  // Get user role from localStorage
+  useEffect(() => {
+    try {
+      const userString = localStorage.getItem('user');
+      if (userString) {
+        const userData = JSON.parse(userString);
+        setUserRole(userData.role);
+      }
+    } catch (error) {
+      console.error('Error parsing user data:', error);
+    }
+  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -25,7 +39,7 @@ export default function Admin() {
     { teamName: "Your Team", points: 320, rank: 5 },
   ];
 
-  // Load the active tab from localStorage or default to "Teams"
+  // Load the active tab from localStorage or default to "Teams" for admin, "Submissions" for mentor
   const [activeTab, setActiveTab] = useState(() => {
     const savedTab = localStorage.getItem("adminActiveTab");
     return savedTab || "Teams";
@@ -35,6 +49,13 @@ export default function Admin() {
   useEffect(() => {
     localStorage.setItem("adminActiveTab", activeTab);
   }, [activeTab]);
+  
+  // Redirect mentor to appropriate tab if they had selected Teams or Challenges
+  useEffect(() => {
+    if (userRole === 'mentor' && (activeTab === 'Teams' || activeTab === 'Challenges')) {
+      setActiveTab('Submissions');
+    }
+  }, [userRole, activeTab]);
 
   return (
     <div>
@@ -65,8 +86,9 @@ export default function Admin() {
         <div className="max-w-7xl mx-auto ">
           <div className="flex flex-wrap mb-8 mt-10 bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl p-1.5 border border-gray-700 w-fit shadow-xl overflow-x-auto">
             {[
-              "Teams",
-              "Challenges",
+              // Only show Teams and Challenges tabs for admins
+              ...(userRole === 'admin' ? ["Teams", "Challenges"] : []),
+              // These tabs are available for both admins and mentors
               "Submissions",
               "Leaderboard",
               "Progress",
@@ -96,12 +118,15 @@ export default function Admin() {
               </button>
             ))}
           </div>
-          {activeTab == "Challenges" && <ChallengeManagement />}
+          {/* Only render Challenge and Team management for admins */}
+          {activeTab == "Challenges" && userRole === 'admin' && <ChallengeManagement />}
+          {activeTab == "Teams" && userRole === 'admin' && <TeamManagement />}
+          
+          {/* These components are available for both admins and mentors */}
           {activeTab == "Leaderboard" && (
             <Leaderboard leaderboardData={leaderboardData} />
           )}
           {activeTab == "Submissions" && <ChallengeValidation />}
-          {activeTab == "Teams" && <TeamManagement />}
           {activeTab == "Progress" && <TeamProgress />}
           {activeTab == "Graph" && <Graph />}
         </div>

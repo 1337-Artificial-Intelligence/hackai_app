@@ -18,7 +18,7 @@ const teamSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ['team', 'admin'],
+    enum: ['team', 'admin', 'mentor'],
     default: 'team'
   },
   currentChallenge: {

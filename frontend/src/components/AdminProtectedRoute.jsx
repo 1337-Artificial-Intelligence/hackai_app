@@ -18,8 +18,9 @@ const AdminProtectedRoute = ({ children }) => {
     
     try {
       const user = JSON.parse(userString);
-      if (user.role !== 'admin') {
-        // If authenticated but not admin, redirect to team dashboard
+      // Allow both admin and mentor roles to access the admin dashboard
+      if (user.role !== 'admin' && user.role !== 'mentor') {
+        // If authenticated but not admin or mentor, redirect to team dashboard
         navigate('/dashboard');
         return;
       }

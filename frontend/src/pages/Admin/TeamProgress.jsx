@@ -61,8 +61,9 @@ export default function TeamProgress() {
       const organizedChallenges = organizeChallengesByLevel(challengesData.data);
       setChallenges(organizedChallenges);
       
-      // Map submissions to teams
-      const teamsWithProgress = mapTeamProgress(teamsData.data, submissionsData.data, organizedChallenges);
+      // Filter out admin and mentor accounts, and map submissions to teams
+      const filteredTeams = teamsData.data.filter(team => team.role === 'team');
+      const teamsWithProgress = mapTeamProgress(filteredTeams, submissionsData.data, organizedChallenges);
       setTeams(teamsWithProgress);
       
       setLoading(false);

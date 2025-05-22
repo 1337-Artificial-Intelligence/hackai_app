@@ -13,11 +13,11 @@ router.use(protect);
 router
   .route('/')
   .post(createSubmission)
-  .get(authorize('admin'), getSubmissions);
+  .get(authorize('admin', 'mentor'), getSubmissions);
 
 router.get('/team', getTeamSubmissions);
 
-router.put('/:id/validate', authorize('admin'), validateSubmission);
+router.put('/:id/validate', authorize('admin', 'mentor'), validateSubmission);
 
 // DELETE route to cancel a pending submission
 router.delete('/:id', async (req, res) => {

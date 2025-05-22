@@ -18,7 +18,7 @@ router.get('/me', getCurrentTeam);
 
 router
   .route('/')
-  .get(authorize('admin'), getTeams)
+  .get(authorize('admin', 'mentor'), getTeams) // Allow mentors to access teams list
   .post(authorize('admin'), createTeam);
 
 router

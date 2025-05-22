@@ -120,9 +120,9 @@ exports.validateSubmission = async (req, res) => {
     }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const admin = await Team.findById(decoded.id);
-    if (!admin || admin.role !== 'admin') {
-      return res.status(403).json({ message: 'Not authorized as admin' });
+    const reviewer = await Team.findById(decoded.id);
+    if (!reviewer || (reviewer.role !== 'admin' && reviewer.role !== 'mentor')) {
+      return res.status(403).json({ message: 'Not authorized to validate submissions' });
     }
 
     const { status, feedback } = req.body;
@@ -140,7 +140,7 @@ exports.validateSubmission = async (req, res) => {
 
     submission.status = status;
     submission.feedback = feedback;
-    submission.reviewedBy = admin._id;
+    submission.reviewedBy = reviewer._id;
     submission.reviewedAt = Date.now();
 
     await submission.save();

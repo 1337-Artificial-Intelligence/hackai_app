@@ -54,7 +54,7 @@ exports.getTeam = async (req, res) => {
 // @access  Admin only
 exports.createTeam = async (req, res) => {
   try {
-    const { teamName, members, password } = req.body;
+    const { teamName, members, password, role } = req.body;
 
     // Validate required fields
     if (!teamName || !password) {
@@ -70,7 +70,8 @@ exports.createTeam = async (req, res) => {
     const team = await Team.create({
       teamName,
       members: members || [],
-      password
+      password,
+      role: role || 'team' // Use provided role or default to 'team'
     });
 
     // Don't send password back
@@ -143,7 +144,10 @@ exports.deleteTeam = async (req, res) => {
 // @access  Private
 exports.getLeaderboard = async (req, res) => {
   try {
-    const teams = await Team.find({ isActive: true, role: { $ne: 'admin' } })
+    const teams = await Team.find({ 
+      isActive: true, 
+      role: { $nin: ['admin', 'mentor'] } // Exclude both admin and mentor roles
+    })
       .select('teamName points role members')
       .sort('-points');
 

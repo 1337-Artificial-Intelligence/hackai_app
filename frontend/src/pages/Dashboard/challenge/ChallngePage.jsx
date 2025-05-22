@@ -222,7 +222,7 @@ export default function ChallengePage() {
                 className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-purple-500 to-blue-500 text-white rounded-lg hover:opacity-90 transition-opacity"
               >
                 <Github className="w-5 h-5 mr-2" />
-                View Solution on GitHub
+                View Solution
               </a>
             </div>
           ) : challenge.submission?.status === 'pending' ? (
