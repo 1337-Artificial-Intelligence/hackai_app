@@ -99,9 +99,23 @@ export default function ChallengePage() {
     }
   };
 
+  const isValidUrl = (url) => {
+    try {
+      new URL(url);
+      return true;
+    } catch (err) {
+      return false;
+    }
+  };
+
   const handleSubmit = async () => {
     if (!githubLink) {
       setSubmitStatus({ loading: false, error: "Please provide a GitHub repository URL", success: false });
+      return;
+    }
+    
+    if (!isValidUrl(githubLink)) {
+      setSubmitStatus({ loading: false, error: "Please enter a valid URL", success: false });
       return;
     }
 
@@ -369,7 +383,7 @@ export default function ChallengePage() {
                   ) : (
                     <>
                       Submit Challenge
-                      <Github className="w-5 h-5 ml-2" />
+                      {/* <Github className="w-5 h-5 ml-2" /> */}
                     </>
                   )}
                 </button>
