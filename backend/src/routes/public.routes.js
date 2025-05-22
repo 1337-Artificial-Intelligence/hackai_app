@@ -19,7 +19,7 @@ router.get('/leaderboard', async (req, res) => {
 
     // Calculate percentage and format response
     const leaderboard = teams.map((team, index) => {
-      const completedCount = team.completedChallenges.length;
+      const completedCount = team.completedChallenges ? team.completedChallenges.length : 0;
       const progressPercentage = totalChallenges > 0 
         ? Math.round((completedCount / totalChallenges) * 100) 
         : 0;
