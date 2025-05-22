@@ -9,6 +9,7 @@ import Admin from "./pages/Admin/Admin";
 import NotFound from "./pages/NotFound";
 import { useEffect } from "react";
 import ProtectedRoute from "./components/ProtectedRoute";
+import AdminProtectedRoute from "./components/AdminProtectedRoute";
 
 const App = () => {
 
@@ -31,9 +32,9 @@ const App = () => {
           {/* <Route path="graph" element={<Graph />} /> */}
         </Route>
         <Route path="/admin" element={
-          <ProtectedRoute>
+          <AdminProtectedRoute>
             <Admin />
-          </ProtectedRoute>
+          </AdminProtectedRoute>
         } />
         <Route path="*" element={<NotFound />} />
       </Routes>
