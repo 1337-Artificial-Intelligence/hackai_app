@@ -70,7 +70,7 @@ export default function Home() {
 
           {isAuthenticated ? (
             <Link
-              to="/dashboard/main"
+              to="/dashboard"
               className="inline-flex md:h-12 h-9 animate-shimmer items-center cursor-pointer justify-center rounded-md border border-white bg-[linear-gradient(110deg,#000103,45%,#1e2631,55%,#000103)] bg-[length:200%_100%] px-6 font-medium text-gray-200 transition-colors focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-slate-50"
             >
               Dashboard

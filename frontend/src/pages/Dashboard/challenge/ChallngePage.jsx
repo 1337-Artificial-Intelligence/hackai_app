@@ -178,7 +178,7 @@ export default function ChallengePage() {
 
   return (
     <div className="flex flex-col">
-      <Link to="/dashboard/main" className="flex justify-start items-center text-white my-2 underline font-bold">
+      <Link to="/dashboard" className="flex justify-start items-center text-white my-2 underline font-bold">
         <ArrowLeftIcon size={18} className="text-white text-md"/> Go Back
       </Link>
 

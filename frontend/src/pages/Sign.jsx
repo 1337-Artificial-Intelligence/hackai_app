@@ -35,7 +35,7 @@ export default function CardWithForm() {
         if (userData.role === 'admin') {
           navigate('/admin');
         } else {
-          navigate('/dashboard/main');
+          navigate('/dashboard');
         }
       } catch (err) {
         // If there's an error parsing user data, clear storage
@@ -72,7 +72,7 @@ export default function CardWithForm() {
       if (data.data.role === 'admin') {
         navigate('/admin');
       } else {
-        navigate('/dashboard/main');
+        navigate('/dashboard');
       }
     } catch (err) {
       setError(err.message);

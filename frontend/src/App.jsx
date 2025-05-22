@@ -27,7 +27,7 @@ const App = () => {
             <Dashboard />
           </ProtectedRoute>
         }>
-          <Route path="main" element={<Main />} />
+          <Route index element={<Main />} />
           <Route path="challenge/:id" element={<ChallengePage />} />
           {/* <Route path="graph" element={<Graph />} /> */}
         </Route>

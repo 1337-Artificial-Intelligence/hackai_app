@@ -20,7 +20,7 @@ const AdminProtectedRoute = ({ children }) => {
       const user = JSON.parse(userString);
       if (user.role !== 'admin') {
         // If authenticated but not admin, redirect to team dashboard
-        navigate('/dashboard/main');
+        navigate('/dashboard');
         return;
       }
       
