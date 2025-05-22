@@ -168,6 +168,13 @@ exports.validateSubmission = async (req, res) => {
       }
 
       await team.save();
+      
+      // Emit leaderboard update via WebSocket
+      const io = req.app.get('io');
+      if (io) {
+        io.to('leaderboard-room').emit('leaderboard-update');
+        console.log('Emitted leaderboard-update event');
+      }
     }
 
     res.json({

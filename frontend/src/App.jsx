@@ -7,6 +7,7 @@ import Main from "./pages/Dashboard/Main";
 import ChallengePage from "./pages/Dashboard/challenge/ChallngePage";
 import Admin from "./pages/Admin/Admin";
 import NotFound from "./pages/NotFound";
+import PublicLeaderboard from "./pages/PublicLeaderboard";
 import { useEffect } from "react";
 import ProtectedRoute from "./components/ProtectedRoute";
 import AdminProtectedRoute from "./components/AdminProtectedRoute";
@@ -36,6 +37,7 @@ const App = () => {
             <Admin />
           </AdminProtectedRoute>
         } />
+        <Route path="/leaderboard" element={<PublicLeaderboard />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
