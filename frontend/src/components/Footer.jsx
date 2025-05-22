@@ -5,9 +5,9 @@ export default function Footer() {
     <footer className="bg-black text-white text-center flex justify-between items-center p-4 w-full flex-wrap border-t bottom-1 border-gray-200">
       <div className="flex justify-center items-center gap-2 flex-wrap">
         {/* <p>© 2025 All rights reserved.</p> */}
-        <a href="/" className="hover:underline font-bold">
-          Developed with ❤️ by  Issam Laafar and Mossaab Amimar
-        </a>
+        <div href="/" className="hover:underline font-bold cursor-pointer">
+          Developed with ❤️ by  Issam Laafar, Hassan karrach and Mossaab Amimar
+        </div>
       </div>
       <div className="flex justify-center items-center font-bold underline gap-2 mt-2">
         <a href="/about-us" className="hover:underline">

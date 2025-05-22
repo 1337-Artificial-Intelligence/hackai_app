@@ -50,6 +50,21 @@ export default function Staff() {
         "Jawad Alaoui",
         "Software Engineer and CEO @ Norma",
       ],
+      [
+        "/assets/profiles/speakers/Kaoutar.jpeg",
+        "Kaoutar El Maghraoui",
+        "Principal Research Scientist and Manager @ IBM",
+      ],
+      [
+        "/assets/profiles/speakers/Mahmoud_Zyate.jpeg",
+        "Mahmoud Zyate",
+        "Lead AI Engineer & Applied AI Consultant @ inowaiv",
+      ],
+      [
+        "/assets/profiles/speakers/MohamedSEDKI.jpeg",
+        "Mohamed SEDKI",
+        "Head of Innovation & Digital Material Platform @ ONCF ",
+      ],
     ],
     []
   );
