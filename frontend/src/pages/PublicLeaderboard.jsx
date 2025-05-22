@@ -133,9 +133,10 @@ const PublicLeaderboard = () => {
                       }`}
                     />
                   )}
-                  {/* {team.teamName} */}
                   <span className="sm:w-full w-20 text-nowrap whitespace-nowrap text-ellipsis overflow-hidden">
-                    sadasddas asdasd asdasd
+                    {/* sadasddas asdasd asdasd */}
+                  {team.teamName}
+
                   </span>
                 </div>
 
