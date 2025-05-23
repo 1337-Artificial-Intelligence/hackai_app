@@ -202,27 +202,41 @@ export default function ChallengesList() {
             {levelChallenges.map((challenge) => (
               <div
                 key={challenge._id}
-                className="bg-gray-900 rounded-xl p-6 border border-gray-800 hover:border-purple-500/30 transition-colors"
+                // {
+                //   ...challenge.title.includes("Optional") ?
+                //   {
+                //     className: "bg-gray-900 rounded-xl p-6 border border-gray-800 hover:border-purple-500/30 transition-colors opacity-70"
+                //   } :
+                //   {
+                //     className: "bg-gray-900 rounded-xl p-6 border border-gray-800 hover:border-purple-500/30 transition-colors"
+                //   }
+                // }
+                className="bg-gray-900  rounded-xl p-6 border border-gray-800 hover:border-purple-500/30 transition-colors"
+
+                // className="bg-gray-900  rounded-xl p-6 border border-gray-800 hover:border-purple-500/30 transition-colors"
               >
                 {/* Challenge Header */}
                 <div className="flex justify-between items-start mb-4">
                   <div>
-                    <div className="flex flex-wrap gap-2 mb-2">
-                      <span
-                        className={`inline-block px-3 py-1 rounded-full text-xs font-medium text-white ${getChallengeTypeStyle(
-                          challenge.tag
-                        )}`}
-                      >
-                        {challenge.tag}
-                      </span>
+                    <span
+                      className={`inline-block px-3 py-1 rounded-full text-xs font-medium text-white mb-2 ${getChallengeTypeStyle(
+                        challenge.tag
+                      )}`}
+                    >
+                      {challenge.tag}
                       
-                      {/* Bonus Points Indicator */}
-                      {challenge.bonusPoints > 0 && challenge.bonusLimit > 0 && challenge.approvedSubmissionsCount < challenge.bonusLimit && (
-                        <span className="inline-block px-3 py-1 rounded-full text-xs font-medium bg-gradient-to-r from-amber-500/20 to-yellow-500/20 text-yellow-400">
-                          +{challenge.bonusPoints} Bonus
+                    </span>
+                      {
+                        challenge.title.includes("Optional") ?
+                        <span
+                          className={`inline-block px-3 py-1 rounded-full ml-2 text-xs font-medium text-white mb-2 bg-orange-700 `}
+                        >
+                        Optional
+                          
                         </span>
-                      )}
-                    </div>
+                        :
+                        ""
+                      }
                     <h3 className="text-xl font-semibold text-white mb-2">
                       {challenge.title}
                     </h3>
@@ -237,24 +251,6 @@ export default function ChallengesList() {
                        challenge.submission.status === 'bypassed' ? 'Bypassed' :
                        challenge.submission.status.charAt(0).toUpperCase() + challenge.submission.status.slice(1)}
                     </span>
-                  </div>
-                </div>
-
-                {/* Dependencies */}
-                {/* Points Display */}
-                <div className="mb-4">
-                  <div className="flex items-center text-white">
-                    <svg className="w-5 h-5 mr-2 text-purple-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-                    </svg>
-                    <span className="font-medium">{challenge.initialPoints || 0} points</span>
-                    
-                    {challenge.bonusPoints > 0 && challenge.bonusLimit > 0 && (
-                      <div className="ml-4 text-xs text-gray-400">
-                        <span className="text-yellow-400">{challenge.approvedSubmissionsCount || 0}</span>
-                        <span>/{challenge.bonusLimit} bonus claims used</span>
-                      </div>
-                    )}
                   </div>
                 </div>
 
