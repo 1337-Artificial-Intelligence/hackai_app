@@ -155,7 +155,7 @@ const PublicLeaderboard = () => {
                     font-bold
                   `}
                   >
-                    {team.points}
+                    {team.points || 0}
                   </span>
                 </div>
 
