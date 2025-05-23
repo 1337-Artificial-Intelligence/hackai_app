@@ -160,8 +160,26 @@ exports.validateSubmission = async (req, res) => {
         // For AI challenges, we need to recalculate points for all teams
         await recalculateAIChallengePoints(challenge._id);
       } else {
-        // For regular challenges, add the fixed points
-        team.points += challenge.points;
+        // For regular challenges, apply dynamic point system
+        // Increment the approved submissions counter for this challenge
+        challenge.approvedSubmissionsCount = (challenge.approvedSubmissionsCount || 0) + 1;
+        await challenge.save();
+        
+        // Calculate points to award based on bonus system
+        let pointsAwarded = challenge.initialPoints || challenge.points;
+        
+        // If this is within the bonus limit, add bonus points
+        if (challenge.bonusLimit > 0 && challenge.approvedSubmissionsCount <= challenge.bonusLimit) {
+          pointsAwarded += challenge.bonusPoints || 0;
+          console.log(`Awarding bonus points to team ${team.teamName} for early submission (${challenge.approvedSubmissionsCount}/${challenge.bonusLimit})`);
+        }
+        
+        // Save the points awarded to this submission
+        submission.pointsAwarded = pointsAwarded;
+        await submission.save();
+        
+        // Add points to team
+        team.points += pointsAwarded;
       }
 
       // Add to completed challenges
@@ -324,7 +342,14 @@ async function updateTeamPoints(teamId) {
     for (const sub of regularSubmissions) {
       // For regular challenges
       if (!sub.challenge.isAIChallenge) {
-        totalPoints += sub.challenge.points || 0;
+        // Use pointsAwarded if available, otherwise fall back to challenge.points
+        if (sub.pointsAwarded) {
+          totalPoints += sub.pointsAwarded;
+          console.log(`Adding awarded points: ${sub.pointsAwarded} for team ${team.teamName}, total now: ${totalPoints}`);
+        } else {
+          totalPoints += sub.challenge.points || 0;
+          console.log(`Adding regular points: ${sub.challenge.points} for team ${team.teamName}, total now: ${totalPoints}`);
+        }
       }
       // For AI challenges
       else if (sub.score !== undefined && sub.aiPoints !== undefined) {

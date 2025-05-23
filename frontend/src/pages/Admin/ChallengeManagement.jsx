@@ -25,6 +25,9 @@ export default function ChallengeManagement() {
     subject: null,
     dependencies: [],
     points: 100,
+    initialPoints: 100,
+    bonusPoints: 0,
+    bonusLimit: 0,
     isAIChallenge: false,
   });
 
@@ -98,6 +101,9 @@ export default function ChallengeManagement() {
         resources: formData.resources.filter(Boolean),
         dependencies: formData.dependencies,
         points: parseInt(formData.points) || 100,
+        initialPoints: parseInt(formData.initialPoints) || parseInt(formData.points) || 100,
+        bonusPoints: parseInt(formData.bonusPoints) || 0,
+        bonusLimit: parseInt(formData.bonusLimit) || 0,
         isAIChallenge: formData.isAIChallenge
       };
 
@@ -159,6 +165,9 @@ export default function ChallengeManagement() {
       resources: [""],
       dependencies: [],
       points: 100,
+      initialPoints: 100,
+      bonusPoints: 0,
+      bonusLimit: 0,
       isAIChallenge: false,
     });
     setSelectedChallenge(null);
@@ -173,6 +182,9 @@ export default function ChallengeManagement() {
       resources: challenge.resources?.length ? challenge.resources : [""],
       dependencies: challenge.dependencies?.map(String) || [],
       points: challenge.points || 100,
+      initialPoints: challenge.initialPoints || challenge.points || 100,
+      bonusPoints: challenge.bonusPoints || 0,
+      bonusLimit: challenge.bonusLimit || 0,
       isAIChallenge: challenge.isAIChallenge || false,
     });
     setShowModal(true);
@@ -201,6 +213,7 @@ export default function ChallengeManagement() {
               <tr>
                 <th className="text-left py-4 px-6 text-gray-300 font-medium">Tag</th>
                 <th className="text-left py-4 px-6 text-gray-300 font-medium">Title</th>
+                <th className="text-left py-4 px-6 text-gray-300 font-medium">Points</th>
                 <th className="text-left py-4 px-6 text-gray-300 font-medium">Dependencies</th>
                 <th className="text-left py-4 px-6 text-gray-300 font-medium">Actions</th>
               </tr>
@@ -214,6 +227,18 @@ export default function ChallengeManagement() {
                     </span>
                   </td>
                   <td className="py-4 px-6 text-white">{challenge.title}</td>
+                  <td className="py-4 px-6">
+                    <div className="text-white font-medium">{challenge.points || 0} pts</div>
+                    {(challenge.bonusPoints > 0 && challenge.bonusLimit > 0) && (
+                      <div className="text-xs text-gray-400 mt-1">
+                        +{challenge.bonusPoints} bonus for first {challenge.bonusLimit} submissions
+                        <div className="mt-1">
+                          <span className="text-green-400">{challenge.approvedSubmissionsCount || 0}</span>
+                          <span className="text-gray-500">/{challenge.bonusLimit} claimed</span>
+                        </div>
+                      </div>
+                    )}
+                  </td>
                   <td className="py-4 px-6">
                     <div className="flex flex-wrap gap-2 max-w-[300px]">
                       {challenge.dependencies?.map(depId => {
@@ -288,19 +313,75 @@ export default function ChallengeManagement() {
                       />
                     </div>
 
-                    <div>
-                      <label className="block text-sm md:text-base text-gray-300 mb-2">
-                        Points
-                      </label>
-                      <input
-                        type="number"
-                        name="points"
-                        value={formData.points || 100}
-                        onChange={handleInputChange}
-                        className="w-full bg-gray-800 rounded-lg px-4 py-2 md:py-3 text-sm md:text-base text-white focus:ring-2 focus:ring-purple-500"
-                        min="0"
-                        required
-                      />
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pb-2 border-b border-gray-800 mb-4">
+                      <div>
+                        <label className="block text-sm md:text-base text-gray-300 mb-2">
+                          Points
+                        </label>
+                        <input
+                          type="number"
+                          name="points"
+                          value={formData.points || 100}
+                          onChange={handleInputChange}
+                          className="w-full bg-gray-800 rounded-lg px-4 py-2 md:py-3 text-sm md:text-base text-white focus:ring-2 focus:ring-purple-500"
+                          min="0"
+                          required
+                        />
+                        <p className="text-xs text-gray-500 mt-1">
+                          Total points value of the challenge
+                        </p>
+                      </div>
+                      
+                      <div>
+                        <label className="block text-sm md:text-base text-gray-300 mb-2">
+                          Initial Points
+                        </label>
+                        <input
+                          type="number"
+                          name="initialPoints"
+                          value={formData.initialPoints}
+                          onChange={handleInputChange}
+                          className="w-full bg-gray-800 rounded-lg px-4 py-2 md:py-3 text-sm md:text-base text-white focus:ring-2 focus:ring-purple-500"
+                          min="0"
+                        />
+                        <p className="text-xs text-gray-500 mt-1">
+                          Base points for completing the challenge
+                        </p>
+                      </div>
+                      
+                      <div>
+                        <label className="block text-sm md:text-base text-gray-300 mb-2">
+                          Bonus Points
+                        </label>
+                        <input
+                          type="number"
+                          name="bonusPoints"
+                          value={formData.bonusPoints}
+                          onChange={handleInputChange}
+                          className="w-full bg-gray-800 rounded-lg px-4 py-2 md:py-3 text-sm md:text-base text-white focus:ring-2 focus:ring-purple-500"
+                          min="0"
+                        />
+                        <p className="text-xs text-gray-500 mt-1">
+                          Extra points for early submissions
+                        </p>
+                      </div>
+                      
+                      <div>
+                        <label className="block text-sm md:text-base text-gray-300 mb-2">
+                          Bonus Limit
+                        </label>
+                        <input
+                          type="number"
+                          name="bonusLimit"
+                          value={formData.bonusLimit}
+                          onChange={handleInputChange}
+                          className="w-full bg-gray-800 rounded-lg px-4 py-2 md:py-3 text-sm md:text-base text-white focus:ring-2 focus:ring-purple-500"
+                          min="0"
+                        />
+                        <p className="text-xs text-gray-500 mt-1">
+                          Number of submissions that receive bonus points
+                        </p>
+                      </div>
                     </div>
                     
                     {/* <div>

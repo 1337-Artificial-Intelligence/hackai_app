@@ -39,6 +39,11 @@ const submissionSchema = new mongoose.Schema({
     type: Number,
     min: 0
   },
+  pointsAwarded: {
+    type: Number,
+    min: 0,
+    default: 0
+  },
   aiPoints: {
     type: Number,
     min: 0,

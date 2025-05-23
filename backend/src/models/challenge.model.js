@@ -20,6 +20,22 @@ const challengeSchema = new mongoose.Schema({
     required: true,
     min: 0
   },
+  initialPoints: {
+    type: Number,
+    default: function() { return this.points; } // Default to points value if not specified
+  },
+  bonusPoints: {
+    type: Number,
+    default: 0 // No bonus by default
+  },
+  bonusLimit: {
+    type: Number,
+    default: 0 // No bonus limit by default
+  },
+  approvedSubmissionsCount: {
+    type: Number,
+    default: 0 // Start with 0 approved submissions
+  },
   resources: [{
     type: String,
     trim: true
