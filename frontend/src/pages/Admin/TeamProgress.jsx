@@ -290,18 +290,21 @@ export default function TeamProgress() {
                       </p>
                     </div>
                   </div>
-                  
                   <div className="flex flex-col md:flex-row gap-4 mt-3 md:mt-0 w-full md:w-auto">
                     {/* Progress Bar */}
-                    <div className="w-full md:w-48 h-7 bg-gray-700 rounded-full overflow-hidden flex items-center">
-                      <div 
-                        className="h-full bg-gradient-to-r from-purple-500 to-blue-500 flex items-center justify-center text-xs font-medium text-white"
-                        style={{ width: `${team.progress.progressPercentage}%` }}
-                      >
+                    <div className="w-full md:w-48 h-7 bg-gray-700 rounded-full overflow-hidden flex items-center relative">
+                      {team.progress.progressPercentage > 0 && (
+                        <div 
+                          className="h-full bg-gradient-to-r from-purple-500 to-blue-500 flex items-center justify-center text-xs font-medium"
+                          style={{ width: `${team.progress.progressPercentage}%` }}
+                        >
+                        </div>
+                      )}
+                      {/* Adding the text as an absolute element so it's always visible */}
+                      <div className="absolute inset-0 flex items-center justify-center text-xs font-medium text-white">
                         {team.progress.progressPercentage}%
                       </div>
                     </div>
-                    
                     {/* Completion Stats */}
                     <div className="text-right text-sm text-gray-400">
                       <span className="text-white font-medium">{team.progress.completedChallenges}</span>
@@ -309,7 +312,6 @@ export default function TeamProgress() {
                       <span>{team.progress.totalChallenges}</span>
                       <span> challenges</span>
                     </div>
-                    
                     {/* Stuck Indicator */}
                     {team.progress.stuckChallenge && (
                       <div className="bg-yellow-500/20 text-yellow-400 rounded-full px-3 py-1 text-xs font-medium flex items-center">

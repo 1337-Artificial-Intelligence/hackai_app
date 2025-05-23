@@ -303,7 +303,7 @@ export default function ChallengeManagement() {
                       />
                     </div>
                     
-                    <div>
+                    {/* <div>
                       <label className="flex items-center space-x-2 cursor-pointer">
                         <input
                           type="checkbox"
@@ -320,7 +320,7 @@ export default function ChallengeManagement() {
                         AI Challenges require mentors to input scores when validating submissions.
                         Points are awarded based on ranking (highest score gets 100 points).
                       </p>
-                    </div>
+                    </div> */}
 
                     <div>
                       <label className="block text-sm md:text-base text-gray-300 mb-2">
