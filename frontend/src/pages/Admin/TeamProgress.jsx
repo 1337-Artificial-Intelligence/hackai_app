@@ -179,7 +179,7 @@ export default function TeamProgress() {
           currentLevel,
           completedChallenges,
           totalChallenges,
-          progressPercentage: totalPoints > 0 ? Math.round((completedPoints / totalPoints) * 100) : 0,
+          progressPercentage: totalPoints > 0 ? Math.round((team.points || 0) / totalPoints * 100) : 0,
           stuckChallenge,
           submissions: submissionStatus
         }

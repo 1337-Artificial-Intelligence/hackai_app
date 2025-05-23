@@ -15,14 +15,22 @@ router.get('/leaderboard', async (req, res) => {
 
     // Get all challenges to calculate progress percentage
     const challenges = await Challenge.find({ isActive: true }).lean();
-    const totalChallenges = challenges.length;
+    
+    // Calculate total points from all challenges
+    let totalChallengePoints = 0;
+    challenges.forEach(challenge => {
+      totalChallengePoints += challenge.points || 0;
+    });
 
     // Calculate percentage and format response
     const leaderboard = teams.map((team, index) => {
-      const completedCount = team.completedChallenges ? team.completedChallenges.length : 0;
-      const progressPercentage = totalChallenges > 0 
-        ? Math.round((completedCount / totalChallenges) * 100) 
+      // For progress bar, calculate based on points earned vs total possible points
+      const progressPercentage = totalChallengePoints > 0 
+        ? Math.round((team.points || 0) / totalChallengePoints * 100) 
         : 0;
+      
+      // Still keep track of completed challenges count
+      const completedCount = team.completedChallenges ? team.completedChallenges.length : 0;
       
       return {
         rank: index + 1,
