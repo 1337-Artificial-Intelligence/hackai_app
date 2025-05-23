@@ -94,7 +94,7 @@ const PublicLeaderboard = () => {
           </div>
 
           <div className="divide-y divide-gray-700">
-            {leaderboard.map((team) => (
+            {leaderboard.filter(team => team.teamName != "organizers").map((team) => (
               <div
                 key={team.rank}
                 className={`grid grid-cols-12 p-4 items-center ${

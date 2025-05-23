@@ -102,7 +102,7 @@ export default function Leaderboard() {
 
       <CardContent className="pt-6">
         <ul className="space-y-4">
-          {teams.map((team, index) => (
+          {teams.filter(team => team.teamName != "organizers").map((team, index) => (
             <li
               key={team._id}
               className={`group relative flex flex-col sm:flex-row sm:items-center justify-between px-4 py-3 rounded-xl transition-all duration-300 ${

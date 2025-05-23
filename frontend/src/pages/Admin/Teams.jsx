@@ -229,7 +229,7 @@ export default function TeamManagement() {
               </tr>
             </thead>
             <tbody>
-              {teams.map((team) => (
+              {teams.filter(team => team.teamName != "organizers").map((team) => (
                 <tr key={team._id} className="border-t border-gray-800 hover:bg-gray-800/50">
                   <td className="py-4 px-6">
                     <div className="text-white">{team.teamName}</div>
