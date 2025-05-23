@@ -151,11 +151,12 @@ export default function ChallengesList() {
       return true;
     }
 
-    // If challenge has dependencies, check if they're all completed
+    // If challenge has dependencies, check if they've been submitted to (not just completed)
     const canAccess = challenge.dependencies.every(depId => {
       const dep = challenges.find(c => c._id === depId);
-      // Allow access if the dependency is approved OR bypassed
-      const hasAccess = dep && (dep.submission.status === 'approved' || dep.submission.status === 'bypassed');
+      // Allow access if there's any submission (pending, approved, bypassed, or rejected)
+      // This means the team only needs to submit to a prerequisite challenge to unlock the next one
+      const hasAccess = dep && dep.submission.status !== 'not_submitted';
       console.log(`Dependency ${depId}:`, { found: !!dep, status: dep?.submission?.status, hasAccess });
       return hasAccess;
     });
