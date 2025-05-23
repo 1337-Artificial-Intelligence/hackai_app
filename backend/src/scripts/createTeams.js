@@ -21,16 +21,11 @@ async function createTeamsFromCSV() {
         .on('data', (row) => {
           // Extract team data from CSV row
           const teamName = row['Team Name']?.trim().toLowerCase();
-          const member1 = row['Team Member_1 Full Name']?.trim();
-          const member2 = row['Team Member_2 Full Name']?.trim();
-          const member3 = row['Team Member_3 Full Name']?.trim();
+          const members = row['Team Members']?.trim();
           const teamPassword = row['Team Password']?.trim();
 
           if (teamName) {
-            const teamMembers = [];
-            if (member1) teamMembers.push(member1);
-            if (member2) teamMembers.push(member2);
-            if (member3) teamMembers.push(member3);
+            const teamMembers = members.split("|").map(member => member.trim());
 
             teams.push({
               teamName,
