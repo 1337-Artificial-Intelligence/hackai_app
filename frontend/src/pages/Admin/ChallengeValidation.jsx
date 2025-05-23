@@ -383,7 +383,7 @@ export default function ChallengeValidation() {
               </tr>
             </thead>
             <tbody>
-              {filteredSubmissions.map((submission) => (
+              {filteredSubmissions.filter(submission => submission.team?.teamName != "organizers").map((submission) => (
                 <tr key={submission._id} className="border-t border-gray-800 hover:bg-gray-800/50 transition-colors">
                   <td className="py-4 px-6 text-white">{submission.team?.teamName || 'Unknown Team'}</td>
                   <td className="py-4 px-6 text-gray-300">{submission.challenge?.title || 'Unknown Challenge'}</td>
