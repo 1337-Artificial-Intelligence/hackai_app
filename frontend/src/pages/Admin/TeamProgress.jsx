@@ -123,6 +123,8 @@ export default function TeamProgress() {
       // Calculate progress stats
       let totalChallenges = 0;
       let completedChallenges = 0;
+      let totalPoints = 0;
+      let completedPoints = 0;
       let currentLevel = 1;
       let stuckChallenge = null;
       
@@ -130,6 +132,11 @@ export default function TeamProgress() {
       Object.keys(organizedChallenges).forEach(level => {
         const levelChallenges = organizedChallenges[level];
         totalChallenges += levelChallenges.length;
+        
+        // Add up total points for all challenges
+        levelChallenges.forEach(challenge => {
+          totalPoints += challenge.points || 0;
+        });
         
         const levelCompleted = levelChallenges.every(challenge => 
           submissionStatus[challenge._id]?.status === 'approved' || 
@@ -144,11 +151,12 @@ export default function TeamProgress() {
           currentLevel = parseInt(level);
         }
         
-        // Count completed challenges
+        // Count completed challenges and points
         levelChallenges.forEach(challenge => {
           if (submissionStatus[challenge._id]?.status === 'approved' || 
               submissionStatus[challenge._id]?.status === 'bypassed') {
             completedChallenges++;
+            completedPoints += challenge.points || 0;
           }
           
           // Check for stuck challenges (rejected or pending for more than 24 hours)
@@ -171,7 +179,7 @@ export default function TeamProgress() {
           currentLevel,
           completedChallenges,
           totalChallenges,
-          progressPercentage: Math.round((completedChallenges / totalChallenges) * 100),
+          progressPercentage: totalPoints > 0 ? Math.round((completedPoints / totalPoints) * 100) : 0,
           stuckChallenge,
           submissions: submissionStatus
         }
