@@ -1,4 +1,5 @@
 const Team = require('../models/team.model');
+const Submission = require('../models/submission.model');
 const bcrypt = require('bcryptjs');
 
 // @desc    Get all teams
@@ -124,17 +125,26 @@ exports.updateTeam = async (req, res) => {
 // @access  Admin only
 exports.deleteTeam = async (req, res) => {
   try {
-    const team = await Team.findByIdAndDelete(req.params.id);
+    // First, find the team to confirm it exists
+    const team = await Team.findById(req.params.id);
 
     if (!team) {
       return res.status(404).json({ message: 'Team not found' });
     }
 
+    // Delete all submissions associated with this team
+    await Submission.deleteMany({ team: req.params.id });
+    console.log(`Deleted all submissions for team ${team.teamName}`);
+    
+    // Now delete the team
+    await Team.findByIdAndDelete(req.params.id);
+
     res.json({
       success: true,
-      message: 'Team deleted successfully'
+      message: 'Team and all associated submissions deleted successfully'
     });
   } catch (error) {
+    console.error('Error deleting team:', error);
     res.status(400).json({ message: error.message });
   }
 };

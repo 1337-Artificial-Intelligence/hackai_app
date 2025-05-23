@@ -57,13 +57,16 @@ export default function TeamProgress() {
       
       const submissionsData = await submissionsResponse.json();
       
+      // Filter out submissions with null team references to prevent errors
+      const validSubmissions = submissionsData.data.filter(submission => submission.team && submission.team._id);
+      
       // Organize challenges by level
       const organizedChallenges = organizeChallengesByLevel(challengesData.data);
       setChallenges(organizedChallenges);
       
       // Filter out admin and mentor accounts, and map submissions to teams
       const filteredTeams = teamsData.data.filter(team => team.role === 'team');
-      const teamsWithProgress = mapTeamProgress(filteredTeams, submissionsData.data, organizedChallenges);
+      const teamsWithProgress = mapTeamProgress(filteredTeams, validSubmissions, organizedChallenges);
       setTeams(teamsWithProgress);
       
       setLoading(false);
