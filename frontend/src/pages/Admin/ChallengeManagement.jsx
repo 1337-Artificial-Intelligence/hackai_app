@@ -77,6 +77,22 @@ export default function ChallengeManagement() {
         : formData.dependencies.filter(dep => dep !== value);
       
       setFormData({ ...formData, dependencies: newDependencies });
+    } else if (e.target.name === "initialPoints" || e.target.name === "bonusPoints") {
+      // Auto-calculate total points when initialPoints or bonusPoints change
+      const newValue = e.target.value ? parseInt(e.target.value) : 0;
+      const fieldToUpdate = e.target.name;
+      
+      let initialPoints = fieldToUpdate === "initialPoints" ? newValue : (parseInt(formData.initialPoints) || 0);
+      let bonusPoints = fieldToUpdate === "bonusPoints" ? newValue : (parseInt(formData.bonusPoints) || 0);
+      
+      // Calculate total points
+      const totalPoints = initialPoints + bonusPoints;
+      
+      setFormData({ 
+        ...formData, 
+        [fieldToUpdate]: e.target.value,
+        points: totalPoints.toString()
+      });
     } else {
       setFormData({ ...formData, [e.target.name]: e.target.value });
     }
@@ -169,15 +185,19 @@ export default function ChallengeManagement() {
   };
 
   const resetForm = () => {
+    const initialPoints = 100;
+    const bonusPoints = 0;
+    
     setFormData({
       title: "",
       description: "",
       tag: "",
       resources: [""],
+      subject: null,
       dependencies: [],
-      points: 100,
-      initialPoints: 100,
-      bonusPoints: 0,
+      points: initialPoints + bonusPoints, // Auto-calculate total points
+      initialPoints: initialPoints,
+      bonusPoints: bonusPoints,
       bonusLimit: 0,
       isAIChallenge: false,
     });
@@ -463,20 +483,26 @@ export default function ChallengeManagement() {
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pb-2 border-b border-gray-800 mb-4">
                       <div>
-                        <label className="block text-sm md:text-base text-gray-300 mb-2">
-                          Points
+                        <label className="flex items-center text-sm md:text-base text-gray-300 mb-2">
+                          Total Points
+                          <span className="ml-2 px-2 py-0.5 text-xs bg-purple-900/30 text-purple-400 rounded-full">Auto-calculated</span>
                         </label>
-                        <input
-                          type="number"
-                          name="points"
-                          value={formData.points || 100}
-                          onChange={handleInputChange}
-                          className="w-full bg-gray-800 rounded-lg px-4 py-2 md:py-3 text-sm md:text-base text-white focus:ring-2 focus:ring-purple-500"
-                          min="0"
-                          required
-                        />
+                        <div className="relative">
+                          <input
+                            type="number"
+                            name="points"
+                            value={formData.points || 100}
+                            readOnly
+                            className="w-full bg-gray-800/50 rounded-lg px-4 py-2 md:py-3 text-sm md:text-base text-gray-300 border border-gray-700 cursor-not-allowed"
+                          />
+                          <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                            <svg className="h-5 w-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                            </svg>
+                          </div>
+                        </div>
                         <p className="text-xs text-gray-500 mt-1">
-                          Total points value of the challenge
+                          Initial Points + Bonus Points = Total Points
                         </p>
                       </div>
                       
