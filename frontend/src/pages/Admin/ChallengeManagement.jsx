@@ -12,11 +12,17 @@ import {
 
 export default function ChallengeManagement() {
   const [challenges, setChallenges] = useState([]);
+  const [filteredChallenges, setFilteredChallenges] = useState([]);
   const [selectedChallenge, setSelectedChallenge] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  
+  // Filter states
+  const [searchQuery, setSearchQuery] = useState("");
+  const [tagFilter, setTagFilter] = useState("all");
+  const [bonusFilter, setBonusFilter] = useState("all");
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -34,6 +40,11 @@ export default function ChallengeManagement() {
   useEffect(() => {
     fetchChallenges();
   }, []);
+  
+  // Apply filters whenever challenges array or filter settings change
+  useEffect(() => {
+    applyFilters();
+  }, [challenges, searchQuery, tagFilter, bonusFilter]);
 
   const fetchChallenges = async () => {
     try {
@@ -173,6 +184,41 @@ export default function ChallengeManagement() {
     setSelectedChallenge(null);
   };
 
+  // Function to apply all filters to the challenges array
+  const applyFilters = () => {
+    let result = [...challenges];
+    
+    // Apply tag filter
+    if (tagFilter !== "all") {
+      result = result.filter(challenge => challenge.tag?.toLowerCase() === tagFilter.toLowerCase());
+    }
+    
+    // Apply bonus filter
+    if (bonusFilter === "with-bonus") {
+      result = result.filter(challenge => challenge.bonusPoints > 0 && challenge.bonusLimit > 0);
+    } else if (bonusFilter === "no-bonus") {
+      result = result.filter(challenge => !(challenge.bonusPoints > 0 && challenge.bonusLimit > 0));
+    }
+    
+    // Apply search query
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase().trim();
+      result = result.filter(
+        challenge => 
+          challenge.title?.toLowerCase().includes(query) || 
+          challenge.description?.toLowerCase().includes(query)
+      );
+    }
+    
+    setFilteredChallenges(result);
+  };
+  
+  // Extract unique tags from challenges for the tag filter dropdown
+  const getUniqueTags = () => {
+    const tags = challenges.map(challenge => challenge.tag).filter(Boolean);
+    return [...new Set(tags)];
+  };
+  
   const openEditModal = challenge => {
     setSelectedChallenge(challenge);
     setFormData({
@@ -206,6 +252,93 @@ export default function ChallengeManagement() {
           </button>
         </div>
 
+        {/* Filter Controls */}
+        <div className="mb-6 bg-gray-800/30 border border-gray-800 rounded-xl p-4">
+          <div className="flex flex-col md:flex-row gap-4">
+            {/* Search Input */}
+            <div className="flex-1">
+              <label htmlFor="search" className="block text-sm font-medium text-gray-400 mb-1">
+                Search
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                  </svg>
+                </div>
+                <input
+                  type="text"
+                  id="search"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Search by title or description..."
+                  className="w-full pl-10 pr-3 py-2 bg-gray-900/50 border border-gray-800 text-gray-200 text-sm rounded-lg focus:ring-1 focus:ring-purple-500/50 focus:border-purple-500/50 block focus:outline-none transition-colors"
+                />
+              </div>
+            </div>
+            
+            {/* Tag Filter */}
+            <div className="w-full md:w-64">
+              <label htmlFor="tagFilter" className="block text-sm font-medium text-gray-400 mb-1">
+                Filter by Tag
+              </label>
+              <select
+                id="tagFilter"
+                value={tagFilter}
+                onChange={(e) => setTagFilter(e.target.value)}
+                className="w-full px-3 py-2 bg-gray-900/50 border border-gray-800 text-gray-200 text-sm rounded-lg focus:ring-1 focus:ring-purple-500/50 focus:border-purple-500/50 block focus:outline-none transition-colors appearance-none"
+                style={{ backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e")`, backgroundPosition: 'right 0.5rem center', backgroundRepeat: 'no-repeat', backgroundSize: '1.5em 1.5em', paddingRight: '2.5rem' }}
+              >
+                <option value="all">All Tags</option>
+                {getUniqueTags().map((tag) => (
+                  <option key={tag} value={tag}>
+                    {tag}
+                  </option>
+                ))}
+              </select>
+            </div>
+            
+            {/* Bonus Points Filter */}
+            <div className="w-full md:w-64">
+              <label htmlFor="bonusFilter" className="block text-sm font-medium text-gray-400 mb-1">
+                Bonus Points
+              </label>
+              <select
+                id="bonusFilter"
+                value={bonusFilter}
+                onChange={(e) => setBonusFilter(e.target.value)}
+                className="w-full px-3 py-2 bg-gray-900/50 border border-gray-800 text-gray-200 text-sm rounded-lg focus:ring-1 focus:ring-purple-500/50 focus:border-purple-500/50 block focus:outline-none transition-colors appearance-none"
+                style={{ backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e")`, backgroundPosition: 'right 0.5rem center', backgroundRepeat: 'no-repeat', backgroundSize: '1.5em 1.5em', paddingRight: '2.5rem' }}
+              >
+                <option value="all">All Challenges</option>
+                <option value="with-bonus">With Bonus Points</option>
+                <option value="no-bonus">No Bonus Points</option>
+              </select>
+            </div>
+          </div>
+          
+          {/* Filter Status and Reset */}
+          <div className="mt-4 flex justify-between items-center">
+            <div className="text-sm text-gray-400">
+              Showing {filteredChallenges.length} of {challenges.length} challenges
+            </div>
+            
+            {(searchQuery || tagFilter !== "all" || bonusFilter !== "all") && (
+              <button
+                onClick={() => {
+                  setSearchQuery("");
+                  setTagFilter("all");
+                  setBonusFilter("all");
+                }}
+                className="text-xs px-2 py-1 bg-gray-800 hover:bg-gray-700 text-gray-400 hover:text-white rounded-md transition-colors flex items-center"
+              >
+                <X className="w-3.5 h-3.5 mr-1" />
+                Clear Filters
+              </button>
+            )}
+          </div>
+        </div>
+        
         {/* Challenges Table */}
         <div className="border border-gray-800 rounded-xl overflow-hidden">
           <table className="w-full">
@@ -219,7 +352,7 @@ export default function ChallengeManagement() {
               </tr>
             </thead>
             <tbody>
-              {challenges.map(challenge => (
+              {filteredChallenges.length > 0 ? filteredChallenges.map(challenge => (
                 <tr key={challenge._id} className="border-t border-gray-800 hover:bg-gray-800/50 transition-colors">
                   <td className="py-4 px-6">
                     <span className={`px-3 py-1 rounded-full text-sm ${getTagStyle(challenge.tag)}`}>
@@ -271,7 +404,22 @@ export default function ChallengeManagement() {
                     </div>
                   </td>
                 </tr>
-              ))}
+              )) : (
+                <tr>
+                  <td colSpan="5" className="py-8 px-6 text-center text-gray-400">
+                    {isLoading ? (
+                      <div className="flex justify-center">
+                        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-purple-500"></div>
+                      </div>
+                    ) : (
+                      <div>
+                        <div className="text-xl mb-2">No challenges found</div>
+                        <div className="text-sm">Try adjusting your filters or add a new challenge</div>
+                      </div>
+                    )}
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>
