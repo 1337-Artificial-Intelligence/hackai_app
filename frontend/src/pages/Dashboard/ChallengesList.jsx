@@ -251,8 +251,14 @@ export default function ChallengesList() {
                     
                     {challenge.bonusPoints > 0 && challenge.bonusLimit > 0 && (
                       <div className="ml-4 text-xs text-gray-400">
-                        <span className="text-yellow-400">{challenge.approvedSubmissionsCount || 0}</span>
-                        <span>/{challenge.bonusLimit} bonus claims used</span>
+                        {(challenge.approvedSubmissionsCount || 0) >= challenge.bonusLimit ? (
+                          <span className="text-yellow-400">All bonus points claimed!</span>
+                        ) : (
+                          <>
+                            <span className="text-yellow-400">{challenge.approvedSubmissionsCount || 0}</span>
+                            <span>/{challenge.bonusLimit} bonus claims used</span>
+                          </>
+                        )}
                       </div>
                     )}
                   </div>

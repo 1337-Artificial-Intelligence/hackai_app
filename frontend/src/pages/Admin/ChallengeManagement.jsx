@@ -386,8 +386,14 @@ export default function ChallengeManagement() {
                       <div className="text-xs text-gray-400 mt-1">
                         +{challenge.bonusPoints} bonus for first {challenge.bonusLimit} submissions
                         <div className="mt-1">
-                          <span className="text-green-400">{challenge.approvedSubmissionsCount || 0}</span>
-                          <span className="text-gray-500">/{challenge.bonusLimit} claimed</span>
+                          {(challenge.approvedSubmissionsCount || 0) >= challenge.bonusLimit ? (
+                            <span className="text-yellow-400">All bonus points claimed!</span>
+                          ) : (
+                            <>
+                              <span className="text-green-400">{challenge.approvedSubmissionsCount || 0}</span>
+                              <span className="text-gray-500">/{challenge.bonusLimit} claimed</span>
+                            </>
+                          )}
                         </div>
                       </div>
                     )}
