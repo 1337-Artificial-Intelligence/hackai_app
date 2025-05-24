@@ -21,32 +21,37 @@ export default function ChallengesList() {
   const groupChallengesByLevel = () => {
     const groups = [];
     const remainingChallenges = new Set(challenges);
-    
+
     // Helper function to check if all dependencies are in previous levels
     const areDependenciesInPreviousLevels = (challenge, previousLevels) => {
-      if (!challenge.dependencies || challenge.dependencies.length === 0) return true;
-      
+      if (!challenge.dependencies || challenge.dependencies.length === 0)
+        return true;
+
       const allPreviousChallenges = previousLevels.flat();
-      return challenge.dependencies.every(depId => 
-        allPreviousChallenges.some(prevChallenge => prevChallenge._id === depId)
+      return challenge.dependencies.every((depId) =>
+        allPreviousChallenges.some(
+          (prevChallenge) => prevChallenge._id === depId
+        )
       );
     };
 
     // Keep going until we've placed all challenges
     while (remainingChallenges.size > 0) {
-      const currentLevel = Array.from(remainingChallenges).filter(challenge => 
+      const currentLevel = Array.from(remainingChallenges).filter((challenge) =>
         areDependenciesInPreviousLevels(challenge, groups)
       );
 
       if (currentLevel.length === 0) {
         // If we can't place any more challenges, there might be a circular dependency
-        console.warn('Possible circular dependency detected');
+        console.warn("Possible circular dependency detected");
         break;
       }
 
       // Add current level to groups and remove these challenges from remaining
       groups.push(currentLevel);
-      currentLevel.forEach(challenge => remainingChallenges.delete(challenge));
+      currentLevel.forEach((challenge) =>
+        remainingChallenges.delete(challenge)
+      );
     }
 
     setGroupedChallenges(groups);
@@ -54,60 +59,66 @@ export default function ChallengesList() {
 
   const fetchChallenges = async () => {
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem("token");
       if (!token) {
-        throw new Error('No authentication token found');
+        throw new Error("No authentication token found");
       }
 
       // Fetch both challenges and submissions
       const [challengesRes, submissionsRes] = await Promise.all([
         fetch(`${import.meta.env.VITE_API_URL}/api/challenges`, {
-          headers: { 'Authorization': `Bearer ${token}` }
+          headers: { Authorization: `Bearer ${token}` },
         }),
         fetch(`${import.meta.env.VITE_API_URL}/api/submissions/team`, {
-          headers: { 'Authorization': `Bearer ${token}` }
-        })
+          headers: { Authorization: `Bearer ${token}` },
+        }),
       ]);
 
       if (!challengesRes.ok) {
-        throw new Error('Failed to fetch challenges');
+        throw new Error("Failed to fetch challenges");
       }
       if (!submissionsRes.ok) {
-        throw new Error('Failed to fetch submissions');
+        throw new Error("Failed to fetch submissions");
       }
 
       const challengesData = await challengesRes.json();
       const submissionsData = await submissionsRes.json();
-      console.log('Submissions:', submissionsData);
+      console.log("Submissions:", submissionsData);
 
       // Create a map of challenge IDs to their latest submission status
       const submissionMap = {};
-      submissionsData.data?.forEach(sub => {
+      submissionsData.data?.forEach((sub) => {
         if (sub.challenge) {
           const challengeId = sub.challenge._id;
           // Only update if there's no submission yet for this challenge
           // or if this submission is newer than the existing one
-          if (!submissionMap[challengeId] || 
-              new Date(sub.createdAt) > new Date(submissionMap[challengeId].createdAt)) {
+          if (
+            !submissionMap[challengeId] ||
+            new Date(sub.createdAt) >
+              new Date(submissionMap[challengeId].createdAt)
+          ) {
             submissionMap[challengeId] = {
-              status: sub.status || 'pending',
+              status: sub.status || "pending",
               githubLink: sub.githubLink,
-              createdAt: sub.createdAt
+              createdAt: sub.createdAt,
             };
           }
         }
       });
 
       // Add submission status to challenges
-      const challengesWithStatus = challengesData.data.map(challenge => ({
+      const challengesWithStatus = challengesData.data.map((challenge) => ({
         ...challenge,
-        submission: submissionMap[challenge._id] || { status: 'not_submitted', githubLink: null }
+        submission: submissionMap[challenge._id] || {
+          status: "not_submitted",
+          githubLink: null,
+        },
       }));
 
-      console.log('Challenges with status:', challengesWithStatus);
+      console.log("Challenges with status:", challengesWithStatus);
       setChallenges(challengesWithStatus);
     } catch (err) {
-      console.error('Error fetching challenges:', err);
+      console.error("Error fetching challenges:", err);
       setError(err.message);
     } finally {
       setIsLoading(false);
@@ -116,16 +127,16 @@ export default function ChallengesList() {
 
   const getStatusBadgeStyle = (status) => {
     switch (status) {
-      case 'approved':
-        return 'bg-green-500/10 text-green-400';
-      case 'pending':
-        return 'bg-yellow-500/10 text-yellow-400';
-      case 'rejected':
-        return 'bg-red-500/10 text-red-400';
-      case 'bypassed':
-        return 'bg-blue-500/10 text-blue-400';
+      case "approved":
+        return "bg-green-500/10 text-green-400";
+      case "pending":
+        return "bg-yellow-500/10 text-yellow-400";
+      case "rejected":
+        return "bg-red-500/10 text-red-400";
+      case "bypassed":
+        return "bg-blue-500/10 text-blue-400";
       default:
-        return 'bg-gray-500/10 text-gray-400';
+        return "bg-gray-500/10 text-gray-400";
     }
   };
 
@@ -143,25 +154,29 @@ export default function ChallengesList() {
   };
 
   const canAccessChallenge = (challenge) => {
-    console.log('Checking access for challenge:', challenge);
-    
+    console.log("Checking access for challenge:", challenge);
+
     // If challenge has no dependencies, it's always accessible
     if (!challenge.dependencies || challenge.dependencies.length === 0) {
-      console.log('No dependencies, access granted');
+      console.log("No dependencies, access granted");
       return true;
     }
 
     // If challenge has dependencies, check if they've been submitted to (not just completed)
-    const canAccess = challenge.dependencies.every(depId => {
-      const dep = challenges.find(c => c._id === depId);
+    const canAccess = challenge.dependencies.every((depId) => {
+      const dep = challenges.find((c) => c._id === depId);
       // Allow access if there's any submission (pending, approved, bypassed, or rejected)
       // This means the team only needs to submit to a prerequisite challenge to unlock the next one
-      const hasAccess = dep && dep.submission.status !== 'not_submitted';
-      console.log(`Dependency ${depId}:`, { found: !!dep, status: dep?.submission?.status, hasAccess });
+      const hasAccess = dep && dep.submission.status !== "not_submitted";
+      console.log(`Dependency ${depId}:`, {
+        found: !!dep,
+        status: dep?.submission?.status,
+        hasAccess,
+      });
       return hasAccess;
     });
 
-    console.log('Final access decision:', canAccess);
+    console.log("Final access decision:", canAccess);
     return canAccess;
   };
 
@@ -179,11 +194,7 @@ export default function ChallengesList() {
   }
 
   if (error) {
-    return (
-      <div className="text-red-500 text-center py-4">
-        {error}
-      </div>
-    );
+    return <div className="text-red-500 text-center py-4">{error}</div>;
   }
 
   return (
@@ -197,7 +208,7 @@ export default function ChallengesList() {
             </h2> */}
             <div className="h-px bg-gray-800 flex-grow"></div>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {levelChallenges.map((challenge) => (
               <div
@@ -208,20 +219,35 @@ export default function ChallengesList() {
                 <div className="flex justify-between items-start mb-4">
                   <div>
                     <div className="flex flex-wrap gap-2 mb-2">
-                      <span
-                        className={`inline-block px-3 py-1 rounded-full text-xs font-medium text-white ${getChallengeTypeStyle(
-                          challenge.tag
-                        )}`}
-                      >
-                        {challenge.tag}
-                      </span>
-                      
-                      {/* Bonus Points Indicator */}
-                      {challenge.bonusPoints > 0 && challenge.bonusLimit > 0 && challenge.approvedSubmissionsCount < challenge.bonusLimit && (
-                        <span className="inline-block px-3 py-1 rounded-full text-xs font-medium bg-gradient-to-r from-amber-500/20 to-yellow-500/20 text-yellow-400">
-                          +{challenge.bonusPoints} Bonus
+                      <div className="flex items-center justify-start gap-2">
+                        <span
+                          className={`inline-block px-3 py-1 rounded-full text-xs font-medium text-white ${getChallengeTypeStyle(
+                            challenge.tag
+                          )}`}
+                        >
+                          {challenge.tag}
                         </span>
-                      )}
+
+                        {challenge.title.includes("Optional") ? (
+                          <span
+                            className={`inline-block px-3 py-1 rounded-full  text-xs font-medium text-white  bg-orange-700 `}
+                          >
+                            Optional
+                          </span>
+                        ) : (
+                          ""
+                        )}
+                      </div>
+
+                      {/* Bonus Points Indicator */}
+                      {challenge.bonusPoints > 0 &&
+                        challenge.bonusLimit > 0 &&
+                        challenge.approvedSubmissionsCount <
+                          challenge.bonusLimit && (
+                          <span className="inline-block px-3 py-1 rounded-full text-xs font-medium bg-gradient-to-r from-amber-500/20 to-yellow-500/20 text-yellow-400">
+                            +{challenge.bonusPoints} Bonus
+                          </span>
+                        )}
                     </div>
                     <h3 className="text-xl font-semibold text-white mb-2">
                       {challenge.title}
@@ -232,10 +258,17 @@ export default function ChallengesList() {
                   </div>
                   {/* Status Badge */}
                   <div className="flex-shrink-0">
-                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusBadgeStyle(challenge.submission.status)}`}>
-                      {challenge.submission.status === 'not_submitted' ? 'Not Started' : 
-                       challenge.submission.status === 'bypassed' ? 'Bypassed' :
-                       challenge.submission.status.charAt(0).toUpperCase() + challenge.submission.status.slice(1)}
+                    <span
+                      className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusBadgeStyle(
+                        challenge.submission.status
+                      )}`}
+                    >
+                      {challenge.submission.status === "not_submitted"
+                        ? "Not Started"
+                        : challenge.submission.status === "bypassed"
+                        ? "Bypassed"
+                        : challenge.submission.status.charAt(0).toUpperCase() +
+                          challenge.submission.status.slice(1)}
                     </span>
                   </div>
                 </div>
@@ -244,21 +277,29 @@ export default function ChallengesList() {
                 {/* Points Display */}
                 <div className="mb-4">
                   <div className="flex items-center text-white">
-                    <svg className="w-5 h-5 mr-2 text-purple-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <svg
+                      className="w-5 h-5 mr-2 text-purple-400"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
                       <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
                     </svg>
-                    <span className="font-medium">{challenge.initialPoints || 0} points</span>
-                    
+                    <span className="font-medium">
+                      {challenge.initialPoints || 0} points
+                    </span>
+
                     {challenge.bonusPoints > 0 && challenge.bonusLimit > 0 && (
                       <div className="ml-4 text-xs text-gray-400">
-                        {(challenge.approvedSubmissionsCount || 0) >= challenge.bonusLimit ? (
-                          <span className="text-yellow-400">All bonus points claimed!</span>
-                        ) : (
-                          <>
-                            <span className="text-yellow-400">{challenge.approvedSubmissionsCount || 0}</span>
-                            <span>/{challenge.bonusLimit} bonus claims used</span>
-                          </>
-                        )}
+                        <div>
+                          <span className="text-yellow-400">
+                            {Math.min(challenge.approvedSubmissionsCount || 0, challenge.bonusLimit)}
+                          </span>
+                          <span>/{challenge.bonusLimit} bonus claims used</span>
+                        </div>
+                        <div className="text-gray-500">
+                          Total submissions: {challenge.approvedSubmissionsCount || 0}
+                        </div>
                       </div>
                     )}
                   </div>
@@ -309,9 +350,11 @@ export default function ChallengesList() {
                       onClick={() => handleStartChallenge(challenge._id)}
                       className="inline-flex items-center justify-center w-full px-4 py-2 text-sm font-medium rounded-lg transition-colors bg-gradient-to-r from-purple-500 to-blue-500 text-white hover:from-purple-600 hover:to-blue-600"
                     >
-                      {challenge.submission?.status === 'approved' ? 'View Solution' : 
-                       challenge.submission?.status === 'bypassed' ? 'Challenge Bypassed' : 
-                       'Start Challenge'}
+                      {challenge.submission?.status === "approved"
+                        ? "View Solution"
+                        : challenge.submission?.status === "bypassed"
+                        ? "Challenge Bypassed"
+                        : "Start Challenge"}
                     </button>
                   )}
                 </div>

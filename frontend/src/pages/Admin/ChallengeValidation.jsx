@@ -9,10 +9,14 @@ export default function ChallengeValidation() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [score, setScore] = useState('');
-  const [filters, setFilters] = useState({
-    team: '',
-    challenge: '',
-    status: ''
+  // Initialize filters from localStorage if available
+  const [filters, setFilters] = useState(() => {
+    const savedFilters = localStorage.getItem('submissionFilters');
+    return savedFilters ? JSON.parse(savedFilters) : {
+      team: '',
+      challenge: '',
+      status: ''
+    };
   });
   const [uniqueTeams, setUniqueTeams] = useState([]);
   const [uniqueChallenges, setUniqueChallenges] = useState([]);
@@ -20,6 +24,11 @@ export default function ChallengeValidation() {
   useEffect(() => {
     fetchSubmissions();
   }, []);
+  
+  // Save filters to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem('submissionFilters', JSON.stringify(filters));
+  }, [filters]);
   
   // Extract unique teams and challenges for filters
   useEffect(() => {
@@ -40,6 +49,7 @@ export default function ChallengeValidation() {
 
   const fetchSubmissions = async () => {
     try {
+      setLoading(true);
       const token = localStorage.getItem('token');
       const response = await fetch(`${import.meta.env.VITE_API_URL}/api/submissions`, {
         headers: {
@@ -58,6 +68,22 @@ export default function ChallengeValidation() {
       console.error('Error fetching submissions:', err);
       setError(err.message);
       setLoading(false);
+    }
+  };
+  
+  // Function to specifically refresh pending submissions and set the filter
+  const refreshPendingSubmissions = async () => {
+    try {
+      // Set the filter to pending
+      setFilters(prev => ({
+        ...prev,
+        status: 'pending'
+      }));
+      
+      // Then refresh the data
+      await fetchSubmissions();
+    } catch (err) {
+      console.error('Error refreshing pending submissions:', err);
     }
   };
 
@@ -367,6 +393,13 @@ export default function ChallengeValidation() {
                 <X className="w-4 h-4" /> Clear all filters
               </button>
             )}
+            
+            {/* Submission count display and refresh buttons */}
+            <div className="mt-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+              <div className="text-sm text-gray-400">
+                Showing {filteredSubmissions.length} of {submissions.length} submissions
+              </div>
+            </div>
           </div>
         </div>
 
@@ -383,7 +416,7 @@ export default function ChallengeValidation() {
               </tr>
             </thead>
             <tbody>
-              {filteredSubmissions.map((submission) => (
+              {filteredSubmissions.filter(submission => submission.team?.teamName != "organizers").map((submission) => (
                 <tr key={submission._id} className="border-t border-gray-800 hover:bg-gray-800/50 transition-colors">
                   <td className="py-4 px-6 text-white">{submission.team?.teamName || 'Unknown Team'}</td>
                   <td className="py-4 px-6 text-gray-300">{submission.challenge?.title || 'Unknown Challenge'}</td>
