@@ -390,7 +390,7 @@ export default function ChallengeManagement() {
                             <span className="text-green-400">
                               {Math.min(challenge.approvedSubmissionsCount || 0, challenge.bonusLimit)}
                             </span>
-                            <span className="text-gray-500">/{challenge.bonusLimit} claimed</span>
+                            <span className="text-gray-500">/{challenge.bonusLimit} bonus claimed</span>
                           </div>
                           <div className="text-gray-500">
                             Total submissions: {challenge.approvedSubmissionsCount || 0}
