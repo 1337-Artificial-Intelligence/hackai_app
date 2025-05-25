@@ -72,7 +72,7 @@ const PublicLeaderboard = () => {
 
   return (
     <div className="min-h-screen bg-gray-900 text-white p-2">
-      <div className="max-w-6xl mt-5 mx-auto">
+      <div className="max-w-7xl mt-5 mx-auto">
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-4xl font-bold flex items-center">
             <Trophy className="text-yellow-500 mr-3 h-10 w-10" />
@@ -87,9 +87,11 @@ const PublicLeaderboard = () => {
           <div className="p-4 bg-gradient-to-r from-purple-900 to-indigo-900 border-b border-gray-700">
             <div className="grid grid-cols-12 text-gray-300 text-lg font-medium">
               <div className="col-span-1 text-center">#</div>
-              <div className="col-span-4">Team</div>
-              <div className="col-span-3 text-center">Points</div>
-              <div className="col-span-4 text-center">Progress</div>
+              <div className="col-span-3">Team</div>
+              <div className="col-span-2 text-center">Challenge Points (50%)</div>
+              <div className="col-span-2 text-center">Jury Score (50%)</div>
+              <div className="col-span-2 text-center">Final Score</div>
+              <div className="col-span-2 text-center">Progress</div>
             </div>
           </div>
 
@@ -121,7 +123,7 @@ const PublicLeaderboard = () => {
                   )}
                 </div>
 
-                <div className="col-span-4 n font-medium flex sm:m-0  ml-3 items-center">
+                <div className="col-span-3 font-medium flex sm:m-0 ml-3 items-center">
                   {team.rank <= 3 && (
                     <Star
                       className={`mr-2 h-5 w-5 ${
@@ -134,13 +136,23 @@ const PublicLeaderboard = () => {
                     />
                   )}
                   <span className="sm:w-full w-20 text-nowrap whitespace-nowrap text-ellipsis overflow-hidden">
-                    {/* sadasddas asdasd asdasd */}
-                  {team.teamName}
-
+                    {team.teamName}
                   </span>
                 </div>
 
-                <div className="col-span-3 text-center font-mono text-xl">
+                <div className="col-span-2 text-center font-mono">
+                  <span className="text-blue-400 font-bold">
+                    {team.challengePoints || 0}
+                  </span>
+                </div>
+
+                <div className="col-span-2 text-center font-mono">
+                  <span className="text-purple-400 font-bold">
+                    {team.juryScore || 0}
+                  </span>
+                </div>
+
+                <div className="col-span-2 text-center font-mono text-xl">
                   <span
                     className={`
                     ${
@@ -150,16 +162,16 @@ const PublicLeaderboard = () => {
                         ? "text-gray-400"
                         : team.rank === 3
                         ? "text-amber-700"
-                        : "text-blue-400"
+                        : "text-green-400"
                     }
                     font-bold
                   `}
                   >
-                    {team.points || 0}
+                    {team.finalScore || 0}
                   </span>
                 </div>
 
-                <div className="col-span-4">
+                <div className="col-span-2">
                   <div className="flex items-center">
                     <div className="w-full bg-gray-700 rounded-full h-4 mr-2">
                       <div

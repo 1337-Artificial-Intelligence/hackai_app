@@ -170,6 +170,56 @@ exports.getLeaderboard = async (req, res) => {
   }
 };
 
+// @desc    Update jury score for a team
+// @route   PUT /api/teams/:id/jury-score
+// @access  Admin only
+exports.updateJuryScore = async (req, res) => {
+  try {
+    const { juryScore } = req.body;
+    
+    // Validate the jury score (admin enters 0-100, but we store 0-50 as it's 50% of final score)
+    if (juryScore === undefined || juryScore < 0 || juryScore > 100) {
+      return res.status(400).json({ 
+        success: false,
+        message: 'Jury score must be a number between 0 and 100' 
+      });
+    }
+    
+    // Convert the 0-100 score to 0-50 (50% of final score)
+    const normalizedJuryScore = juryScore / 2;
+    
+    const team = await Team.findOneAndUpdate(
+      { _id: req.params.id, isActive: true },
+      { juryScore: normalizedJuryScore },
+      { new: true, runValidators: true }
+    ).select('-password');
+    
+    if (!team) {
+      return res.status(404).json({ 
+        success: false,
+        message: 'Team not found' 
+      });
+    }
+    
+    // Notify clients about the leaderboard update
+    const io = req.app.get('io');
+    if (io) {
+      io.to('leaderboard-room').emit('leaderboard-update');
+    }
+    
+    res.json({
+      success: true,
+      data: team
+    });
+  } catch (error) {
+    console.error('Error updating jury score:', error);
+    res.status(400).json({ 
+      success: false,
+      message: error.message 
+    });
+  }
+};
+
 // @desc    Get current team data
 // @route   GET /api/teams/me
 // @access  Private

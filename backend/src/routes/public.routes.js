@@ -9,8 +9,7 @@ const Challenge = require('../models/challenge.model');
 router.get('/leaderboard', async (req, res) => {
   try {
     const teams = await Team.find({ role: 'team' })
-      .select('teamName points completedChallenges')
-      .sort('-points')
+      .select('teamName points juryScore completedChallenges')
       .lean();
 
     // Get all challenges to calculate progress percentage
@@ -22,8 +21,8 @@ router.get('/leaderboard', async (req, res) => {
       totalChallengePoints += challenge.points || 0;
     });
 
-    // Calculate percentage and format response
-    const leaderboard = teams.map((team, index) => {
+    // Calculate combined scores and format response
+    const leaderboard = teams.map(team => {
       // For progress bar, calculate based on points earned vs total possible points
       const progressPercentage = totalChallengePoints > 0 
         ? Math.round((team.points || 0) / totalChallengePoints * 100) 
@@ -32,13 +31,33 @@ router.get('/leaderboard', async (req, res) => {
       // Still keep track of completed challenges count
       const completedCount = team.completedChallenges ? team.completedChallenges.length : 0;
       
+      // Calculate normalized challenge score (50% of final score)
+      const normalizedChallengeScore = totalChallengePoints > 0
+        ? ((team.points || 0) / totalChallengePoints) * 50
+        : 0;
+        
+      // Jury score (50% of final score)
+      const juryScore = team.juryScore || 0;
+      
+      // Calculate final combined score (challenge score + jury score)
+      const finalScore = normalizedChallengeScore + juryScore;
+      
       return {
-        rank: index + 1,
         teamName: team.teamName,
-        points: team.points,
+        challengePoints: team.points || 0,
+        juryScore: juryScore,
+        finalScore: parseFloat(finalScore.toFixed(2)),
         progress: progressPercentage,
         completedCount
       };
+    });
+    
+    // Sort by final score in descending order
+    leaderboard.sort((a, b) => b.finalScore - a.finalScore);
+    
+    // Add rank after sorting
+    leaderboard.forEach((team, index) => {
+      team.rank = index + 1;
     });
 
     res.json({

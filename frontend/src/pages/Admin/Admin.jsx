@@ -6,6 +6,7 @@ import Leaderboard from "../Dashboard/LeaderBoard";
 import TeamManagement from "./Teams";
 import ChallengeValidation from "./ChallengeValidation";
 import TeamProgress from "./TeamProgress";
+import JuryScoreManagement from "./JuryScoreManagement";
 import Graph from "../../components/graph";
 
 export default function Admin() {
@@ -87,7 +88,7 @@ export default function Admin() {
           <div className="flex flex-wrap mb-8 mt-10 bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl p-1.5 border border-gray-700 w-fit shadow-xl overflow-x-auto">
             {[
               // Only show Teams and Challenges tabs for admins
-              ...(userRole === 'admin' ? ["Teams", "Challenges"] : []),
+              ...(userRole === 'admin' ? ["Teams", "Challenges", "Jury Scores"] : []),
               // These tabs are available for both admins and mentors
               "Submissions",
               "Leaderboard",
@@ -120,6 +121,7 @@ export default function Admin() {
           {/* Only render Challenge and Team management for admins */}
           {activeTab == "Challenges" && userRole === 'admin' && <ChallengeManagement />}
           {activeTab == "Teams" && userRole === 'admin' && <TeamManagement />}
+          {activeTab == "Jury Scores" && userRole === 'admin' && <JuryScoreManagement />}
           
           {/* These components are available for both admins and mentors */}
           {activeTab == "Leaderboard" && (

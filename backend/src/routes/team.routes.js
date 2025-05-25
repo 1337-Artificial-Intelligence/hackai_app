@@ -7,7 +7,8 @@ const {
   updateTeam,
   deleteTeam,
   getLeaderboard,
-  getCurrentTeam
+  getCurrentTeam,
+  updateJuryScore
 } = require('../controllers/team.controller');
 const { protect, authorize } = require('../middleware/auth.middleware');
 
@@ -26,5 +27,8 @@ router
   .get(authorize('admin'), getTeam)
   .put(authorize('admin'), updateTeam)
   .delete(authorize('admin'), deleteTeam);
+
+// Route for updating jury scores
+router.put('/:id/jury-score', authorize('admin'), updateJuryScore);
 
 module.exports = router;
