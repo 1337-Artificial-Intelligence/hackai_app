@@ -21,6 +21,19 @@ router.get('/leaderboard', async (req, res) => {
       totalChallengePoints += challenge.points || 0;
     });
 
+    // Find max and min values for normalization
+    const allChallengePoints = teams.map(team => team.points || 0);
+    const allJuryScores = teams.map(team => team.juryScore || 0);
+    
+    const maxChallengePoints = Math.max(...allChallengePoints, 1); // Avoid division by zero
+    const minChallengePoints = Math.min(...allChallengePoints);
+    const maxJuryScore = Math.max(...allJuryScores, 1); // Avoid division by zero
+    const minJuryScore = Math.min(...allJuryScores);
+    
+    // Calculate the normalization denominators (avoid division by zero)
+    const challengeDenominator = maxChallengePoints - minChallengePoints || 1;
+    const juryDenominator = maxJuryScore - minJuryScore || 1;
+    
     // Calculate combined scores and format response
     const leaderboard = teams.map(team => {
       // For progress bar, calculate based on points earned vs total possible points
@@ -31,21 +44,26 @@ router.get('/leaderboard', async (req, res) => {
       // Still keep track of completed challenges count
       const completedCount = team.completedChallenges ? team.completedChallenges.length : 0;
       
-      // Calculate normalized challenge score (50% of final score)
-      const normalizedChallengeScore = totalChallengePoints > 0
-        ? ((team.points || 0) / totalChallengePoints) * 50
-        : 0;
-        
-      // Jury score (50% of final score)
-      const juryScore = team.juryScore || 0;
+      // Apply new normalization formula: (value - min) / (max - min)
+      const normalizedChallengeScore = 
+        (team.points || 0) === minChallengePoints && maxChallengePoints === minChallengePoints
+          ? 0.5 // Edge case: all teams have same score
+          : ((team.points || 0) - minChallengePoints) / challengeDenominator;
       
-      // Calculate final combined score (challenge score + jury score)
-      const finalScore = normalizedChallengeScore + juryScore;
+      const normalizedJuryScore = 
+        (team.juryScore || 0) === minJuryScore && maxJuryScore === minJuryScore
+          ? 0.5 // Edge case: all teams have same score
+          : ((team.juryScore || 0) - minJuryScore) / juryDenominator;
+      
+      // Calculate final combined score (normalized challenge score + normalized jury score) * 100
+      const finalScore = (normalizedChallengeScore + normalizedJuryScore) * 100; // Multiply by 100 as specified
       
       return {
         teamName: team.teamName,
         challengePoints: team.points || 0,
-        juryScore: juryScore,
+        juryScore: team.juryScore || 0,
+        normalizedChallengeScore: parseFloat(normalizedChallengeScore.toFixed(2)),
+        normalizedJuryScore: parseFloat(normalizedJuryScore.toFixed(2)),
         finalScore: parseFloat(finalScore.toFixed(2)),
         progress: progressPercentage,
         completedCount

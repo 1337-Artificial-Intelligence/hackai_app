@@ -177,20 +177,19 @@ exports.updateJuryScore = async (req, res) => {
   try {
     const { juryScore } = req.body;
     
-    // Validate the jury score (admin enters 0-100, but we store 0-50 as it's 50% of final score)
-    if (juryScore === undefined || juryScore < 0 || juryScore > 100) {
+    // Validate the jury score (should be a non-negative number)
+    if (juryScore === undefined || juryScore < 0) {
       return res.status(400).json({ 
         success: false,
-        message: 'Jury score must be a number between 0 and 100' 
+        message: 'Jury score must be a non-negative number' 
       });
     }
     
-    // Convert the 0-100 score to 0-50 (50% of final score)
-    const normalizedJuryScore = juryScore / 2;
+    // No need to normalize the score here, as it will be normalized relative to other scores in the leaderboard calculation
     
     const team = await Team.findOneAndUpdate(
       { _id: req.params.id, isActive: true },
-      { juryScore: normalizedJuryScore },
+      { juryScore },
       { new: true, runValidators: true }
     ).select('-password');
     

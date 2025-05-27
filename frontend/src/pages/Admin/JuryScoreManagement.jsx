@@ -69,8 +69,8 @@ export default function JuryScoreManagement() {
 
   const handleOpenEditModal = (team) => {
     setSelectedTeam(team);
-    // Convert the stored 0-50 score to 0-100 for display
-    const displayScore = team.juryScore ? team.juryScore * 2 : 0;
+    // Use the actual jury score without any conversion
+    const displayScore = team.juryScore || 0;
     setJuryScore(displayScore.toString());
     setShowEditModal(true);
   };
@@ -82,9 +82,9 @@ export default function JuryScoreManagement() {
   };
 
   const handleScoreChange = (e) => {
-    // Only allow numbers between 0 and 100
+    // Allow any non-negative number as jury score
     const value = e.target.value;
-    if (value === "" || (Number(value) >= 0 && Number(value) <= 100)) {
+    if (value === "" || (Number(value) >= 0)) {
       setJuryScore(value);
     }
   };
@@ -97,8 +97,8 @@ export default function JuryScoreManagement() {
       }
 
       const score = parseFloat(juryScore);
-      if (isNaN(score) || score < 0 || score > 100) {
-        throw new Error("Jury score must be a number between 0 and 100");
+      if (isNaN(score) || score < 0) {
+        throw new Error("Jury score must be a non-negative number");
       }
 
       const response = await axios.put(
@@ -224,7 +224,7 @@ export default function JuryScoreManagement() {
                     Challenge Points
                   </th>
                   <th className="text-left py-4 px-6 text-gray-300 font-medium">
-                    Jury Score (0-100)
+                    Jury Score
                   </th>
                   <th className="text-left py-4 px-6 text-gray-300 font-medium">
                     Actions
@@ -243,7 +243,7 @@ export default function JuryScoreManagement() {
                         {team.points || 0}
                       </td>
                       <td className="py-4 px-6 text-purple-400 font-mono">
-                        {team.juryScore ? team.juryScore * 2 : 0}
+                        {team.juryScore || 0}
                       </td>
                       <td className="py-4 px-6">
                         <button
@@ -278,8 +278,8 @@ export default function JuryScoreManagement() {
             
             <div className="mb-4">
               <p className="text-gray-400 mb-2 text-sm">
-                Enter a score between 0 and 100 (this will be converted to 50% of the final score).
-                The other 50% comes from challenge points.
+                Enter any positive number for the jury score. Final scores will be calculated using relative normalization
+                across all teams for both challenge points and jury scores.
               </p>
             </div>
             
@@ -294,7 +294,6 @@ export default function JuryScoreManagement() {
                 type="number"
                 id="juryScore"
                 min="0"
-                max="100"
                 value={juryScore}
                 onChange={handleScoreChange}
                 className="w-full px-3 py-2 bg-gray-900/50 border border-gray-700 text-white text-lg rounded-lg focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 block focus:outline-none transition-colors"
