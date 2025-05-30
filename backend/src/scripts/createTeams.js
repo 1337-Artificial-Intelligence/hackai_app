@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const fs = require('fs');
 const csv = require('csv-parser');
+const path = require('path');
 
 async function createTeamsFromCSV() {
   try {
@@ -15,8 +16,12 @@ async function createTeamsFromCSV() {
     // Read and parse CSV file
     const teams = [];
     
+    // Get CSV path from environment variable or use default path
+    const csvPath = process.env.TEAMS_CSV_PATH || path.join(__dirname, 'teams.csv');
+    console.log(`Reading teams from: ${csvPath}`);
+    
     await new Promise((resolve, reject) => {
-      fs.createReadStream('teams.csv')
+      fs.createReadStream(csvPath)
         .pipe(csv())
         .on('data', (row) => {
           // Extract team data from CSV row
@@ -40,9 +45,8 @@ async function createTeamsFromCSV() {
 
     console.log(`Found ${teams.length} teams in CSV file`);
 
-    // Clear existing teams (optional - remove this if you want to keep existing teams)
-    // await mongoose.connection.collection('teams').deleteMany({});
-    // console.log('Cleared existing teams');
+    // We are updating existing teams with new passwords
+    console.log('Updating existing teams with new passwords');
 
     // Function to generate random 5-character password with lowercase letters and numbers
     function generatePassword() {
@@ -54,47 +58,48 @@ async function createTeamsFromCSV() {
       return password;
     }
 
-    // Create teams in database
-    const createdTeams = [];
+    // Update teams in database
+    const updatedTeams = [];
     
     for (const team of teams) {
       try {
-        // Generate a unique 5-character password for each team
-        // const teamPassword = generatePassword();
+        // Hash the new password
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(team.teamPassword, salt);
 
-        const teamDoc = {
-          teamName: team.teamName,
-          password: hashedPassword,
-          members: team.members,
-          role: 'team', // Default role for teams
-          isActive: true,
-          createdAt: new Date(),
-          updatedAt: new Date()
-        };
-
-        const result = await mongoose.connection.collection('teams').insertOne(teamDoc);
+        // Update existing team with new password
+        const result = await mongoose.connection.collection('teams').updateOne(
+          { teamName: team.teamName },
+          { 
+            $set: {
+              password: hashedPassword,
+              updatedAt: new Date()
+            }
+          }
+        );
         
-        createdTeams.push({
-          id: result.insertedId,
-          teamName: team.teamName,
-          members: team.members,
-          memberCount: team.members.length,
-          password: team.teamPassword // Store the plain password for display
-        });
+        if (result.matchedCount > 0) {
+          updatedTeams.push({
+            teamName: team.teamName,
+            members: team.members,
+            memberCount: team.members.length,
+            password: team.teamPassword // Store the plain password for display
+          });
+        } else {
+          console.log(`No team found with name: ${team.teamName}`);
+        }
       } catch (error) {
         console.error(`Error creating team ${team.teamName}:`, error.message);
       }
     }
 
     console.log('\n=== SUMMARY ===');
-    console.log(`Successfully created ${createdTeams.length} teams:`);
-    createdTeams.forEach(team => {
+    console.log(`Successfully updated ${updatedTeams.length} teams:`);
+    updatedTeams.forEach(team => {
       console.log(`${team.teamName},${team.password},${team.members.join(' | ')}`);
     });
 
-    console.log('\nIMPORTANT: Save these passwords! Each team has a unique 5-character password.');
+    console.log('\nIMPORTANT: Save these new passwords! Make sure to distribute them to the teams.');
 
   } catch (error) {
     console.error('Error creating teams from CSV:', error);

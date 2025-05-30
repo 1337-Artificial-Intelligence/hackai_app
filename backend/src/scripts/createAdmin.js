@@ -2,6 +2,9 @@ require('dotenv').config();
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
+// Default admin password for development only - should be overridden by environment variable
+const DEFAULT_ADMIN_PASSWORD = 'development_password_only';
+
 async function createAdmin() {
   try {
     // Connect to MongoDB
@@ -14,9 +17,12 @@ async function createAdmin() {
     await mongoose.connection.collection('teams').deleteOne({ teamName: 'admin' });
     console.log('Deleted existing admin if any');
 
+    // Get admin password from environment variable or use default (for development only)
+    const adminPassword = process.env.ADMIN_PASSWORD || DEFAULT_ADMIN_PASSWORD;
+    
     // Hash password
     const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash('0m@L@APKpJmLT8', salt);
+    const hashedPassword = await bcrypt.hash(adminPassword, salt);
     console.log('Generated hashed password');
 
     // Create admin user directly in MongoDB to bypass any model validation

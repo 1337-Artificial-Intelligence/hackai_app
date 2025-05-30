@@ -134,3 +134,9 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+# Sensitive data files
+/src/scripts/mentors.csv
+/src/scripts/teams.csv
+# Keep template files
+!/src/scripts/*.template.csv
