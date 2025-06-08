@@ -1,3 +1,5 @@
+MONGODB_URI=$(node -e "require('dotenv').config(); console.log(process.env.MONGODB_URI)")
+
 mongosh --eval "use hackai" --eval  "db.dropDatabase()"
-mongodump --uri="mongodb+srv://hackai:B2ndDigaAMY98kRb@cluster0.sw6xchf.mongodb.net/hackai"
+mongodump --uri="$MONGODB_URI"
 mongorestore --db hackai dump/hackai
