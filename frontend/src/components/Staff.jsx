@@ -133,7 +133,7 @@ export default function Staff() {
         "Research scientist @ Sigma Nova",
       ],
       [
-        "/assets/profiles/extern/imane.png",
+        "/assets/profiles/extern/image_placeholder.jpg",
         "Imane Momayiz",
         "Senior Data Scientist - Cofounder @AtlasIA",
       ],
